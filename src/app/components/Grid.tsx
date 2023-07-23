@@ -3,7 +3,7 @@
 import styles from "./Grid.module.scss";
 
 import React, {useEffect, useRef, useState} from 'react';
-import GridSquare, {GridSquareProps} from '@/app/components/GridSquare';
+import GridCell, {GridCellProps} from '@/app/components/GridCell';
 import {debounce} from '@/util/debounce';
 
 const minRows = 0;
@@ -11,7 +11,7 @@ const minRows = 0;
 const Grid = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [cols] = useState<number>(24);
-    const [gridSquares, setGridSquares] = useState<GridSquareProps[]>([]);
+    const [gridSquares, setGridSquares] = useState<GridCellProps[]>([]);
 
     const adjustGridSize = () => {
         if (!containerRef.current) return;
@@ -38,7 +38,7 @@ const Grid = () => {
     };
 
     const addRows = (rowCount: number) => {
-        const newGridSquares: GridSquareProps[] = [];
+        const newGridSquares: GridCellProps[] = [];
 
         for (let y = 0; y < rowCount; y++) {
             for (let x = 0; x < cols; x++) {
@@ -61,7 +61,7 @@ const Grid = () => {
     return (
         <div className={styles.container} ref={containerRef} id={styles.grid}>
             {gridSquares.map((gridSquareProps) =>
-                <GridSquare x={gridSquareProps.x} y={gridSquareProps.y} key={`${gridSquareProps.x}-${gridSquareProps.y}`}/>
+                <GridCell x={gridSquareProps.x} y={gridSquareProps.y} key={`${gridSquareProps.x}-${gridSquareProps.y}`}/>
             )}
         </div>
     );

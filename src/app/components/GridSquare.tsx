@@ -9,7 +9,7 @@ const GridSquare = (props: GridSquareProps) => {
     
     return (
         <div className={styles.gridSquare}>
-            {props.x}-{props.y}
+            
         </div>
     )
 }

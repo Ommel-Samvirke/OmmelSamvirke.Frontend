@@ -1,0 +1,22 @@
+﻿.pageTemplateEditorSidebar {
+    background-color: #fff;
+    border: 1px solid #c4c4c4;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 50px;
+    border-radius: 25px;
+    overflow: hidden;
+    width: 400px;
+    z-index: 1;
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    span {
+        cursor: pointer;
+        padding: 8px 12px;
+    }
+}

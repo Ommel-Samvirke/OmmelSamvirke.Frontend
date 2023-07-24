@@ -10,7 +10,7 @@ import ContentBlock from '@/app/page-template-editor/ContentBlock';
 import IContentBlock from '@/app/page-template-editor/interfaces/IContentBlock';
 import {canResizeOrMove} from '@/app/page-template-editor/helpers/ContentBlockHelpers';
 
-const minRows = 0;
+const minRows = 25;
 
 const Grid = () => {
     const containerRef = useRef<HTMLDivElement>(null);

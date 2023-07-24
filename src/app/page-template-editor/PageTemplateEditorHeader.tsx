@@ -23,19 +23,21 @@ const PageTemplateEditorHeader = () => {
 
     return (
         <div className={styles.pageTemplateEditorHeader}>
-            {editTemplateNameActive &&
-                <input
-                    ref={inputRef}
-                    type="text"
-                    value={templateName}
-                    onChange={(e) => setTemplateName(e.target.value)}
-                />
-            }
-            {!editTemplateNameActive &&
-                <h1 onClick={() => setEditTemplateNameActive(true)}>{templateName}</h1>
-            }
-            
-            <button>Gem Skabelon</button>
+            <div className={styles.innerContainer}>
+                {editTemplateNameActive &&
+                    <input
+                        ref={inputRef}
+                        type="text"
+                        value={templateName}
+                        onChange={(e) => setTemplateName(e.target.value)}
+                    />
+                }
+                {!editTemplateNameActive &&
+                    <h1 onClick={() => setEditTemplateNameActive(true)}>{templateName}</h1>
+                }
+                
+                <button>Gem Skabelon</button>
+            </div>
         </div>
     )
 };

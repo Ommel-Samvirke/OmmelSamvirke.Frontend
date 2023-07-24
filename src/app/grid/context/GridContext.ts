@@ -4,7 +4,8 @@ import IContentBlock from '@/app/grid/interfaces/IContentBlock';
 export interface GridContextState {
     contentBlocks: IContentBlock[];
     moveContentBlock: (id: string, x: number, y: number) => void;
-    canMoveContentBlock: (id: string, x: number, y: number, width: number, height: number) => boolean;
+    canMoveContentBlock: (id: string, x: number, y: number) => boolean;
+    resizeContentBlock: (id: string, width: number, height: number) => void;
 }
 
 
@@ -12,4 +13,5 @@ export const GridContext = createContext<GridContextState>({
     contentBlocks: [],
     moveContentBlock: () => {},
     canMoveContentBlock: () => false,
+    resizeContentBlock: () => {}
 });

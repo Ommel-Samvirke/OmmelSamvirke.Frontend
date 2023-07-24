@@ -10,6 +10,7 @@ import {GridContext} from '@/app/grid/context/GridContext';
 import GridCell, {GridCellProps} from '@/app/grid/GridCell';
 import ContentBlock from '@/app/grid/ContentBlock';
 import IContentBlock from '@/app/grid/interfaces/IContentBlock';
+import {canResizeOrMove} from '@/app/grid/helpers/ContentBlockHelpers';
 
 const minRows = 0;
 
@@ -19,6 +20,23 @@ const Grid = () => {
     const [gridCells, setGridCells] = useState<GridCellProps[]>([]);
     const [contentBlocks, setContentBlocks] = useState<IContentBlock[]>([]);
     const [gridCellWidth, setGridCellWidth] = useState<number>(0);
+    const contentBlocksRef = useRef(contentBlocks);
+
+    useEffect(() => {
+        const debouncedAdjustGridSize = debounce(adjustGridSize, 150);
+
+        window.addEventListener('resize', debouncedAdjustGridSize);
+        return () => window.removeEventListener('resize', debouncedAdjustGridSize);  // Cleanup listener
+    }, [cols]);
+
+    useEffect(() => {
+        contentBlocksRef.current = contentBlocks;
+    }, [contentBlocks]);
+
+    useEffect(() => {
+        setInitialContentBlocks();
+        adjustGridSize();
+    }, []);
     
     const adjustGridSize = () => {
         if (!containerRef.current) return;
@@ -46,19 +64,6 @@ const Grid = () => {
         }
 
         setGridCells(newGridCells);
-    };
-
-    useEffect(() => {
-        const debouncedAdjustGridSize = debounce(adjustGridSize, 150);
-        
-        window.addEventListener('resize', debouncedAdjustGridSize);
-        return () => window.removeEventListener('resize', debouncedAdjustGridSize);  // Cleanup listener
-    }, [cols]);
-
-    const findContentBlockAt = (x: number, y: number) => {
-        return contentBlocks.find(
-            (contentBlock) => contentBlock.x === x && contentBlock.y === y
-        );
     };
     
     const setInitialContentBlocks = () => {
@@ -88,25 +93,23 @@ const Grid = () => {
         );
     }, []);
 
-    const canMoveContentBlock = useCallback((id: string, x: number, y: number, width: number, height: number) => {
-        for(let i = 0; i < width; i++){
-            for(let j = 0; j < height; j++){
-                const contentBlockAt = findContentBlockAt(x + i, y + j);
-                if(contentBlockAt && contentBlockAt.id !== id){
-                    return false;
-                }
-            }
-        }
-        return true;
+    const canMoveContentBlock = useCallback((id: string, x: number, y: number) => {
+        const contentBlock: IContentBlock | undefined = contentBlocksRef.current.find(block => block.id === id);
+        if(!contentBlock) return false;
+        
+        return canResizeOrMove(contentBlock.width, contentBlock.height, x, y, id, contentBlocks);
     }, [contentBlocks]);
 
-    useEffect(() => {
-        setInitialContentBlocks();
-        adjustGridSize();
+    const resizeContentBlock = useCallback((id: string, width: number, height: number) => {
+        setContentBlocks(prevBlocks =>
+            prevBlocks.map(block =>
+                block.id === id ? { ...block, width, height } : block
+            )
+        );
     }, []);
 
     return (
-        <GridContext.Provider value={{ contentBlocks, moveContentBlock, canMoveContentBlock }}>
+        <GridContext.Provider value={{ contentBlocks, moveContentBlock, canMoveContentBlock, resizeContentBlock }}>
             <DndProvider backend={HTML5Backend}>
                 <div className={styles.container} ref={containerRef} id={styles.grid}>
                     {gridCells.map((gridCellProps) =>

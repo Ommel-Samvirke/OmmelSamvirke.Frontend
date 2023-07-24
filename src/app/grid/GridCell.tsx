@@ -1,4 +1,4 @@
-﻿import styles from "./GridCell.module.scss";
+﻿import styles from "./styles/GridCell.module.scss";
 import React, {useContext} from 'react';
 import {DraggableTypes} from '@/app/grid/constants/DraggableTypes';
 import {useDrop} from 'react-dnd';

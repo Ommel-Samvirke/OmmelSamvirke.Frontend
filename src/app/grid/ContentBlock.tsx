@@ -1,4 +1,4 @@
-﻿import styles from "./ContentBlock.module.scss";
+﻿import styles from "./styles/ContentBlock.module.scss";
 import {useDrag} from 'react-dnd';
 import {DraggableTypes} from '@/app/grid/constants/DraggableTypes';
 import {GridContext} from '@/app/grid/context/GridContext';

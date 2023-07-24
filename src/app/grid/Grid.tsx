@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import styles from "./Grid.module.scss";
+import styles from "./styles/Grid.module.scss";
 
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {debounce} from '@/util/debounce';

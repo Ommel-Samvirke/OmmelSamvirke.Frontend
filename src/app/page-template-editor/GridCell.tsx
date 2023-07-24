@@ -21,7 +21,12 @@ const GridCell = (props: GridCellProps) => {
         accept: [DraggableTypes.HEADLINE_BLOCK, DraggableTypes.TEXT_BLOCK, DraggableTypes.IMAGE_BLOCK],
         canDrop: (item: IDraggableItem) => {
             if (item.source === DragSource.TOOL_MENU) {
-                return gridContext.canMoveContentBlock(item.id, props.x, props.y, 1, 1);
+                switch (item.type) {
+                    case DraggableTypes.HEADLINE_BLOCK:
+                        return gridContext.canMoveContentBlock(item.id, props.x, props.y, 9, 1);
+                }
+                
+                
             } else if (item.source === DragSource.CONTENT_BLOCK) {
                 return gridContext.canMoveContentBlock(item.id, props.x, props.y);
             }
@@ -34,7 +39,7 @@ const GridCell = (props: GridCellProps) => {
                     id: uuidv1(),
                     x: props.x,
                     y: props.y,
-                    width: 4,
+                    width: 9,
                     height: 1
                 });
             } else if (item.source === DragSource.CONTENT_BLOCK) {

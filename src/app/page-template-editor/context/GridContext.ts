@@ -7,6 +7,7 @@ export interface GridContextState {
     canMoveContentBlock: (id: string, x: number, y: number, width?: number, height?: number) => boolean;
     resizeContentBlock: (id: string, width: number, height: number) => void;
     addContentBlock: (contentBlock: IContentBlock) => void;
+    removeContentBlock: (id: string) => void;
 }
 
 
@@ -16,4 +17,5 @@ export const GridContext = createContext<GridContextState>({
     canMoveContentBlock: () => false,
     resizeContentBlock: () => {},
     addContentBlock: () => {},
+    removeContentBlock: () => {}
 });

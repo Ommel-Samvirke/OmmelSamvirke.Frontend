@@ -62,15 +62,15 @@ const Grid = () => {
             id: '1',
             x: 0,
             y: 0,
-            width: 2,
+            width: 8,
             height: 1
         });
         
         gridContext.addContentBlock({
             id: '2',
-            x: 3,
-            y: 2,
-            width: 1,
+            x: 0,
+            y: 6,
+            width: 8,
             height: 2
         });
     }

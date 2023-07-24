@@ -1,4 +1,5 @@
 ﻿import IContentBlock from '@/app/page-template-editor/interfaces/IContentBlock';
+import {GridConstants} from '@/app/page-template-editor/constants/GridConstants';
 
 const isOverlapping = (
     x1: number,
@@ -17,17 +18,19 @@ const isOverlapping = (
 }
 
 export const canResizeOrMove = (
-    newWidth: number,
-    newHeight: number,
-    currentX: number,
-    currentY: number,
-    currentId: string,
+    width: number,
+    height: number,
+    x: number,
+    y: number,
+    id: string,
     contentBlocks: IContentBlock[]
 ) => {
+    if (width + x > GridConstants.COLUMNS) return false;
+    
     for(let block of contentBlocks) {
-        if(block.id === currentId) continue;
+        if(block.id === id) continue;
 
-        if(isOverlapping(currentX, currentY, newWidth, newHeight, block.x, block.y, block.width, block.height)) {
+        if(isOverlapping(x, y, width, height, block.x, block.y, block.width, block.height)) {
             return false;
         }
     }

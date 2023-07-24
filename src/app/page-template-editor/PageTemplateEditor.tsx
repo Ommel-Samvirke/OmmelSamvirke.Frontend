@@ -32,10 +32,10 @@ const PageTemplateEditor = () => {
         const contentBlock: IContentBlock | undefined = contentBlocksRef.current.find(block => block.id === id);
         if(!contentBlock) {
             if (!width || !height) return false;
-            return canResizeOrMove(width, height, x, y, id, contentBlocks);
+            return canResizeOrMove(width, height, x, y, id, contentBlocksRef.current);
         }
 
-        return canResizeOrMove(contentBlock.width, contentBlock.height, x, y, id, contentBlocks);
+        return canResizeOrMove(contentBlock.width, contentBlock.height, x, y, id, contentBlocksRef.current);
     }, [contentBlocks]);
 
     const resizeContentBlock = useCallback((id: string, width: number, height: number) => {
@@ -50,8 +50,12 @@ const PageTemplateEditor = () => {
         setContentBlocks(prevBlocks => [...prevBlocks, contentBlock]);
     }, []);
     
+    const removeContentBlock = useCallback((id: string) => {
+        setContentBlocks(prevBlocks => prevBlocks.filter(block => block.id !== id));
+    }, []);
+    
     return (
-        <GridContext.Provider value={{ contentBlocks, moveContentBlock, canMoveContentBlock, resizeContentBlock, addContentBlock }}>
+        <GridContext.Provider value={{ contentBlocks, moveContentBlock, canMoveContentBlock, resizeContentBlock, addContentBlock, removeContentBlock }}>
             <DndProvider backend={HTML5Backend}>
             <div className={styles.PageTemplateEditor}>
                 <PageTemplateEditorHeader />

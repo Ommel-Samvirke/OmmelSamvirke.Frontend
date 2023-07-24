@@ -1,5 +1,37 @@
 ﻿.contentBlock {
-    background: dodgerblue;
-    color: white;
+    background: white;
+    color: black;
     position: absolute;
+    overflow: hidden;
+    .headline {
+        font-size: 2rem;
+        font-weight: bold;
+        padding: 0.5rem 1rem;
+    }
+    .dragIconContainer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: move;
+    }
+    .deleteIconContainer {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        .deleteIcon {
+            font-size: 1rem;
+            color: red;
+        }
+    }
 }

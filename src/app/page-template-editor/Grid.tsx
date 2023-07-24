@@ -1,6 +1,4 @@
-﻿"use client";
-
-import styles from "./styles/Grid.module.scss";
+﻿import styles from "./styles/Grid.module.scss";
 
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {debounce} from '@/util/debounce';
@@ -48,7 +46,7 @@ const Grid = () => {
         setGridCellWidth(actualCellWidth);
         containerRef.current.removeChild(tempCell);
         
-        const rowsForViewportHeight = Math.ceil(window.innerHeight / actualCellWidth);
+        const rowsForViewportHeight = Math.ceil(window.innerHeight / actualCellWidth) - 2;
         const desiredRowCount = Math.max(minRows, rowsForViewportHeight);
 
         addRows(desiredRowCount);

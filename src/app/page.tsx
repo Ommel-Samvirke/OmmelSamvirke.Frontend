@@ -1,10 +1,10 @@
 import React from 'react';
-import Grid from '@/app/page-template-editor/Grid';
+import PageTemplateEditor from '@/app/page-template-editor/PageTemplateEditor';
 
 export default function Home() {
   return (
       <>
-        <Grid />
+        <PageTemplateEditor />
       </>
   )
 }

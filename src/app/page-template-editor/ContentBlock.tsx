@@ -1,12 +1,14 @@
-﻿import styles from "./styles/ContentBlock.module.scss";
+﻿import styles from './styles/ContentBlock.module.scss';
 import {useDrag} from 'react-dnd';
 import {DraggableTypes} from '@/app/page-template-editor/constants/DraggableTypes';
 import {GridContext} from '@/app/page-template-editor/context/GridContext';
 import {useContext} from 'react';
 
-import { Resizable } from 'react-resizable';
+import {Resizable} from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import {canResizeOrMove} from '@/app/page-template-editor/helpers/ContentBlockHelpers';
+import {IDraggableItem} from '@/app/page-template-editor/interfaces/IDraggableItem';
+import {DragSource} from '@/app/page-template-editor/constants/DragSource';
 
 export interface ContentBlockProps {
     id: string,
@@ -14,18 +16,19 @@ export interface ContentBlockProps {
     height: number,
     x: number,
     y: number,
-    gridCellWidth: number
+    gridCellWidth: number,
+    type: string
 }
 
 const ContentBlock = (props: ContentBlockProps) => {
     const { resizeContentBlock, contentBlocks } = useContext(GridContext);
     
-    const [{isDragging}, drag, preview] = useDrag(() => ({
-        type: DraggableTypes.CONTENT_BLOCK,
-        item: {id: props.id},
+    const [{isDragging}, drag, preview] = useDrag<IDraggableItem, void, { isDragging: boolean }>(() => ({
+        type: props.type,
+        item: { id: props.id, type: props.type, source: DragSource.CONTENT_BLOCK },
         collect: monitor => ({
-            isDragging: monitor.isDragging()
-        })
+            isDragging: monitor.isDragging(),
+        }),
     }));
 
     return (

@@ -4,6 +4,9 @@ import {DraggableTypes} from '@/app/page-template-editor/constants/DraggableType
 import {useDrop} from 'react-dnd';
 import {GridContext} from '@/app/page-template-editor/context/GridContext';
 import DropOverlay from '@/app/page-template-editor/DropOverlay';
+import {IDraggableItem} from '@/app/page-template-editor/interfaces/IDraggableItem';
+import { v1 as uuidv1 } from 'uuid';
+import {DragSource} from '@/app/page-template-editor/constants/DragSource';
 
 export interface GridCellProps {
     x: number,
@@ -14,19 +17,36 @@ export interface GridCellProps {
 const GridCell = (props: GridCellProps) => {
     const gridContext = useContext(GridContext);
 
-    const [{isOver, canDrop }, drop] = useDrop(() => ({
-        accept: DraggableTypes.CONTENT_BLOCK,
-        canDrop: (item: { id: string }) => {
+    const [{isOver, canDrop }, drop] = useDrop<IDraggableItem, void, {isOver: boolean, canDrop: boolean}>(() => ({
+        accept: [DraggableTypes.HEADLINE_BLOCK, DraggableTypes.TEXT_BLOCK, DraggableTypes.IMAGE_BLOCK],
+        canDrop: (item: IDraggableItem) => {
+            if (item.source === DragSource.TOOL_MENU) {
+                return gridContext.canMoveContentBlock(item.id, props.x, props.y, 1, 1);
+            } else if (item.source === DragSource.CONTENT_BLOCK) {
+                return gridContext.canMoveContentBlock(item.id, props.x, props.y);
+            }
+            
             return gridContext.canMoveContentBlock(item.id, props.x, props.y)
         },
-        drop: (item: { id: string }) => gridContext.moveContentBlock(item.id, props.x, props.y),
+        drop: (item: IDraggableItem) => {
+            if (item.source === DragSource.TOOL_MENU) {
+                gridContext.addContentBlock({
+                    id: uuidv1(),
+                    x: props.x,
+                    y: props.y,
+                    width: 4,
+                    height: 1
+                });
+            } else if (item.source === DragSource.CONTENT_BLOCK) {
+                gridContext.moveContentBlock(item.id, props.x, props.y);
+            }  
+        },
         collect: monitor => ({
             isOver: monitor.isOver(),
             canDrop: monitor.canDrop(),
         })
     }),
     [props.x, props.y]);
-
 
     return (
         <div

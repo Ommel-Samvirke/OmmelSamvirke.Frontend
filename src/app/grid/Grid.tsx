@@ -16,48 +16,39 @@ const minRows = 0;
 const Grid = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [cols] = useState<number>(24);
-    const [gridSquares, setGridSquares] = useState<GridCellProps[]>([]);
+    const [gridCells, setGridCells] = useState<GridCellProps[]>([]);
     const [contentBlocks, setContentBlocks] = useState<IContentBlock[]>([]);
-
+    const [gridCellWidth, setGridCellWidth] = useState<number>(0);
+    
     const adjustGridSize = () => {
         if (!containerRef.current) return;
         
-        const tempSquare = document.createElement('div');
-        tempSquare.className = styles.gridSquare;
-        containerRef.current.appendChild(tempSquare);
-        const actualSquareWidth = tempSquare.offsetWidth;
-        containerRef.current.removeChild(tempSquare);
+        const tempCell = document.createElement('div');
+        tempCell.className = styles.gridCell;
+        containerRef.current.appendChild(tempCell);
+        const actualCellWidth = tempCell.getBoundingClientRect().width;
+        setGridCellWidth(actualCellWidth);
+        containerRef.current.removeChild(tempCell);
         
-        const rowsForViewportHeight = Math.ceil(window.innerHeight / actualSquareWidth);
+        const rowsForViewportHeight = Math.ceil(window.innerHeight / actualCellWidth);
         const desiredRowCount = Math.max(minRows, rowsForViewportHeight);
-        const containerHeight = actualSquareWidth * desiredRowCount;
-
-        if (desiredRowCount <= rowsForViewportHeight) {
-            containerRef.current.style.height = `${containerHeight}px`;
-            containerRef.current.style.overflowY = 'hidden';
-        } else {
-            containerRef.current.style.height = 'auto';
-            containerRef.current.style.overflowY = 'scroll';
-        }
 
         addRows(desiredRowCount);
     };
 
     const addRows = (rowCount: number) => {
-        const newGridSquares: GridCellProps[] = [];
+        const newGridCells: GridCellProps[] = [];
 
         for (let y = 0; y < rowCount; y++) {
             for (let x = 0; x < cols; x++) {
-                newGridSquares.push({ x, y });
+                newGridCells.push({ x, y });
             }
         }
 
-        setGridSquares(newGridSquares);
+        setGridCells(newGridCells);
     };
 
     useEffect(() => {
-        adjustGridSize();
-
         const debouncedAdjustGridSize = debounce(adjustGridSize, 150);
         
         window.addEventListener('resize', debouncedAdjustGridSize);
@@ -75,12 +66,16 @@ const Grid = () => {
             {
                 id: '1',
                 x: 0,
-                y: 0
+                y: 0,
+                width: 2,
+                height: 1
             },
             {
                 id: '2',
                 x: 3,
-                y: 2
+                y: 2,
+                width: 1,
+                height: 2
             }
         ])
     }
@@ -92,27 +87,45 @@ const Grid = () => {
             )
         );
     }, []);
-    
-    const canMoveContentBlock = useCallback((id: string, x: number, y: number) => {
-        const contentBlockAt = findContentBlockAt(x, y);
-        return !contentBlockAt || contentBlockAt.id === id;
+
+    const canMoveContentBlock = useCallback((id: string, x: number, y: number, width: number, height: number) => {
+        for(let i = 0; i < width; i++){
+            for(let j = 0; j < height; j++){
+                const contentBlockAt = findContentBlockAt(x + i, y + j);
+                if(contentBlockAt && contentBlockAt.id !== id){
+                    return false;
+                }
+            }
+        }
+        return true;
     }, [contentBlocks]);
-    
+
     useEffect(() => {
         setInitialContentBlocks();
+        adjustGridSize();
     }, []);
 
     return (
         <GridContext.Provider value={{ contentBlocks, moveContentBlock, canMoveContentBlock }}>
             <DndProvider backend={HTML5Backend}>
                 <div className={styles.container} ref={containerRef} id={styles.grid}>
-                    {gridSquares.map((gridSquareProps) =>
-                        <GridCell x={gridSquareProps.x} y={gridSquareProps.y} key={`${gridSquareProps.x}-${gridSquareProps.y}`}>
-                            {
-                                findContentBlockAt(gridSquareProps.x, gridSquareProps.y) &&
-                                <ContentBlock id={findContentBlockAt(gridSquareProps.x, gridSquareProps.y)!.id} />
-                            }
-                        </GridCell>
+                    {gridCells.map((gridCellProps) =>
+                        <GridCell
+                            x={gridCellProps.x}
+                            y={gridCellProps.y}
+                            key={`${gridCellProps.x}-${gridCellProps.y}`} 
+                        />
+                    )}
+                    {contentBlocks.map(block =>
+                        <ContentBlock
+                            key={block.id}
+                            id={block.id}
+                            width={block.width}
+                            height={block.height}
+                            x={block.x}
+                            y={block.y}
+                            gridCellWidth={gridCellWidth}
+                        />
                     )}
                 </div>
             </DndProvider>

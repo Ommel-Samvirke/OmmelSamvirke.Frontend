@@ -1,15 +1,11 @@
 ﻿.gridCell {
     position: relative;
     grid-column: span 1;
+    grid-row: span 0.5;
     display: flex;
     justify-content: center;
     align-items: center;
     border: 1px solid #e0e0e0;
     color: #9a9a9a;
-    &::before {
-        content: '';
-        display: block;
-        padding-top: 100%;
-        visibility: hidden;
-    }
+    aspect-ratio: 1;
 }

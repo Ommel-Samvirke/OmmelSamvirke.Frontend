@@ -1,9 +1,9 @@
 ﻿import styles from "./styles/GridCell.module.scss";
 import React, {useContext} from 'react';
-import {DraggableTypes} from '@/app/grid/constants/DraggableTypes';
+import {DraggableTypes} from '@/app/page-template-editor/constants/DraggableTypes';
 import {useDrop} from 'react-dnd';
-import {GridContext} from '@/app/grid/context/GridContext';
-import DropOverlay from '@/app/grid/DropOverlay';
+import {GridContext} from '@/app/page-template-editor/context/GridContext';
+import DropOverlay from '@/app/page-template-editor/DropOverlay';
 
 export interface GridCellProps {
     x: number,

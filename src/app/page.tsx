@@ -1,5 +1,5 @@
 import React from 'react';
-import Grid from '@/app/grid/Grid';
+import Grid from '@/app/page-template-editor/Grid';
 
 export default function Home() {
   return (

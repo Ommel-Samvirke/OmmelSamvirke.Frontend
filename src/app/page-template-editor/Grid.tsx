@@ -6,11 +6,11 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {debounce} from '@/util/debounce';
 import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
-import {GridContext} from '@/app/grid/context/GridContext';
-import GridCell, {GridCellProps} from '@/app/grid/GridCell';
-import ContentBlock from '@/app/grid/ContentBlock';
-import IContentBlock from '@/app/grid/interfaces/IContentBlock';
-import {canResizeOrMove} from '@/app/grid/helpers/ContentBlockHelpers';
+import {GridContext} from '@/app/page-template-editor/context/GridContext';
+import GridCell, {GridCellProps} from '@/app/page-template-editor/GridCell';
+import ContentBlock from '@/app/page-template-editor/ContentBlock';
+import IContentBlock from '@/app/page-template-editor/interfaces/IContentBlock';
+import {canResizeOrMove} from '@/app/page-template-editor/helpers/ContentBlockHelpers';
 
 const minRows = 0;
 

@@ -1,4 +1,4 @@
-﻿import IContentBlock from '@/app/grid/interfaces/IContentBlock';
+﻿import IContentBlock from '@/app/page-template-editor/interfaces/IContentBlock';
 
 const isOverlapping = (
     x1: number,

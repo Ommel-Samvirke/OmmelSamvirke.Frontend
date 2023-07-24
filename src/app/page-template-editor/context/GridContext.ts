@@ -1,5 +1,5 @@
 ﻿import {createContext} from 'react';
-import IContentBlock from '@/app/grid/interfaces/IContentBlock';
+import IContentBlock from '@/app/page-template-editor/interfaces/IContentBlock';
 
 export interface GridContextState {
     contentBlocks: IContentBlock[];

@@ -1,12 +1,12 @@
 ﻿import styles from "./styles/ContentBlock.module.scss";
 import {useDrag} from 'react-dnd';
-import {DraggableTypes} from '@/app/grid/constants/DraggableTypes';
-import {GridContext} from '@/app/grid/context/GridContext';
+import {DraggableTypes} from '@/app/page-template-editor/constants/DraggableTypes';
+import {GridContext} from '@/app/page-template-editor/context/GridContext';
 import {useContext} from 'react';
 
 import { Resizable } from 'react-resizable';
 import 'react-resizable/css/styles.css';
-import {canResizeOrMove} from '@/app/grid/helpers/ContentBlockHelpers';
+import {canResizeOrMove} from '@/app/page-template-editor/helpers/ContentBlockHelpers';
 
 export interface ContentBlockProps {
     id: string,

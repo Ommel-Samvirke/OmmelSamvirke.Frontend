@@ -4,7 +4,7 @@ import 'react-resizable/css/styles.css';
 import {useDrag} from 'react-dnd';
 import {DraggableTypes} from '@/app/page-template-editor/constants/DraggableTypes';
 import {GridContext} from '@/app/page-template-editor/context/GridContext';
-import React, {useContext, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Resizable} from 'react-resizable';
 import {canResizeOrMove} from '@/app/page-template-editor/helpers/ContentBlockHelpers';
 import {IDraggableItem} from '@/app/page-template-editor/interfaces/IDraggableItem';
@@ -36,6 +36,7 @@ const ContentBlock = (props: ContentBlockProps) => {
     const { resizeContentBlock, moveContentBlock, removeContentBlock, contentBlocks } = useContext(GridContext);
     const [isSelectionBlocked, setIsSelectionBlocked] = useState<boolean>(false);
     const propertyWidget = useRef(null);
+    const resizableRef = useRef(null);
     
     const [{isDragging}, drag, preview] = useDrag<IDraggableItem, void, { isDragging: boolean }>(() => ({
         type: props.contentBlock.type,
@@ -44,6 +45,23 @@ const ContentBlock = (props: ContentBlockProps) => {
             isDragging: monitor.isDragging(),
         }),
     }));
+
+    useEffect(() => {
+        // Prevent resizing when mouseup is triggered while the mouse is over an iframe or an embed element.
+        const handleMouseMove = (event: MouseEvent) => {
+            if (event.buttons === 0 && resizableRef.current) {
+                document.dispatchEvent(new Event('mouseup'));
+            }
+        };
+
+        if (resizableRef.current) {
+            document.addEventListener('mousemove', handleMouseMove);
+        }
+
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+        };
+    }, [resizableRef]);
 
     return (
         <>
@@ -65,7 +83,7 @@ const ContentBlock = (props: ContentBlockProps) => {
                 width={props.contentBlock.width * props.gridCellWidth}
                 height={props.contentBlock.height * props.gridCellWidth}
                 draggableOpts={{grid: [props.gridCellWidth, props.gridCellWidth]}}
-                
+                ref={resizableRef}
                 onResize={() => {
                     let newWidth = props.mouseGridX - props.contentBlock.x + 1;
                     let newHeight = props.mouseGridY - props.contentBlock.y + 1;

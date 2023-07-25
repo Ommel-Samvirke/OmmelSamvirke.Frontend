@@ -66,11 +66,9 @@ const ContentBlock = (props: ContentBlockProps) => {
                 draggableOpts={{grid: [props.gridCellWidth, props.gridCellWidth]}}
                 
                 onResize={() => {
-                    // Calculate new width and height based on cursor's position
                     let newWidth = props.mouseGridX - props.contentBlock.x + 1;
                     let newHeight = props.mouseGridY - props.contentBlock.y + 1;
-    
-                    // Clamping the width and height to be within certain boundaries
+                    
                     newWidth = Math.min(Math.max(newWidth, 1), GridConstants.COLUMNS);
                     newHeight = Math.min(Math.max(newHeight, 1), 200);
     

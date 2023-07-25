@@ -12,7 +12,6 @@ import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
 import Tooltip from '@mui/joy/Tooltip';
 
-
 interface PageTemplateEditorHeaderProps {
     onUndo: () => void,
     onRedo: () => void
@@ -28,16 +27,6 @@ const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
         <div className={styles.pageTemplateEditorHeader}>
             <div className={styles.innerContainer}>
                 <div className={styles.leftContainer}>
-                    <Input
-                        ref={inputRef}
-                        type="text"
-                        variant={isInputHovered ? 'outlined' : 'plain'}
-                        value={templateName}
-                        onChange={(e) => setTemplateName(e.target.value)}
-                        className={roboto.className + ' ' + (isInputHovered ? '': styles.inputNotHovered) }
-                        onMouseEnter={() => setIsInputHovered(true)}
-                        onMouseLeave={() => setIsInputHovered(false)}
-                    />
                     <Tooltip title="Fortryd (Ctrl+Z)">
                         <IconButton variant='soft' onClick={props.onUndo}>
                             <UndoIcon />
@@ -48,6 +37,16 @@ const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
                             <RedoIcon />
                         </IconButton>
                     </Tooltip>
+                    <Input
+                        ref={inputRef}
+                        type="text"
+                        variant={isInputHovered ? 'outlined' : 'plain'}
+                        value={templateName}
+                        onChange={(e) => setTemplateName(e.target.value)}
+                        className={roboto.className + ' ' + (isInputHovered ? '': styles.inputNotHovered) }
+                        onMouseEnter={() => setIsInputHovered(true)}
+                        onMouseLeave={() => setIsInputHovered(false)}
+                    />
                 </div>
                 
                 <div className={styles.rightContainer}>

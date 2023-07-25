@@ -4,7 +4,7 @@ import 'react-resizable/css/styles.css';
 import {useDrag} from 'react-dnd';
 import {DraggableTypes} from '@/app/page-template-editor/constants/DraggableTypes';
 import {GridContext} from '@/app/page-template-editor/context/GridContext';
-import React, {useContext, useRef} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {Resizable} from 'react-resizable';
 import {canResizeOrMove} from '@/app/page-template-editor/helpers/ContentBlockHelpers';
 import {IDraggableItem} from '@/app/page-template-editor/interfaces/IDraggableItem';
@@ -34,6 +34,7 @@ export interface ContentBlockProps {
 
 const ContentBlock = (props: ContentBlockProps) => {
     const { resizeContentBlock, moveContentBlock, removeContentBlock, contentBlocks } = useContext(GridContext);
+    const [isSelectionBlocked, setIsSelectionBlocked] = useState<boolean>(false);
     const propertyWidget = useRef(null);
     
     const [{isDragging}, drag, preview] = useDrag<IDraggableItem, void, { isDragging: boolean }>(() => ({
@@ -78,6 +79,8 @@ const ContentBlock = (props: ContentBlockProps) => {
     
                     resizeContentBlock(props.contentBlock.id, newWidth, newHeight);
                 }}
+                onResizeStart={props.onDeselect} 
+                onResizeStop={() => setIsSelectionBlocked(true)}
                 resizeHandles={['se']} 
             >
                 <div
@@ -95,9 +98,13 @@ const ContentBlock = (props: ContentBlockProps) => {
                         if (props.isSelected) {
                             props.onDeselect();
                         } else {
-                            props.onSelect(props.contentBlock.id)}
+                            if (!isSelectionBlocked) {
+                                props.onSelect(props.contentBlock.id);
+                            }
+                            
+                            setIsSelectionBlocked(false);
                         }
-                    }
+                    }}
                 >
                     {
                         props.contentBlock.type === DraggableTypes.HEADLINE_BLOCK && 

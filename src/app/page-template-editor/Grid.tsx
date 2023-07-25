@@ -123,6 +123,8 @@ const Grid = () => {
                     isSelected={block.id === selectedContentBlockId}
                     onSelect={() => setSelectedContentBlockId(block.id)}
                     onDeselect={() => setSelectedContentBlockId(null)}
+                    mouseGridX={currentCoordinate[0]}
+                    mouseGridY={currentCoordinate[1]}
                 />
             )}
             <CoordinateWidget x={currentCoordinate[0]} y={currentCoordinate[1]} />

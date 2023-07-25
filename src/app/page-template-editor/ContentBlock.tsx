@@ -30,6 +30,8 @@ export interface ContentBlockProps {
     isSelected: boolean,
     onSelect: (id: string) => void,
     onDeselect: () => void,
+    mouseGridX: number,
+    mouseGridY: number,
 }
 
 const ContentBlock = (props: ContentBlockProps) => {
@@ -66,17 +68,10 @@ const ContentBlock = (props: ContentBlockProps) => {
                 draggableOpts={{grid: [props.gridCellWidth, props.gridCellWidth]}}
                 
                 // @ts-ignore
-                onResize={(event: MouseEvent) => {
-                    const boxLeft = props.contentBlock.x * props.gridCellWidth;
-                    const boxTop = props.contentBlock.y * props.gridCellWidth;
-    
-                    // Distance moved by the cursor from the starting position of the box
-                    const deltaX = event.clientX - boxLeft;
-                    const deltaY = event.clientY - boxTop;
-    
+                onResize={() => {
                     // Calculate new width and height based on cursor's position
-                    let newWidth = Math.round(deltaX / props.gridCellWidth) - 1;
-                    let newHeight = Math.round(deltaY / props.gridCellWidth);
+                    let newWidth = props.mouseGridX - props.contentBlock.x;
+                    let newHeight = props.mouseGridY - props.contentBlock.y;
     
                     // Clamping the width and height to be within certain boundaries
                     newWidth = Math.min(Math.max(newWidth, 1), GridConstants.COLUMNS);

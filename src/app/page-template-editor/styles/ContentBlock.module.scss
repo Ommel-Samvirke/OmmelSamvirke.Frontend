@@ -3,24 +3,6 @@
     color: black;
     position: absolute;
     cursor: pointer;
-    .dragIconContainer {
-        position: absolute;
-        transform: translateY(-50%);
-        top: 50%;
-        left: -36px;
-        cursor: move;
-    }
-    .deleteIconContainer {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        left: -66px;
-        cursor: pointer;
-        .deleteIcon {
-            font-size: 1rem;
-            color: red;
-        }
-    }
 }
 
 .selected {

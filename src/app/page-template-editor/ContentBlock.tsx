@@ -4,12 +4,11 @@ import 'react-resizable/css/styles.css';
 import {useDrag} from 'react-dnd';
 import {DraggableTypes} from '@/app/page-template-editor/constants/DraggableTypes';
 import {GridContext} from '@/app/page-template-editor/context/GridContext';
-import {useContext, useState} from 'react';
+import {useContext, useState, useEffect} from 'react';
 import {Resizable} from 'react-resizable';
 import {canResizeOrMove} from '@/app/page-template-editor/helpers/ContentBlockHelpers';
 import {IDraggableItem} from '@/app/page-template-editor/interfaces/IDraggableItem';
 import {DragSource} from '@/app/page-template-editor/constants/DragSource';
-import {useEffect} from 'react';
 
 export interface ContentBlockProps {
     id: string,
@@ -80,10 +79,7 @@ const ContentBlock = (props: ContentBlockProps) => {
                 resizeContentBlock(props.id, newWidth, newHeight);
                 setIsSelected(false)
             }}
-            onResizeStart={() => {
-                setIsSelected(false)
-            }}
-
+            onResizeStart={() => setIsSelected(false)}
             resizeHandles={['se']} 
         >
             <div
@@ -98,6 +94,7 @@ const ContentBlock = (props: ContentBlockProps) => {
                     opacity: isDragging ? 0.5 : 1
                 }}
                 onMouseDownCapture={() => setIsSelected(!isSelected)}
+                onDragStart={() => setIsSelected(false)}
             >
                 {props.type === DraggableTypes.HEADLINE_BLOCK && <h1 ref={drag} className={styles.headline}>Eksempel: Overskrift</h1>}
                 

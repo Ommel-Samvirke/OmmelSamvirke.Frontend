@@ -15,9 +15,21 @@
         width: 90vw;
         display: flex;
         justify-content: space-between;
-        h1 {
-            font-size: 1.5rem;
+        align-items: center;
+        height: 100%;
+        input, h1 {
+            font-size: 2rem;
             font-weight: 500;
+        }
+        h1 {
+            padding-right: 5rem;
+            cursor: pointer;
+        }
+        .buttonContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 18rem;
         }
     }
 }

@@ -7,6 +7,7 @@ import DesktopWindowsOutlinedIcon from '@mui/icons-material/DesktopWindowsOutlin
 import TabletMacOutlinedIcon from '@mui/icons-material/TabletMacOutlined';
 import PhoneIphoneOutlinedIcon from '@mui/icons-material/PhoneIphoneOutlined';
 import Tooltip from '@mui/joy/Tooltip';
+import { roboto } from '../fonts';
 
 const PageTemplateEditorHeader = () => {
     const [templateName, setTemplateName] = useState<string>('Unavngiven skabelon');
@@ -23,6 +24,7 @@ const PageTemplateEditorHeader = () => {
                         variant='plain'
                         value={templateName}
                         onChange={(e) => setTemplateName(e.target.value)}
+                        className={roboto.className}
                     />
                 </div>
                 

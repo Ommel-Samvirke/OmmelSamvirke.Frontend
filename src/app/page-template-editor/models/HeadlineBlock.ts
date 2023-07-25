@@ -1,7 +1,7 @@
 import { AbstractContentBlocks } from "./AbstractContentBlocks";
 
 export class HeadlineBlock extends AbstractContentBlocks {
-    public headline: string = 'Eksempel: Overskrift';
+    public headline: string = 'Lorem ipsum dolor sit amet';
     public width: number = HeadlineBlock.defaultWidth;
     public height: number = HeadlineBlock.defaultHeight;
 

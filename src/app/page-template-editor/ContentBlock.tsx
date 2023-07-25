@@ -105,7 +105,7 @@ const ContentBlock = (props: ContentBlockProps) => {
             >
                 {
                     props.contentBlock.type === DraggableTypes.HEADLINE_BLOCK && 
-                    <HeadlineTemplateBlock ref={drag} />
+                    <HeadlineTemplateBlock ref={drag} headlineBlock={props.contentBlock as HeadlineBlock} />
                 }
                 {
                     props.contentBlock.type === DraggableTypes.IMAGE_BLOCK && 

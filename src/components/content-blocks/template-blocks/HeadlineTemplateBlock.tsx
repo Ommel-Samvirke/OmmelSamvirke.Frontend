@@ -1,10 +1,18 @@
 import styles from './styles/HeadlineTemplateBlock.module.scss';
 
 import { forwardRef, ForwardedRef } from 'react';
+import { HeadlineBlock } from '@/app/page-template-editor/models/HeadlineBlock';
+import { roboto } from '@/app/fonts';
 
-const HeadlineTemplateBlock = forwardRef((_, ref: ForwardedRef<HTMLDivElement>) => {
+interface HeadlineTemplateBlockProps {
+    headlineBlock: HeadlineBlock
+}
+
+const HeadlineTemplateBlock = forwardRef((props: HeadlineTemplateBlockProps, ref: ForwardedRef<HTMLDivElement>) => {
     return (
-        <h1 ref={ref} className={styles.headline}>Eksempel: Overskrift</h1>
+        <div ref={ref} className={styles.headlineContainer}>
+            <h1 className={styles.headline + " " + roboto.className}>{props.headlineBlock.headline}</h1>
+        </div>
     );
 });
 

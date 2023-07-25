@@ -11,6 +11,7 @@ import { roboto } from '../fonts';
 
 const PageTemplateEditorHeader = () => {
     const [templateName, setTemplateName] = useState<string>('Unavngiven skabelon');
+    const [isInputHovered, setIsInputHovered] = useState<boolean>(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -21,10 +22,12 @@ const PageTemplateEditorHeader = () => {
                     <Input
                         ref={inputRef}
                         type="text"
-                        variant='plain'
+                        variant={isInputHovered ? 'outlined' : 'plain'}
                         value={templateName}
                         onChange={(e) => setTemplateName(e.target.value)}
-                        className={roboto.className}
+                        className={roboto.className + ' ' + (isInputHovered ? '': styles.inputNotHovered) }
+                        onMouseEnter={() => setIsInputHovered(true)}
+                        onMouseLeave={() => setIsInputHovered(false)}
                     />
                 </div>
                 

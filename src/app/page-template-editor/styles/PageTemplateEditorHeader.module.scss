@@ -25,11 +25,16 @@
         .inputNotHovered {
             padding: 0 13px;
         }
-        .buttonContainer {
+        .rightContainer, .leftContainer {
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+        .rightContainer {
             width: 18rem;
+        }
+        .leftContainer {
+            width: 31rem;
         }
     }
 }

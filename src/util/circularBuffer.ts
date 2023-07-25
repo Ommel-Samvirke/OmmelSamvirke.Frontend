@@ -1,11 +1,11 @@
-﻿export class Stack<T> {
+﻿export class CircularBuffer<T> {
     private storage: T[] = [];
 
-    constructor(private capacity: number = Infinity) {}
+    constructor(private capacity: number = 20) {}
 
     push(item: T): void {
         if (this.size() === this.capacity) {
-            throw Error("Stack has reached max capacity, you cannot add more items");
+            this.storage.shift();
         }
         this.storage.push(item);
     }

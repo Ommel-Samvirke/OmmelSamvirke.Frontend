@@ -11,21 +11,67 @@ import {GridContext} from '@/app/page-template-editor/context/GridContext';
 import {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import {canResizeOrMove} from '@/app/page-template-editor/helpers/ContentBlockHelpers';
 import {ContentBlockType} from '@/app/page-template-editor/types/ContentBlockType';
+import {CircularBuffer} from '@/util/circularBuffer';
 
 const PageTemplateEditor = () => {
     const [contentBlocks, setContentBlocks] = useState<ContentBlockType[]>([]);
+    const [undoBuffer, setUndoBuffer] = useState<CircularBuffer<(ContentBlockType)[]>>(new CircularBuffer<(ContentBlockType)[]>());
+    const [redoBuffer, setRedoBuffer] = useState<CircularBuffer<(ContentBlockType)[]>>(new CircularBuffer<(ContentBlockType)[]>());
     const contentBlocksRef = useRef(contentBlocks);
+
+    const undo = useCallback(() => {
+        if (undoBuffer.size() === 0) return;
+
+        const previousState = undoBuffer.pop();
+
+        if (!previousState) return;
+
+        redoBuffer.push(contentBlocks);
+        setRedoBuffer(redoBuffer);
+
+        setContentBlocks(previousState);
+    }, [contentBlocks, undoBuffer, redoBuffer]);
+
+    const redo = useCallback(() => {
+        if (redoBuffer.size() === 0) return;
+
+        const nextState = redoBuffer.pop();
+
+        if (!nextState) return;
+
+        undoBuffer.push(contentBlocks);
+        setUndoBuffer(undoBuffer);
+
+        setContentBlocks(nextState);
+    }, [contentBlocks, undoBuffer, redoBuffer]);
 
     useEffect(() => {
         contentBlocksRef.current = contentBlocks;
     }, [contentBlocks]);
+
+    useEffect(() => {
+        const handleKeyPress = (event: KeyboardEvent) => {
+            if ((event.ctrlKey || event.metaKey) && event.key === 'z') {
+                undo();
+            } else if ((event.ctrlKey || event.metaKey) && event.key === 'y') {
+                redo();
+            }
+        };
+        
+        document.addEventListener('keydown', handleKeyPress);
+        
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [undo, redo]);
     
     const moveContentBlock = useCallback((id: string, x: number, y: number) => {
-        setContentBlocks(prevBlocks =>
-            prevBlocks.map(block =>
+        setContentBlocks(prevBlocks => {
+            updateUndoBuffer(prevBlocks);
+            return prevBlocks.map(block =>
                 block.id === id ? { ...block, x, y } : block
-            )
-        );
+            );
+        });
     }, []);
 
     const canMoveContentBlock = useCallback((id: string, x: number, y: number, width?: number, height?: number) => {
@@ -39,32 +85,34 @@ const PageTemplateEditor = () => {
     }, [contentBlocksRef]);
 
     const resizeContentBlock = useCallback((id: string, width: number, height: number) => {
-        setContentBlocks(prevBlocks =>
-            prevBlocks.map(block =>
+        setContentBlocks(prevBlocks => {
+            updateUndoBuffer(prevBlocks);
+            return prevBlocks.map(block =>
                 block.id === id ? { ...block, width, height } : block
-            )
-        );
+            );
+        });
     }, []);
     
     const addContentBlock = useCallback((contentBlock: ContentBlockType) => {
-        setContentBlocks(prevBlocks => [...prevBlocks, contentBlock]);
+        setContentBlocks(prevBlocks => {
+            updateUndoBuffer(prevBlocks);
+            return [...prevBlocks, contentBlock];
+        });
     }, []);
     
     const removeContentBlock = useCallback((id: string) => {
-        setContentBlocks(prevBlocks => prevBlocks.filter(block => block.id !== id));
+        setContentBlocks(prevBlocks => {
+            updateUndoBuffer(prevBlocks);
+            return prevBlocks.filter(block => block.id !== id);
+        });
     }, []);
-    
-    const saveSnapshot = useCallback(() => {
-        console.log(contentBlocks);
-    }, [contentBlocks]);
-    
-    const undo = useCallback(() => {
-        console.log('undo');
-    }, []);
-    
-    const redo = useCallback(() => {
-        console.log('redo');
-    }, []);
+
+    const updateUndoBuffer = (snapshot: ContentBlockType[]) => {
+        undoBuffer.push(snapshot);
+        setUndoBuffer(undoBuffer);
+        
+        setRedoBuffer(new CircularBuffer<ContentBlockType[]>());
+    };
     
     const contextValue = useMemo(() => ({
         contentBlocks,
@@ -73,7 +121,6 @@ const PageTemplateEditor = () => {
         resizeContentBlock,
         addContentBlock,
         removeContentBlock,
-        saveSnapshot,
         undo,
         redo
     }), [
@@ -83,7 +130,6 @@ const PageTemplateEditor = () => {
         resizeContentBlock,
         addContentBlock,
         removeContentBlock,
-        saveSnapshot,
         undo,
         redo
     ]);
@@ -92,7 +138,10 @@ const PageTemplateEditor = () => {
         <GridContext.Provider value={contextValue}>
             <DndProvider backend={HTML5Backend}>
                 <div className={styles.PageTemplateEditor}>
-                    <PageTemplateEditorHeader />
+                    <PageTemplateEditorHeader
+                        onUndo={undo}    
+                        onRedo={redo}
+                    />
                     <Grid />
                     <PageTemplateToolMenu />
                 </div>

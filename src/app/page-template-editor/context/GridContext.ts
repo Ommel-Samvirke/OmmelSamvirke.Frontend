@@ -14,7 +14,6 @@ export interface GridContextState {
     resizeContentBlock: (id: string, width: number, height: number) => void;
     addContentBlock: (contentBlock: ContentBlockType) => void;
     removeContentBlock: (id: string) => void;
-    saveSnapshot: () => void;
     undo: () => void;
     redo: () => void;
 }
@@ -27,7 +26,6 @@ export const GridContext = createContext<GridContextState>({
     resizeContentBlock: () => {},
     addContentBlock: () => {},
     removeContentBlock: () => {},
-    saveSnapshot: () => {},
     undo: () => {},
     redo: () => {},
 });

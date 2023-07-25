@@ -10,10 +10,7 @@ import {canResizeOrMove} from '@/app/page-template-editor/helpers/ContentBlockHe
 import {IDraggableItem} from '@/app/page-template-editor/interfaces/IDraggableItem';
 import {DragSource} from '@/app/page-template-editor/constants/DragSource';
 import { HeadlineBlock } from './models/HeadlineBlock';
-import { TextBlock } from './models/TextBlock';
 import { ImageBlock } from './models/ImageBlock';
-import { PdfBlock } from './models/PdfBlock';
-import { VideoBlock } from './models/VideoBlock';
 import { SlideshowBlock } from './models/SlideshowBlock';
 import SlideshowTemplateBlock from '@/components/content-blocks/template-blocks/SlideshowTemplateBlock';
 import PdfTemplateBlock from '@/components/content-blocks/template-blocks/PdfTemplateBlock';
@@ -23,9 +20,10 @@ import ImageTemplateBlock from '@/components/content-blocks/template-blocks/Imag
 import HeadlineTemplateBlock from '@/components/content-blocks/template-blocks/HeadlineTemplateBlock';
 import PropertyWidget from '@/app/page-template-editor/PropertyWidget';
 import {GridConstants} from '@/app/page-template-editor/constants/GridConstants';
+import {ContentBlockType} from '@/app/page-template-editor/types/ContentBlockType';
 
 export interface ContentBlockProps {
-    contentBlock: HeadlineBlock | TextBlock | ImageBlock | PdfBlock | VideoBlock | SlideshowBlock,
+    contentBlock: ContentBlockType,
     gridCellWidth: number,
     isSelected: boolean,
     onSelect: (id: string) => void,
@@ -69,8 +67,8 @@ const ContentBlock = (props: ContentBlockProps) => {
                 
                 onResize={() => {
                     // Calculate new width and height based on cursor's position
-                    let newWidth = props.mouseGridX - props.contentBlock.x;
-                    let newHeight = props.mouseGridY - props.contentBlock.y;
+                    let newWidth = props.mouseGridX - props.contentBlock.x + 1;
+                    let newHeight = props.mouseGridY - props.contentBlock.y + 1;
     
                     // Clamping the width and height to be within certain boundaries
                     newWidth = Math.min(Math.max(newWidth, 1), GridConstants.COLUMNS);

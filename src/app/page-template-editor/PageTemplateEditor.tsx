@@ -10,15 +10,10 @@ import {DndProvider} from 'react-dnd';
 import {GridContext} from '@/app/page-template-editor/context/GridContext';
 import {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import {canResizeOrMove} from '@/app/page-template-editor/helpers/ContentBlockHelpers';
-import {HeadlineBlock} from '@/app/page-template-editor/models/HeadlineBlock';
-import {TextBlock} from '@/app/page-template-editor/models/TextBlock';
-import {ImageBlock} from '@/app/page-template-editor/models/ImageBlock';
-import {PdfBlock} from '@/app/page-template-editor/models/PdfBlock';
-import {VideoBlock} from '@/app/page-template-editor/models/VideoBlock';
-import {SlideshowBlock} from '@/app/page-template-editor/models/SlideshowBlock';
+import {ContentBlockType} from '@/app/page-template-editor/types/ContentBlockType';
 
 const PageTemplateEditor = () => {
-    const [contentBlocks, setContentBlocks] = useState<(HeadlineBlock | TextBlock | ImageBlock | PdfBlock | VideoBlock | SlideshowBlock)[]>([]);
+    const [contentBlocks, setContentBlocks] = useState<ContentBlockType[]>([]);
     const contentBlocksRef = useRef(contentBlocks);
 
     useEffect(() => {
@@ -34,7 +29,7 @@ const PageTemplateEditor = () => {
     }, []);
 
     const canMoveContentBlock = useCallback((id: string, x: number, y: number, width?: number, height?: number) => {
-        const contentBlock: HeadlineBlock | TextBlock | ImageBlock | PdfBlock | VideoBlock | SlideshowBlock | undefined = contentBlocksRef.current.find(block => block.id === id);
+        const contentBlock: ContentBlockType | undefined = contentBlocksRef.current.find(block => block.id === id);
         if(!contentBlock) {
             if (!width || !height) return false;
             return canResizeOrMove(width, height, x, y, id, contentBlocksRef.current);
@@ -51,12 +46,24 @@ const PageTemplateEditor = () => {
         );
     }, []);
     
-    const addContentBlock = useCallback((contentBlock: HeadlineBlock | TextBlock | ImageBlock | PdfBlock | VideoBlock | SlideshowBlock) => {
+    const addContentBlock = useCallback((contentBlock: ContentBlockType) => {
         setContentBlocks(prevBlocks => [...prevBlocks, contentBlock]);
     }, []);
     
     const removeContentBlock = useCallback((id: string) => {
         setContentBlocks(prevBlocks => prevBlocks.filter(block => block.id !== id));
+    }, []);
+    
+    const saveSnapshot = useCallback(() => {
+        console.log(contentBlocks);
+    }, [contentBlocks]);
+    
+    const undo = useCallback(() => {
+        console.log('undo');
+    }, []);
+    
+    const redo = useCallback(() => {
+        console.log('redo');
     }, []);
     
     const contextValue = useMemo(() => ({
@@ -65,8 +72,21 @@ const PageTemplateEditor = () => {
         canMoveContentBlock,
         resizeContentBlock,
         addContentBlock,
-        removeContentBlock
-    }), [contentBlocks, moveContentBlock, canMoveContentBlock, resizeContentBlock, addContentBlock, removeContentBlock]);
+        removeContentBlock,
+        saveSnapshot,
+        undo,
+        redo
+    }), [
+        contentBlocks,
+        moveContentBlock,
+        canMoveContentBlock,
+        resizeContentBlock,
+        addContentBlock,
+        removeContentBlock,
+        saveSnapshot,
+        undo,
+        redo
+    ]);
     
     return (
         <GridContext.Provider value={contextValue}>

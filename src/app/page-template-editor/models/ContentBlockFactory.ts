@@ -6,9 +6,10 @@ import { PdfBlock } from "./PdfBlock";
 import { SlideshowBlock } from "./SlideshowBlock";
 import { TextBlock } from "./TextBlock";
 import { VideoBlock } from "./VideoBlock";
+import {ContentBlockType} from '@/app/page-template-editor/types/ContentBlockType';
 
 export class ContentBlockFactory {
-    public static createContentBlock(type: string, x?: number, y?: number): AbstractContentBlocks {
+    public static createContentBlock(type: string, x?: number, y?: number): ContentBlockType {
         switch (type) {
             case DraggableTypes.HEADLINE_BLOCK:
                 return new HeadlineBlock(type, x, y);

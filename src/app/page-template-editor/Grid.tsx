@@ -9,14 +9,15 @@ import {DraggableTypes} from '@/app/page-template-editor/constants/DraggableType
 import { ImageBlock } from "./models/ImageBlock";
 import { HeadlineBlock } from "./models/HeadlineBlock";
 import CoordinateWidget from '@/app/page-template-editor/CoordinateWidget';
+import {GridConstants} from '@/app/page-template-editor/constants/GridConstants';
 
-const minRows = 24;
+const minRows = GridConstants.COLUMNS;
 
 const Grid = () => {
     const gridContext = useContext(GridContext);
     const [gridCells, setGridCells] = useState<GridCellProps[]>([]);
     const [gridCellWidth, setGridCellWidth] = useState<number>(0);
-    const [cols] = useState<number>(24);
+    const [cols] = useState<number>(GridConstants.COLUMNS);
     const [currentCoordinate, setCurrentCoordinate] = useState<[number, number]>([0,0]);
     const [selectedContentBlockId, setSelectedContentBlockId] = useState<string | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);

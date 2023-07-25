@@ -22,6 +22,7 @@ import VideoTemplateBlock from '@/components/content-blocks/template-blocks/Vide
 import ImageTemplateBlock from '@/components/content-blocks/template-blocks/ImageTemplateBlock';
 import HeadlineTemplateBlock from '@/components/content-blocks/template-blocks/HeadlineTemplateBlock';
 import PropertyWidget from '@/app/page-template-editor/PropertyWidget';
+import {GridConstants} from '@/app/page-template-editor/constants/GridConstants';
 
 export interface ContentBlockProps {
     contentBlock: HeadlineBlock | TextBlock | ImageBlock | PdfBlock | VideoBlock | SlideshowBlock,
@@ -78,7 +79,7 @@ const ContentBlock = (props: ContentBlockProps) => {
                     let newHeight = Math.round(deltaY / props.gridCellWidth);
     
                     // Clamping the width and height to be within certain boundaries
-                    newWidth = Math.min(Math.max(newWidth, 1), 24);
+                    newWidth = Math.min(Math.max(newWidth, 1), GridConstants.COLUMNS);
                     newHeight = Math.min(Math.max(newHeight, 1), 200);
     
                     if (!canResizeOrMove(newWidth, newHeight, props.contentBlock.x, props.contentBlock.y, props.contentBlock.id, contentBlocks)) {

@@ -6,6 +6,8 @@ import GridCell, {GridCellProps} from '@/app/page-template-editor/GridCell';
 import ContentBlock from '@/app/page-template-editor/ContentBlock';
 import {GridContext} from '@/app/page-template-editor/context/GridContext';
 import {DraggableTypes} from '@/app/page-template-editor/constants/DraggableTypes';
+import { ImageBlock } from "./models/ImageBlock";
+import { HeadlineBlock } from "./models/HeadlineBlock";
 
 const minRows = 25;
 
@@ -57,22 +59,8 @@ const Grid = () => {
     };
     
     const setInitialContentBlocks = () => {
-        
-        gridContext.addContentBlock({
-            id: '1',
-            x: 0,
-            y: 0,
-            width: 8,
-            height: 1
-        });
-        
-        gridContext.addContentBlock({
-            id: '2',
-            x: 0,
-            y: 6,
-            width: 8,
-            height: 2
-        });
+        gridContext.addContentBlock(new HeadlineBlock(DraggableTypes.HEADLINE_BLOCK, 0, 0, 8, 1));
+        gridContext.addContentBlock(new ImageBlock( DraggableTypes.IMAGE_BLOCK, 0, 3, 6, 6));
     }
 
     return (
@@ -87,13 +75,8 @@ const Grid = () => {
             {gridContext.contentBlocks.map(block =>
                 <ContentBlock
                     key={block.id}
-                    id={block.id}
-                    width={block.width}
-                    height={block.height}
-                    x={block.x}
-                    y={block.y}
+                    contentBlock={block}
                     gridCellWidth={gridCellWidth}
-                    type={DraggableTypes.HEADLINE_BLOCK}
                 />
             )}
         </div>

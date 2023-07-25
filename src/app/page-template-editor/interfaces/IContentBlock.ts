@@ -4,4 +4,5 @@
     y: number;
     width: number;
     height: number;
+    type: string;
 }

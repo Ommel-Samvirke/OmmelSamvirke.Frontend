@@ -27,12 +27,9 @@ const ToolMenuIcon = (props: ToolMenuIconProps) => {
         }
     }, []);
     
-    const [{isDragging}, drag, preview] = useDrag<IDraggableItem, void, { isDragging: boolean }>(() => ({
+    const [, drag, preview] = useDrag<IDraggableItem>(() => ({
         type: props.type,
         item: { id: '', type: props.type, source: DragSource.TOOL_MENU},
-        collect: monitor => ({
-            isDragging: monitor.isDragging(),
-        }),
     }));
     
     return (

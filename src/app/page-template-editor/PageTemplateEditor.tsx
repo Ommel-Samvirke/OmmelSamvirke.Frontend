@@ -8,7 +8,7 @@ import PageTemplateToolMenu from '@/app/page-template-editor/PageTemplateToolMen
 import {HTML5Backend} from 'react-dnd-html5-backend';
 import {DndProvider} from 'react-dnd';
 import {GridContext} from '@/app/page-template-editor/context/GridContext';
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import IContentBlock from '@/app/page-template-editor/interfaces/IContentBlock';
 import {canResizeOrMove} from '@/app/page-template-editor/helpers/ContentBlockHelpers';
 
@@ -36,7 +36,7 @@ const PageTemplateEditor = () => {
         }
 
         return canResizeOrMove(contentBlock.width, contentBlock.height, x, y, id, contentBlocksRef.current);
-    }, [contentBlocks]);
+    }, [contentBlocksRef]);
 
     const resizeContentBlock = useCallback((id: string, width: number, height: number) => {
         setContentBlocks(prevBlocks =>
@@ -54,17 +54,27 @@ const PageTemplateEditor = () => {
         setContentBlocks(prevBlocks => prevBlocks.filter(block => block.id !== id));
     }, []);
     
+    const contextValue = useMemo(() => ({
+        contentBlocks,
+        moveContentBlock,
+        canMoveContentBlock,
+        resizeContentBlock,
+        addContentBlock,
+        removeContentBlock
+    }), [contentBlocks, moveContentBlock, canMoveContentBlock, resizeContentBlock, addContentBlock, removeContentBlock]);
+    
     return (
-        <GridContext.Provider value={{ contentBlocks, moveContentBlock, canMoveContentBlock, resizeContentBlock, addContentBlock, removeContentBlock }}>
+        <GridContext.Provider value={contextValue}>
             <DndProvider backend={HTML5Backend}>
-            <div className={styles.PageTemplateEditor}>
-                <PageTemplateEditorHeader />
-                <Grid />
-                <PageTemplateToolMenu />
-            </div>
+                <div className={styles.PageTemplateEditor}>
+                    <PageTemplateEditorHeader />
+                    <Grid />
+                    <PageTemplateToolMenu />
+                </div>
             </DndProvider>
         </GridContext.Provider>
     );
+    
 };
 
 export default PageTemplateEditor;

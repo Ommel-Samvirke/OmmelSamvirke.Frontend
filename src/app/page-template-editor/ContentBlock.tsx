@@ -15,15 +15,12 @@ import { ImageBlock } from './models/ImageBlock';
 import { PdfBlock } from './models/PdfBlock';
 import { VideoBlock } from './models/VideoBlock';
 import { SlideshowBlock } from './models/SlideshowBlock';
-import SwipeableViews from 'react-swipeable-views';
-import { autoPlay } from 'react-swipeable-views-utils';
-import Image from 'next/image';
-import { Box } from '@mui/joy';
-import Button from '@mui/material/Button';
-import MobileStepper from '@mui/material/MobileStepper/MobileStepper';
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
-
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+import SlideshowTemplateBlock from '@/components/content-blocks/template-blocks/SlideshowTemplateBlock';
+import PdfTemplateBlock from '@/components/content-blocks/template-blocks/PdfTemplateBlock';
+import TextTemplateBlock from '@/components/content-blocks/template-blocks/TextTemplateBlock';
+import VideoTemplateBlock from '@/components/content-blocks/template-blocks/VideoTemplateBlock';
+import ImageTemplateBlock from '@/components/content-blocks/template-blocks/ImageTemplateBlock';
+import HeadlineTemplateBlock from '@/components/content-blocks/template-blocks/HeadlineTemplateBlock';
 
 export interface ContentBlockProps {
     contentBlock: HeadlineBlock | TextBlock | ImageBlock | PdfBlock | VideoBlock | SlideshowBlock,
@@ -34,7 +31,6 @@ const ContentBlock = (props: ContentBlockProps) => {
     const { resizeContentBlock, contentBlocks } = useContext(GridContext);
     const [isSelected, setIsSelected] = useState<boolean>(false);
     const gridContext = useContext(GridContext);
-    const [activeStep, setActiveStep] = useState<number>(0);
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -59,18 +55,6 @@ const ContentBlock = (props: ContentBlockProps) => {
             isDragging: monitor.isDragging(),
         }),
     }));
-
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      };
-    
-      const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-      };
-    
-      const handleStepChange = (step: number) => {
-        setActiveStep(step);
-      };
 
     return (
         <Resizable
@@ -121,101 +105,27 @@ const ContentBlock = (props: ContentBlockProps) => {
             >
                 {
                     props.contentBlock.type === DraggableTypes.HEADLINE_BLOCK && 
-                    <h1 ref={drag} className={styles.headline}>Eksempel: Overskrift</h1>
+                    <HeadlineTemplateBlock ref={drag} />
                 }
                 {
                     props.contentBlock.type === DraggableTypes.IMAGE_BLOCK && 
-                    <Image 
-                        ref={drag}
-                        src={(props.contentBlock as ImageBlock).imageUrl} 
-                        alt={"Skabelon af billede"} 
-                        className={styles.image}
-                        width={600}
-                        height={600} 
-                    />
+                    <ImageTemplateBlock ref={drag} imageBlock={props.contentBlock as ImageBlock} />
                 }
                 {
                     props.contentBlock.type === DraggableTypes.VIDEO_BLOCK && 
-                    <iframe 
-                        ref={drag} 
-                        className={styles.video}
-                        src="https://www.youtube.com/embed/C0DPdy98e4c" 
-                        title="YouTube video player"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    ></iframe>
+                    <VideoTemplateBlock ref={drag} />
                 }
                 {
                     props.contentBlock.type === DraggableTypes.TEXT_BLOCK &&
-                    <div ref={drag} className={styles.textContent}>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas fringilla non enim sed euismod.
-                            Nullam tincidunt ullamcorper nulla at laoreet. Donec hendrerit nunc et facilisis condimentum.
-                            Pellentesque accumsan ligula a dolor commodo bibendum. Nulla cursus tincidunt dui ac elementum.
-                            Maecenas ac congue felis, at pretium nisl. Donec sodales nibh nec lorem scelerisque, non pulvinar quam volutpat.
-                            Nam non congue tortor. Aliquam gravida bibendum lorem, eget elementum mi tempus venenatis. Nam ut euismod dolor.
-                            Vivamus lacinia arcu ac vehicula rutrum. Nulla consequat pellentesque ipsum at convallis. Morbi quis mollis odio, a pulvinar purus.
-                        </p>
-                        <p>
-                            Praesent ornare mollis ipsum non vulputate. Nullam eleifend lorem purus, vel ullamcorper lectus pellentesque vitae.
-                            Nunc ullamcorper rhoncus ipsum sed mollis. Nulla fringilla tortor libero, ac condimentum enim aliquam sit amet. 
-                            Aenean ut odio augue. Quisque sagittis auctor imperdiet. Duis in viverra eros, et mattis sem.
-                        </p>
-                    </div>
+                    <TextTemplateBlock ref={drag} />
                 }
                 {
                     props.contentBlock.type === DraggableTypes.PDF_BLOCK &&
-                    <div ref={drag} className={styles.pdfContent}>
-                        <embed 
-                            src="/files/test-pdf.pdf"
-                            type="application/pdf"
-                            width="100%"
-                            height="100%"
-                        />
-                    </div>
+                    <PdfTemplateBlock ref={drag} />
                 }
                 {
                     props.contentBlock.type === DraggableTypes.SLIDESHOW_BLOCK &&
-                    <div ref={drag} className={styles.slideshowContainer}>
-                        <Box className={styles.slideshowContent}>
-                            <SwipeableViews
-                                axis={'x'}
-                                index={activeStep}
-                                onChangeIndex={handleStepChange}
-                                enableMouseEvents
-                            >
-                                {(props.contentBlock as SlideshowBlock).imageUrls.map((url, index) => (
-                                <div key={url}>
-                                    {Math.abs(activeStep - index) <= 2 ? (
-                                    <Box
-                                        component="img"
-                                        src={url}
-                                        alt={`Billedegalleri: Billede nummer ${index + 1}`}
-                                    />
-                                    ) : null}
-                                </div>
-                                ))}
-                            </SwipeableViews>
-                            <MobileStepper
-                                steps={(props.contentBlock as SlideshowBlock).imageUrls.length}
-                                position="static"
-                                activeStep={activeStep}
-                                nextButton={
-                                <Button
-                                    size="small"
-                                    onClick={handleNext}
-                                    disabled={activeStep === (props.contentBlock as SlideshowBlock).imageUrls.length - 1}
-                                >
-                                    Næste <KeyboardArrowRight />
-                                </Button>
-                                }
-                                backButton={
-                                <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-                                    <KeyboardArrowLeft /> Forrige
-                                </Button>
-                                }
-                            />
-                        </Box>
-                    </div>
+                    <SlideshowTemplateBlock ref={drag} slideshowBlock={props.contentBlock as SlideshowBlock} />
                 }
             </div>
         </Resizable>

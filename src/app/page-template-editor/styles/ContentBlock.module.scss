@@ -4,58 +4,6 @@
     position: absolute;
     cursor: pointer;
     overflow: hidden;
-    .headline {
-        font-size: 2.25rem;
-        font-weight: bold;
-        padding: 0.5rem 1rem;
-        display: flex;
-        align-items: center;
-        height: 100%;
-    }
-    .image {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-    }
-    .video {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-        padding: 0.5rem;
-    }
-    .textContent {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        p {
-            padding: 0.5rem;
-        }
-    }
-    .pdfContent, .slideshowContainer {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-        padding: 0.5rem;
-    }
-    .slideshowContent {
-        height: 100%;
-        width: 100%;
-        & > div:first-child {
-            height: calc(100% - 50px);
-            width: 100%;
-            & div {
-                height: 100%;
-                width: 100%;
-                & img {
-                    height: calc(100% - 5px);
-                    width: 100%;
-                    object-fit: cover;
-                }
-            }
-        }
-    }
     .dragIconContainer {
         position: absolute;
         transform: translateY(-50%);

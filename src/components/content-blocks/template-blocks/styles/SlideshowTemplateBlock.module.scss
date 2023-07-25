@@ -1,0 +1,24 @@
+.slideshowContainer {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    padding: 0.5rem;
+}
+
+.slideshowContent {
+    height: 100%;
+    width: 100%;
+    & > div:first-child {
+        height: calc(100% - 50px);
+        width: 100%;
+        & div {
+            height: 100%;
+            width: 100%;
+            & img {
+                height: calc(100% - 5px);
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+}

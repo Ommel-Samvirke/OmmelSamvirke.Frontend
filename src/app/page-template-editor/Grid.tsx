@@ -8,8 +8,9 @@ import {GridContext} from '@/app/page-template-editor/context/GridContext';
 import {DraggableTypes} from '@/app/page-template-editor/constants/DraggableTypes';
 import { ImageBlock } from "./models/ImageBlock";
 import { HeadlineBlock } from "./models/HeadlineBlock";
+import CoordinateWidget from '@/app/page-template-editor/CoordinateWidget';
 
-const minRows = 25;
+const minRows = 24;
 
 const Grid = () => {
     const [gridCells, setGridCells] = useState<GridCellProps[]>([]);
@@ -17,12 +18,13 @@ const Grid = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [cols] = useState<number>(24);
     const gridContext = useContext(GridContext);
+    const [currentCoordinate, setCurrentCoordinate] = useState<[number, number]>([0,0]);
 
     useEffect(() => {
         const debouncedAdjustGridSize = debounce(adjustGridSize, 150);
 
         window.addEventListener('resize', debouncedAdjustGridSize);
-        return () => window.removeEventListener('resize', debouncedAdjustGridSize);  // Cleanup listener
+        return () => window.removeEventListener('resize', debouncedAdjustGridSize);
     }, [cols]);
 
     useEffect(() => {
@@ -63,13 +65,24 @@ const Grid = () => {
         gridContext.addContentBlock(new ImageBlock( DraggableTypes.IMAGE_BLOCK, 0, 3, 6, 6));
     }
 
+    const calculateCurrentGridCell = (event: React.MouseEvent<HTMLDivElement>) => {
+        if (!containerRef.current) return;  
+        const { top, left } = containerRef.current.getBoundingClientRect();
+        
+        const x = Math.floor((event.clientX - left) / gridCellWidth);
+        const y = Math.floor((event.clientY - top) / gridCellWidth);
+
+        setCurrentCoordinate([x, y]);
+    }
+
     return (
-        <div className={styles.container} ref={containerRef} id={styles.grid}>
+        <div className={styles.container} ref={containerRef} id={styles.grid} onMouseMove={calculateCurrentGridCell}>
             {gridCells.map((gridCellProps) =>
                 <GridCell
                     x={gridCellProps.x}
                     y={gridCellProps.y}
-                    key={`${gridCellProps.x}-${gridCellProps.y}`} 
+                    key={`${gridCellProps.x}-${gridCellProps.y}`}
+                    setCoordinate={(x: number, y: number) => setCurrentCoordinate([x, y])}
                 />
             )}
             {gridContext.contentBlocks.map(block =>
@@ -79,6 +92,7 @@ const Grid = () => {
                     gridCellWidth={gridCellWidth}
                 />
             )}
+            <CoordinateWidget x={currentCoordinate[0]} y={currentCoordinate[1]} />
         </div>
     );
 }

@@ -17,11 +17,17 @@ import { ContentBlockFactory } from "./models/ContentBlockFactory";
 export interface GridCellProps {
     x: number,
     y: number,
-    children?: React.ReactNode
+    children?: React.ReactNode,
+    setCoordinate?: (x: number, y: number) => void
 }
 
 const GridCell = (props: GridCellProps) => {
     const gridContext = useContext(GridContext);
+    
+    const setCoordinate = (x: number, y: number) => {
+        if (!props.setCoordinate) return;
+        props.setCoordinate(x, y);
+    }
 
     const [{isOver, canDrop }, drop] = useDrop<IDraggableItem, void, {isOver: boolean, canDrop: boolean}>(() => ({
         accept: [
@@ -70,6 +76,7 @@ const GridCell = (props: GridCellProps) => {
         <div
             ref={drop}    
             className={styles.gridCell}
+            onMouseEnter={() => setCoordinate(props.x, props.y)}
         >
             {isOver && canDrop && <DropOverlay color={"yellow"} />}
             {isOver && !canDrop && <DropOverlay color={"red"} />}

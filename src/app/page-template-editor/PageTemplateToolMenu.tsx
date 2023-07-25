@@ -4,9 +4,12 @@ import {DraggableTypes} from '@/app/page-template-editor/constants/DraggableType
 
 const PageTemplateToolMenu = () => {
     return <div className={styles.pageTemplateEditorSidebar}>
-        <ToolMenuIcon type={DraggableTypes.HEADLINE_BLOCK} />
-        <ToolMenuIcon type={DraggableTypes.TEXT_BLOCK} />
-        <ToolMenuIcon type={DraggableTypes.IMAGE_BLOCK} />
+        <ToolMenuIcon type={DraggableTypes.HEADLINE_BLOCK} tooltip="Overskrift"/>
+        <ToolMenuIcon type={DraggableTypes.TEXT_BLOCK} tooltip="Tekst" />
+        <ToolMenuIcon type={DraggableTypes.IMAGE_BLOCK} tooltip="Billede" />
+        <ToolMenuIcon type={DraggableTypes.PDF_BLOCK} tooltip="PDF" />
+        <ToolMenuIcon type={DraggableTypes.VIDEO_BLOCK} tooltip="Video" />
+        <ToolMenuIcon type={DraggableTypes.SLIDESHOW_BLOCK} tooltip="Galleri" />
     </div>
 };
 

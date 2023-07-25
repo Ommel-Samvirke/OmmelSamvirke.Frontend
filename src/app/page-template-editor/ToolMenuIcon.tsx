@@ -1,7 +1,6 @@
-﻿import {DragPreviewImage, useDrag} from 'react-dnd';
+﻿import {useDrag} from 'react-dnd';
 import {IDraggableItem} from '@/app/page-template-editor/interfaces/IDraggableItem';
 import {DragSource} from '@/app/page-template-editor/constants/DragSource';
-import {useEffect, useState} from 'react';
 import {DraggableTypes} from '@/app/page-template-editor/constants/DraggableTypes';
 import IconButton from '@mui/joy/IconButton';
 import AbcOutlinedIcon from '@mui/icons-material/AbcOutlined';
@@ -18,23 +17,13 @@ interface ToolMenuIconProps {
 }
 
 const ToolMenuIcon = (props: ToolMenuIconProps) => {
-    const [previewImagePath, setPreviewImagePath] = useState<string>('');
-    
-    useEffect(() => {
-        switch (props.type) {
-            case DraggableTypes.HEADLINE_BLOCK:
-                setPreviewImagePath('/images/content-block-previews/headline.png');
-        }
-    }, []);
-    
-    const [, drag, preview] = useDrag<IDraggableItem>(() => ({
+    const [, drag] = useDrag<IDraggableItem>(() => ({
         type: props.type,
         item: { id: '', type: props.type, source: DragSource.TOOL_MENU},
     }));
     
     return (
         <>
-            <DragPreviewImage connect={preview} src={previewImagePath} />
             <Tooltip title={props.tooltip}>
                 <IconButton ref={drag} >
                     { props.type === DraggableTypes.HEADLINE_BLOCK && <AbcOutlinedIcon /> }

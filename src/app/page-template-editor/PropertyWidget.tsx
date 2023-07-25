@@ -3,6 +3,7 @@ import Button from '@mui/joy/Button';
 import {Delete} from '@mui/icons-material';
 import {FormControl, FormLabel, Input} from '@mui/joy';
 import {ChangeEvent, ForwardedRef, forwardRef} from 'react';
+import {GridConstants} from '@/app/page-template-editor/constants/GridConstants';
 
 interface PropertyWidgetProps { 
     id: string,
@@ -30,6 +31,12 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
                             placeholder="X" 
                             value={props.x}
                             type={"number"}
+                            slotProps={{
+                                input: {
+                                    min: 0,
+                                    max: GridConstants.COLUMNS - 1,
+                                },
+                            }}
                             onChange={(event: ChangeEvent<HTMLInputElement>) => props.moveContentBlock(props.id, +event.target.value, props.y)}
                         />
                     </FormControl>
@@ -39,6 +46,11 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
                             placeholder="Y" 
                             value={props.y}
                             type={"number"}
+                            slotProps={{
+                                input: {
+                                    min: 0,
+                                },
+                            }}
                             onChange={(event: ChangeEvent<HTMLInputElement>) => props.moveContentBlock(props.id, props.x, +event.target.value)}
                         />
                     </FormControl>
@@ -50,6 +62,12 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
                             placeholder="Bredde" 
                             value={props.width}
                             type={"number"}
+                            slotProps={{
+                                input: {
+                                    min: 1,
+                                    max: GridConstants.COLUMNS,
+                                },
+                            }}
                             onChange={(event: ChangeEvent<HTMLInputElement>) => props.resizeContentBlock(props.id, +event.target.value, props.height)}
                         />
                     </FormControl>
@@ -59,6 +77,12 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
                             placeholder="Højde"
                             value={props.height}
                             type={"number"}
+                            slotProps={{
+                                input: {
+                                    min: 1,
+                                    max: 100,
+                                },
+                            }}
                             onChange={(event: ChangeEvent<HTMLInputElement>) => props.resizeContentBlock(props.id, props.width, +event.target.value)} 
                         />
                     </FormControl>

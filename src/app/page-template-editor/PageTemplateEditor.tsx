@@ -45,6 +45,16 @@ const PageTemplateEditor = () => {
         setContentBlocks(nextState);
     }, [contentBlocks, undoBuffer, redoBuffer]);
 
+    const canMoveContentBlock = useCallback((id: string, x: number, y: number, width?: number, height?: number) => {
+        const contentBlock: ContentBlockType | undefined = contentBlocksRef.current.find(block => block.id === id);
+        if(!contentBlock) {
+            if (!width || !height) return false;
+            return canResizeOrMove(width, height, x, y, id, contentBlocksRef.current);
+        }
+        
+        return canResizeOrMove(width ? width : contentBlock.width, height ? height : contentBlock.height, x, y, id, contentBlocksRef.current);
+    }, [contentBlocksRef]);
+
     useEffect(() => {
         contentBlocksRef.current = contentBlocks;
     }, [contentBlocks]);
@@ -66,33 +76,32 @@ const PageTemplateEditor = () => {
     }, [undo, redo]);
     
     const moveContentBlock = useCallback((id: string, x: number, y: number) => {
+        if (!canMoveContentBlock(id, x, y)) return;
+        
         setContentBlocks(prevBlocks => {
             updateUndoBuffer(prevBlocks);
             return prevBlocks.map(block =>
                 block.id === id ? { ...block, x, y } : block
             );
         });
-    }, []);
-
-    const canMoveContentBlock = useCallback((id: string, x: number, y: number, width?: number, height?: number) => {
-        const contentBlock: ContentBlockType | undefined = contentBlocksRef.current.find(block => block.id === id);
-        if(!contentBlock) {
-            if (!width || !height) return false;
-            return canResizeOrMove(width, height, x, y, id, contentBlocksRef.current);
-        }
-
-        return canResizeOrMove(contentBlock.width, contentBlock.height, x, y, id, contentBlocksRef.current);
-    }, [contentBlocksRef]);
+    }, [canMoveContentBlock]);
 
     const resizeContentBlock = useCallback((id: string, width: number, height: number) => {
+        const currentBlock = contentBlocks.find(block => block.id === id);
+        if (!currentBlock) return;
+        
+        const { x, y } = currentBlock;
+        if (!canMoveContentBlock(id, x, y, width, height)) return;
+        
         setContentBlocks(prevBlocks => {
             updateUndoBuffer(prevBlocks);
             return prevBlocks.map(block =>
                 block.id === id ? { ...block, width, height } : block
             );
         });
-    }, []);
-    
+    }, [canMoveContentBlock, contentBlocks]);
+
+
     const addContentBlock = useCallback((contentBlock: ContentBlockType) => {
         setContentBlocks(prevBlocks => {
             updateUndoBuffer(prevBlocks);

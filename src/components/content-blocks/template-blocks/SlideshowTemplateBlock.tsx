@@ -6,24 +6,28 @@ import MobileStepper from '@mui/material/MobileStepper/MobileStepper';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import SwipeableViews from 'react-swipeable-views';
 import { SlideshowBlock } from '@/app/page-template-editor/models/SlideshowBlock';
-import { useState, forwardRef, ForwardedRef } from 'react';
+import React, { useState, forwardRef, ForwardedRef } from 'react';
 
 interface SlideshowTemplateBlockProps { 
     slideshowBlock: SlideshowBlock,
+    onSwipe: () => void,
 }
 
 const SlideshowTemplateBlock = forwardRef((props: SlideshowTemplateBlockProps, ref: ForwardedRef<HTMLDivElement>) => {
     const [activeStep, setActiveStep] = useState<number>(0);
 
-    const handleNext = () => {
+    const handleNext = (event: React.MouseEvent) => {
+        event.stopPropagation();
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
     
-    const handleBack = () => {
+    const handleBack = (event: React.MouseEvent) => {
+        event.stopPropagation();
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
     const handleStepChange = (step: number) => {
+        props.onSwipe();
         setActiveStep(step);
     };
 

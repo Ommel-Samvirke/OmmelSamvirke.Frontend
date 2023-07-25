@@ -146,7 +146,11 @@ const ContentBlock = (props: ContentBlockProps) => {
                     }
                     {
                         props.contentBlock.type === DraggableTypes.SLIDESHOW_BLOCK &&
-                        <SlideshowTemplateBlock ref={drag} slideshowBlock={props.contentBlock as SlideshowBlock} />
+                        <SlideshowTemplateBlock 
+                            ref={drag} 
+                            slideshowBlock={props.contentBlock as SlideshowBlock} 
+                            onSwipe={() => setIsSelectionBlocked(true)} 
+                        />
                     }
                 </div>
             </Resizable>

@@ -10,7 +10,7 @@ export abstract class AbstractContentBlocks implements IContentBlock {
     public height: number;
     public type: string;
 
-    constructor(type: string, x: number, y: number, width: number, height: number) {
+    protected constructor(type: string, x: number, y: number, width: number, height: number) {
         this.id = uuidv1();
         this.type = type;
         this.x = x;

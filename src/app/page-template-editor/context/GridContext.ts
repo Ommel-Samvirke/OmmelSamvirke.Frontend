@@ -1,5 +1,4 @@
 ﻿import {createContext} from 'react';
-import IContentBlock from '@/app/page-template-editor/interfaces/IContentBlock';
 import { HeadlineBlock } from '../models/HeadlineBlock';
 import { ImageBlock } from '../models/ImageBlock';
 import { PdfBlock } from '../models/PdfBlock';
@@ -12,7 +11,7 @@ export interface GridContextState {
     moveContentBlock: (id: string, x: number, y: number) => void;
     canMoveContentBlock: (id: string, x: number, y: number, width?: number, height?: number) => boolean;
     resizeContentBlock: (id: string, width: number, height: number) => void;
-    addContentBlock: (contentBlock: IContentBlock) => void;
+    addContentBlock: (contentBlock: HeadlineBlock | TextBlock | ImageBlock | PdfBlock | VideoBlock | SlideshowBlock) => void;
     removeContentBlock: (id: string) => void;
 }
 

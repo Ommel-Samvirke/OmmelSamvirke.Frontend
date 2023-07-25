@@ -9,11 +9,16 @@ import {HTML5Backend} from 'react-dnd-html5-backend';
 import {DndProvider} from 'react-dnd';
 import {GridContext} from '@/app/page-template-editor/context/GridContext';
 import {useCallback, useEffect, useRef, useState, useMemo} from 'react';
-import IContentBlock from '@/app/page-template-editor/interfaces/IContentBlock';
 import {canResizeOrMove} from '@/app/page-template-editor/helpers/ContentBlockHelpers';
+import {HeadlineBlock} from '@/app/page-template-editor/models/HeadlineBlock';
+import {TextBlock} from '@/app/page-template-editor/models/TextBlock';
+import {ImageBlock} from '@/app/page-template-editor/models/ImageBlock';
+import {PdfBlock} from '@/app/page-template-editor/models/PdfBlock';
+import {VideoBlock} from '@/app/page-template-editor/models/VideoBlock';
+import {SlideshowBlock} from '@/app/page-template-editor/models/SlideshowBlock';
 
 const PageTemplateEditor = () => {
-    const [contentBlocks, setContentBlocks] = useState<IContentBlock[]>([]);
+    const [contentBlocks, setContentBlocks] = useState<(HeadlineBlock | TextBlock | ImageBlock | PdfBlock | VideoBlock | SlideshowBlock)[]>([]);
     const contentBlocksRef = useRef(contentBlocks);
 
     useEffect(() => {
@@ -29,7 +34,7 @@ const PageTemplateEditor = () => {
     }, []);
 
     const canMoveContentBlock = useCallback((id: string, x: number, y: number, width?: number, height?: number) => {
-        const contentBlock: IContentBlock | undefined = contentBlocksRef.current.find(block => block.id === id);
+        const contentBlock: HeadlineBlock | TextBlock | ImageBlock | PdfBlock | VideoBlock | SlideshowBlock | undefined = contentBlocksRef.current.find(block => block.id === id);
         if(!contentBlock) {
             if (!width || !height) return false;
             return canResizeOrMove(width, height, x, y, id, contentBlocksRef.current);
@@ -46,7 +51,7 @@ const PageTemplateEditor = () => {
         );
     }, []);
     
-    const addContentBlock = useCallback((contentBlock: IContentBlock) => {
+    const addContentBlock = useCallback((contentBlock: HeadlineBlock | TextBlock | ImageBlock | PdfBlock | VideoBlock | SlideshowBlock) => {
         setContentBlocks(prevBlocks => [...prevBlocks, contentBlock]);
     }, []);
     

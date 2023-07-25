@@ -13,19 +13,48 @@ import CoordinateWidget from '@/app/page-template-editor/CoordinateWidget';
 const minRows = 24;
 
 const Grid = () => {
+    const gridContext = useContext(GridContext);
     const [gridCells, setGridCells] = useState<GridCellProps[]>([]);
     const [gridCellWidth, setGridCellWidth] = useState<number>(0);
-    const containerRef = useRef<HTMLDivElement>(null);
     const [cols] = useState<number>(24);
-    const gridContext = useContext(GridContext);
     const [currentCoordinate, setCurrentCoordinate] = useState<[number, number]>([0,0]);
+    const [selectedContentBlockId, setSelectedContentBlockId] = useState<string | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const debouncedAdjustGridSize = debounce(adjustGridSize, 150);
+        const handleDocumentClick = (event: MouseEvent) => {
+            const target = event.target as Element;
 
+            if (target.closest('.content-block-controls')) {
+                return;
+            }
+
+            if (target.closest('.content-block')) {
+                return;
+            }
+            
+            setSelectedContentBlockId(null);
+        }
+        
+        const handleKeyPress = (event: KeyboardEvent) => {
+            console.log(selectedContentBlockId)
+            if (event.key === 'Escape' || event.key === 'Backspace' || event.key === 'Delete') {
+                if (!selectedContentBlockId) return;
+                gridContext.removeContentBlock(selectedContentBlockId);
+            }
+        };
+        
+        document.addEventListener('mousedown', handleDocumentClick);
+        document.addEventListener('keydown', handleKeyPress);
         window.addEventListener('resize', debouncedAdjustGridSize);
-        return () => window.removeEventListener('resize', debouncedAdjustGridSize);
-    }, [cols]);
+        
+        return () => {
+            document.removeEventListener('mousedown', handleDocumentClick);
+            document.removeEventListener('keydown', handleKeyPress);
+            window.removeEventListener('resize', debouncedAdjustGridSize);
+        }
+    }, [cols, gridContext.contentBlocks, selectedContentBlockId]);
 
     useEffect(() => {
         setInitialContentBlocks();
@@ -90,6 +119,9 @@ const Grid = () => {
                     key={block.id}
                     contentBlock={block}
                     gridCellWidth={gridCellWidth}
+                    isSelected={block.id === selectedContentBlockId}
+                    onSelect={() => setSelectedContentBlockId(block.id)}
+                    onDeselect={() => setSelectedContentBlockId(null)}
                 />
             )}
             <CoordinateWidget x={currentCoordinate[0]} y={currentCoordinate[1]} />

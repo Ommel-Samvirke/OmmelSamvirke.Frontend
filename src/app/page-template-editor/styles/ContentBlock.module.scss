@@ -2,36 +2,35 @@
     background: white;
     color: black;
     position: absolute;
-    overflow: hidden;
+    cursor: pointer;
     .headline {
-        font-size: 2rem;
+        font-size: 2.25rem;
         font-weight: bold;
         padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        height: 100%;
     }
     .dragIconContainer {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 20px;
-        height: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        transform: translateY(-50%);
+        top: 50%;
+        left: -36px;
         cursor: move;
     }
     .deleteIconContainer {
         position: absolute;
-        top: 0;
-        right: 0;
-        width: 20px;
-        height: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        top: 50%;
+        transform: translateY(-50%);
+        left: -66px;
         cursor: pointer;
         .deleteIcon {
             font-size: 1rem;
             color: red;
         }
     }
+}
+
+.selected {
+    border: 2px dashed crimson;
 }

@@ -1,5 +1,6 @@
 ﻿import React, { useState, useRef, useEffect } from 'react';
 import styles from "./styles/PageTemplateEditorHeader.module.scss";
+import Button from '@mui/joy/Button';
 
 const PageTemplateEditorHeader = () => {
     const [templateName, setTemplateName] = useState<string>('Unavngiven skabelon');
@@ -36,7 +37,7 @@ const PageTemplateEditorHeader = () => {
                     <h1 onClick={() => setEditTemplateNameActive(true)}>{templateName}</h1>
                 }
                 
-                <button>Gem Skabelon</button>
+                <Button>Gem Skabelon</Button>
             </div>
         </div>
     )

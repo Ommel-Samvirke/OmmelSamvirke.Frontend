@@ -1,16 +1,15 @@
 ﻿import styles from './styles/ContentBlock.module.scss';
+import 'react-resizable/css/styles.css';
+
 import {useDrag} from 'react-dnd';
 import {DraggableTypes} from '@/app/page-template-editor/constants/DraggableTypes';
 import {GridContext} from '@/app/page-template-editor/context/GridContext';
 import {useContext, useState} from 'react';
-
 import {Resizable} from 'react-resizable';
-import 'react-resizable/css/styles.css';
 import {canResizeOrMove} from '@/app/page-template-editor/helpers/ContentBlockHelpers';
 import {IDraggableItem} from '@/app/page-template-editor/interfaces/IDraggableItem';
 import {DragSource} from '@/app/page-template-editor/constants/DragSource';
-import Image from 'next/image';
-import {Cancel} from '@mui/icons-material';
+import {useEffect} from 'react';
 
 export interface ContentBlockProps {
     id: string,
@@ -24,8 +23,24 @@ export interface ContentBlockProps {
 
 const ContentBlock = (props: ContentBlockProps) => {
     const { resizeContentBlock, contentBlocks } = useContext(GridContext);
-    const [areContentBlockButtonsVisible, setAreContentBlockButtonsVisible] = useState<boolean>(false);
+    const [isSelected, setIsSelected] = useState<boolean>(false);
     const gridContext = useContext(GridContext);
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Delete' || event.key === 'Backspace' || event.key === 'Escape') {
+                if (isSelected) { 
+                    gridContext.removeContentBlock(props.id);
+                }
+            }
+        }
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        }
+    }, [isSelected]);
     
     const [{isDragging}, drag, preview] = useDrag<IDraggableItem, void, { isDragging: boolean }>(() => ({
         type: props.type,
@@ -63,12 +78,17 @@ const ContentBlock = (props: ContentBlockProps) => {
                 }
 
                 resizeContentBlock(props.id, newWidth, newHeight);
+                setIsSelected(false)
             }}
+            onResizeStart={() => {
+                setIsSelected(false)
+            }}
+
             resizeHandles={['se']} 
         >
             <div
                 ref={preview}
-                className={styles.contentBlock}
+                className={styles.contentBlock + " " + (isSelected ? " " + styles.selected : "")}
                 style={{
                     position: 'absolute',
                     left: `${props.x * props.gridCellWidth}px`,
@@ -77,20 +97,9 @@ const ContentBlock = (props: ContentBlockProps) => {
                     height: `${props.height * props.gridCellWidth}px`,
                     opacity: isDragging ? 0.5 : 1
                 }}
-                onMouseEnter={() => setAreContentBlockButtonsVisible(true)}
-                onMouseLeave={() => setAreContentBlockButtonsVisible(false)}
+                onMouseDownCapture={() => setIsSelected(!isSelected)}
             >
-                {areContentBlockButtonsVisible && (
-                    <>
-                        <div ref={drag} className={styles.dragIconContainer}>
-                            <Image src={"/images/icons/drag-icon.png"} alt={"Drag Icon"} width={12} height={12} />
-                        </div>
-                        <div className={styles.deleteIconContainer} onClick={() => gridContext.removeContentBlock(props.id)}>
-                            <Cancel className={styles.deleteIcon} />
-                        </div>
-                    </>
-                )}
-                {props.type === DraggableTypes.HEADLINE_BLOCK && <h1 className={styles.headline}>Eksempel: Overskrift</h1>}
+                {props.type === DraggableTypes.HEADLINE_BLOCK && <h1 ref={drag} className={styles.headline}>Eksempel: Overskrift</h1>}
                 
             </div>
         </Resizable>

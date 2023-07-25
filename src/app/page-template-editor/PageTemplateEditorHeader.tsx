@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import styles from "./styles/PageTemplateEditorHeader.module.scss";
 import Button from '@mui/joy/Button';
 import { Input } from '@mui/joy';
@@ -10,43 +10,20 @@ import Tooltip from '@mui/joy/Tooltip';
 
 const PageTemplateEditorHeader = () => {
     const [templateName, setTemplateName] = useState<string>('Unavngiven skabelon');
-    const [editTemplateNameActive, setEditTemplateNameActive] = useState<boolean>(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
-                setEditTemplateNameActive(false);
-            }
-        }
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        }
-    }, []);
 
     return (
         <div className={styles.pageTemplateEditorHeader}>
             <div className={styles.innerContainer}>
                 <div>
-                    {editTemplateNameActive &&
-                        <Input
-                            ref={inputRef}
-                            type="text"
-                            value={templateName}
-                            onChange={(e) => setTemplateName(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    setEditTemplateNameActive(false);
-                                }
-                            }}
-                        />
-                    }
-                    {!editTemplateNameActive &&
-                        <h1 onClick={() => setEditTemplateNameActive(true)}>{templateName}</h1>
-                    }
+                    <Input
+                        ref={inputRef}
+                        type="text"
+                        variant='plain'
+                        value={templateName}
+                        onChange={(e) => setTemplateName(e.target.value)}
+                    />
                 </div>
                 
                 <div className={styles.buttonContainer}>

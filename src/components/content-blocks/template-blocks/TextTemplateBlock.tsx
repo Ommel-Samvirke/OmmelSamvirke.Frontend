@@ -1,10 +1,8 @@
-import { GridContext } from '@/app/page-template-editor/context/GridContext';
 import { loremIpsum } from 'lorem-ipsum';
-import React, { ForwardedRef, forwardRef, useContext, useEffect, useRef, useState } from 'react';
+import React, { ForwardedRef, forwardRef, useEffect, useRef, useState } from 'react';
 import styles from './styles/TextTemplateBlock.module.scss';
 
 const TextTemplateBlock = forwardRef((_, ref: ForwardedRef<HTMLDivElement>) => {
-    const gridContext = useContext(GridContext);
     const containerRef = useRef<HTMLDivElement>(null);
     const [text, setText] = useState('');
 

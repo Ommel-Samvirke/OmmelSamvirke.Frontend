@@ -23,7 +23,8 @@ export const canResizeOrMove = (
     x: number,
     y: number,
     id: string,
-    contentBlocks: IContentBlock[]
+    contentBlocks: IContentBlock[],
+    rowCount: number
 ) => {
     for(let block of contentBlocks) {
         if(block.id === id) continue;
@@ -31,6 +32,7 @@ export const canResizeOrMove = (
         if (x + width > GridConstants.COLUMNS) return false;
         if (x + width < 0) return false;
         if (y + height < 0) return false;
+        if ((y + height) > rowCount) return false;
         
         if(isOverlapping(x, y, width, height, block.x, block.y, block.width, block.height)) {
             return false;

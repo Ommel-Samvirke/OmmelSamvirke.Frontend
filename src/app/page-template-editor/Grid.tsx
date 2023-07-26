@@ -89,6 +89,7 @@ const Grid = () => {
         }
 
         setGridCells(newGridCells);
+        gridContext.updateRowCount(rowCount);
     };
     
     const addRow = () => {

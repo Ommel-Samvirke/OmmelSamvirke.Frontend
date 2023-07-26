@@ -11,12 +11,15 @@ import {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import {canResizeOrMove} from '@/app/page-template-editor/helpers/ContentBlockHelpers';
 import {ContentBlockType} from '@/app/page-template-editor/types/ContentBlockType';
 import {CircularBuffer} from '@/util/circularBuffer';
+import {GridConstants} from '@/app/page-template-editor/constants/GridConstants';
 
 const PageTemplateEditor = () => {
     const [contentBlocks, setContentBlocks] = useState<ContentBlockType[]>([]);
     const [undoBuffer, setUndoBuffer] = useState<CircularBuffer<(ContentBlockType)[]>>(new CircularBuffer<(ContentBlockType)[]>());
     const [redoBuffer, setRedoBuffer] = useState<CircularBuffer<(ContentBlockType)[]>>(new CircularBuffer<(ContentBlockType)[]>());
+    const [rowCount, setRowCount] = useState<number>(GridConstants.COLUMNS);
     const contentBlocksRef = useRef(contentBlocks);
+    const rowCountRef = useRef(rowCount);
 
     const undo = useCallback(() => {
         if (undoBuffer.size() === 0) return;
@@ -48,15 +51,27 @@ const PageTemplateEditor = () => {
         const contentBlock: ContentBlockType | undefined = contentBlocksRef.current.find(block => block.id === id);
         if(!contentBlock) {
             if (!width || !height) return false;
-            return canResizeOrMove(width, height, x, y, id, contentBlocksRef.current);
+            return canResizeOrMove(width, height, x, y, id, contentBlocksRef.current, rowCountRef.current);
         }
         
-        return canResizeOrMove(width ? width : contentBlock.width, height ? height : contentBlock.height, x, y, id, contentBlocksRef.current);
+        return canResizeOrMove(
+            width ? width : contentBlock.width,
+            height ? height : contentBlock.height,
+            x,
+            y,
+            id,
+            contentBlocksRef.current,
+            rowCountRef.current
+        );
     }, [contentBlocksRef]);
 
     useEffect(() => {
         contentBlocksRef.current = contentBlocks;
     }, [contentBlocks]);
+    
+    useEffect(() => {
+        rowCountRef.current = rowCount;
+    }, [rowCount]);
 
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
@@ -122,6 +137,11 @@ const PageTemplateEditor = () => {
         setRedoBuffer(new CircularBuffer<ContentBlockType[]>());
     };
     
+    const updateRowCount = useCallback((rows: number) => {
+        console.log("asdlæjkf")
+        setRowCount(rows);
+    }, []);
+    
     const contextValue = useMemo(() => ({
         contentBlocks,
         moveContentBlock,
@@ -130,7 +150,9 @@ const PageTemplateEditor = () => {
         addContentBlock,
         removeContentBlock,
         undo,
-        redo
+        redo,
+        rowCount,
+        updateRowCount
     }), [
         contentBlocks,
         moveContentBlock,
@@ -139,7 +161,9 @@ const PageTemplateEditor = () => {
         addContentBlock,
         removeContentBlock,
         undo,
-        redo
+        redo,
+        rowCount,
+        updateRowCount
     ]);
     
     return (

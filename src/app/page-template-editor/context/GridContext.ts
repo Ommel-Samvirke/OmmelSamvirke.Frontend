@@ -6,6 +6,7 @@ import { SlideshowBlock } from '../models/SlideshowBlock';
 import { VideoBlock } from '../models/VideoBlock';
 import { TextBlock } from '../models/TextBlock';
 import {ContentBlockType} from '@/app/page-template-editor/types/ContentBlockType';
+import {GridConstants} from '@/app/page-template-editor/constants/GridConstants';
 
 export interface GridContextState {
     contentBlocks: (HeadlineBlock | ImageBlock | PdfBlock | SlideshowBlock | VideoBlock | TextBlock)[];
@@ -16,6 +17,8 @@ export interface GridContextState {
     removeContentBlock: (id: string) => void;
     undo: () => void;
     redo: () => void;
+    rowCount: number;
+    updateRowCount: (rowCount: number) => void;
 }
 
 
@@ -28,4 +31,6 @@ export const GridContext = createContext<GridContextState>({
     removeContentBlock: () => {},
     undo: () => {},
     redo: () => {},
+    rowCount: GridConstants.COLUMNS,
+    updateRowCount: () => {}
 });

@@ -23,7 +23,7 @@
         .separator {
             width: 90%;
             height: 2px;
-            background: #c7c7c7;
+            background: $separator-color;
             margin-top: 1rem;
         }
     }
@@ -50,7 +50,7 @@
         .separator {
             width: 90%;
             height: 2px;
-            background: #c7c7c7;
+            background: $separator-color;
             margin-bottom: 1rem;
         }
     }

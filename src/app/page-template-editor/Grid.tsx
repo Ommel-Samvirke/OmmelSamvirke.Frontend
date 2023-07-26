@@ -10,6 +10,7 @@ import { ImageBlock } from "./models/ImageBlock";
 import { HeadlineBlock } from "./models/HeadlineBlock";
 import CoordinateWidget from '@/app/page-template-editor/CoordinateWidget';
 import {GridConstants} from '@/app/page-template-editor/constants/GridConstants';
+import PageTemplateToolMenu from '@/app/page-template-editor/PageTemplateToolMenu';
 
 const minRows = GridConstants.COLUMNS;
 
@@ -75,10 +76,10 @@ const Grid = () => {
         const rowsForViewportHeight = Math.ceil(window.innerHeight / actualCellWidth) - 2;
         const desiredRowCount = Math.max(minRows, rowsForViewportHeight);
 
-        addRows(desiredRowCount);
+        setRows(desiredRowCount);
     };
 
-    const addRows = (rowCount: number) => {
+    const setRows = (rowCount: number) => {
         const newGridCells: GridCellProps[] = [];
 
         for (let y = 0; y < rowCount; y++) {
@@ -89,6 +90,16 @@ const Grid = () => {
 
         setGridCells(newGridCells);
     };
+    
+    const addRow = () => {
+        const currentRows = gridCells.length / GridConstants.COLUMNS;
+        setRows(currentRows + 1);
+    }
+    
+    const removeRow = () => {
+        const currentRows = gridCells.length / GridConstants.COLUMNS;
+        setRows(currentRows - 1);
+    }
     
     const setInitialContentBlocks = () => {
         gridContext.addContentBlock(new HeadlineBlock(DraggableTypes.HEADLINE_BLOCK, 0, 0, 8, 1));
@@ -127,6 +138,11 @@ const Grid = () => {
                     mouseGridY={currentCoordinate[1]}
                 />
             )}
+            <PageTemplateToolMenu
+                addRow={addRow}
+                removeRow={removeRow}
+                rowCount={gridCells.length / GridConstants.COLUMNS}
+            />
             <CoordinateWidget x={currentCoordinate[0]} y={currentCoordinate[1]} />
         </div>
     );

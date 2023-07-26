@@ -16,7 +16,7 @@ interface ToolMenuIconProps {
     tooltip: string
 }
 
-const ToolMenuIcon = (props: ToolMenuIconProps) => {
+const DraggableToolMenuIcon = (props: ToolMenuIconProps) => {
     const [, drag] = useDrag<IDraggableItem>(() => ({
         type: props.type,
         item: { id: '', type: props.type, source: DragSource.TOOL_MENU},
@@ -38,4 +38,4 @@ const ToolMenuIcon = (props: ToolMenuIconProps) => {
     );
 };
 
-export default ToolMenuIcon;
+export default DraggableToolMenuIcon;

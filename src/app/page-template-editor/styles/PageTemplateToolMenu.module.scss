@@ -1,4 +1,6 @@
-﻿.pageTemplateEditorSidebar {
+﻿@import "./variables.module.scss";
+
+.toolMenu {
     background-color: #fff;
     border: 1px solid #d6d6d6;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
@@ -14,7 +16,13 @@
     left: 50%;
     transform: translateX(-50%);
     padding: 1rem;
+    .separator {
+        width: 2px;
+        height: 40px;
+        background: $separator-color;
+        margin: 0 0.75rem;
+    }
     button {
-        margin: 0 1rem;
+        margin: 0 0.75rem;
     }
 }

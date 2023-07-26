@@ -4,7 +4,6 @@ import styles from "./styles/PageTemplateEditor.module.scss";
 
 import Grid from '@/app/page-template-editor/Grid';
 import PageTemplateEditorHeader from '@/app/page-template-editor/PageTemplateEditorHeader';
-import PageTemplateToolMenu from '@/app/page-template-editor/PageTemplateToolMenu';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 import {DndProvider} from 'react-dnd';
 import {GridContext} from '@/app/page-template-editor/context/GridContext';
@@ -152,12 +151,10 @@ const PageTemplateEditor = () => {
                         onRedo={redo}
                     />
                     <Grid />
-                    <PageTemplateToolMenu />
                 </div>
             </DndProvider>
         </GridContext.Provider>
     );
-    
 };
 
 export default PageTemplateEditor;

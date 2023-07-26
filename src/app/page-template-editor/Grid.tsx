@@ -136,6 +136,8 @@ const Grid = () => {
                     onDeselect={() => setSelectedContentBlockId(null)}
                     mouseGridX={currentCoordinate[0]}
                     mouseGridY={currentCoordinate[1]}
+                    gridContainerLeft={containerRef.current?.getBoundingClientRect().left || 0}
+                    gridContainerTop={containerRef.current?.getBoundingClientRect().top || 0}
                 />
             )}
             <PageTemplateToolMenu

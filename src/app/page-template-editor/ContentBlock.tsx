@@ -1,7 +1,7 @@
 ﻿import styles from './styles/ContentBlock.module.scss';
 import 'react-resizable/css/styles.css';
 
-import {useDrag} from 'react-dnd';
+import {DropTargetMonitor, useDrag, useDrop} from 'react-dnd';
 import {DraggableTypes} from '@/app/page-template-editor/constants/DraggableTypes';
 import {GridContext} from '@/app/page-template-editor/context/GridContext';
 import React, {useContext, useEffect, useRef, useState} from 'react';
@@ -30,10 +30,12 @@ export interface ContentBlockProps {
     onDeselect: () => void,
     mouseGridX: number,
     mouseGridY: number,
+    gridContainerTop: number,
+    gridContainerLeft: number,
 }
 
 const ContentBlock = (props: ContentBlockProps) => {
-    const { resizeContentBlock, moveContentBlock, removeContentBlock, contentBlocks, rowCount } = useContext(GridContext);
+    const gridContext = useContext(GridContext);
     const [isSelectionBlocked, setIsSelectionBlocked] = useState<boolean>(false);
     const propertyWidget = useRef(null);
     const resizableRef = useRef(null);
@@ -45,6 +47,29 @@ const ContentBlock = (props: ContentBlockProps) => {
             isDragging: monitor.isDragging(),
         }),
     }));
+
+    // Allow dropping content block on a position occupied by itself
+    const [_, drop] = useDrop<IDraggableItem>(() => ({
+        accept: [
+            DraggableTypes.HEADLINE_BLOCK,
+            DraggableTypes.TEXT_BLOCK,
+            DraggableTypes.IMAGE_BLOCK,
+            DraggableTypes.PDF_BLOCK,
+            DraggableTypes.VIDEO_BLOCK,
+            DraggableTypes.SLIDESHOW_BLOCK,
+        ],
+        drop: (item: IDraggableItem, monitor: DropTargetMonitor<IDraggableItem, void>) => {
+            const clientOffset = monitor.getClientOffset();
+            
+            if (item.source === DragSource.CONTENT_BLOCK && clientOffset) {
+                const gridX = Math.floor((clientOffset.x - props.gridContainerLeft) / props.gridCellWidth);
+                const gridY = Math.floor((clientOffset.y - props.gridContainerTop) / props.gridCellWidth);
+                if (gridContext.canMoveContentBlock(item.id, gridX, gridY)) {
+                    gridContext.moveContentBlock(item.id, gridX, gridY);
+                }
+            }
+        },
+    }), [props.mouseGridX, props.mouseGridY]);
 
     useEffect(() => {
         // Prevent resizing when mouseup is triggered while the mouse is over an iframe or an embed element.
@@ -74,9 +99,9 @@ const ContentBlock = (props: ContentBlockProps) => {
                     y={props.contentBlock.y}
                     width={props.contentBlock.width}
                     height={props.contentBlock.height}
-                    moveContentBlock={moveContentBlock}
-                    resizeContentBlock={resizeContentBlock}
-                    deleteContentBlock={removeContentBlock}
+                    moveContentBlock={gridContext.moveContentBlock}
+                    resizeContentBlock={gridContext.resizeContentBlock}
+                    deleteContentBlock={gridContext.removeContentBlock}
                 />
             }
             <Resizable
@@ -96,21 +121,24 @@ const ContentBlock = (props: ContentBlockProps) => {
                         newHeight,
                         props.contentBlock.x, 
                         props.contentBlock.y, 
-                        props.contentBlock.id, 
-                        contentBlocks, 
-                        rowCount
+                        props.contentBlock.id,
+                        gridContext.contentBlocks,
+                        gridContext.rowCount
                     )) {
                         return;
                     }
-    
-                    resizeContentBlock(props.contentBlock.id, newWidth, newHeight);
+
+                    gridContext.resizeContentBlock(props.contentBlock.id, newWidth, newHeight);
                 }}
                 onResizeStart={props.onDeselect} 
                 onResizeStop={() => setIsSelectionBlocked(true)}
                 resizeHandles={['se']} 
             >
                 <div
-                    ref={preview}
+                    ref={node => {
+                       preview(node);
+                       drop(node);
+                    }}
                     className={styles.contentBlock + " content-block " + (props.isSelected ? " " + styles.selected : "")}
                     style={{
                         position: 'absolute',

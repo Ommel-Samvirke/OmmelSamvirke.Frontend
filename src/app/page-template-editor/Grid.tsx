@@ -40,7 +40,6 @@ const Grid = () => {
         }
         
         const handleKeyPress = (event: KeyboardEvent) => {
-            console.log(selectedContentBlockId)
             if (event.key === 'Escape' || event.key === 'Backspace' || event.key === 'Delete') {
                 if (!selectedContentBlockId) return;
                 gridContext.removeContentBlock(selectedContentBlockId);

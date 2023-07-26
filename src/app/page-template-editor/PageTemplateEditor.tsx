@@ -138,7 +138,6 @@ const PageTemplateEditor = () => {
     };
     
     const updateRowCount = useCallback((rows: number) => {
-        console.log("asdlæjkf")
         setRowCount(rows);
     }, []);
     

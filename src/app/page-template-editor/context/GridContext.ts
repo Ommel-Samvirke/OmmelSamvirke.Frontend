@@ -16,7 +16,9 @@ export interface GridContextState {
     addContentBlock: (contentBlock: ContentBlockType) => void;
     removeContentBlock: (id: string) => void;
     undo: () => void;
+    undoBufferUsedCapacity: number;
     redo: () => void;
+    redoBufferUsedCapacity: number;
     rowCount: number;
     updateRowCount: (rowCount: number) => void;
 }
@@ -30,7 +32,9 @@ export const GridContext = createContext<GridContextState>({
     addContentBlock: () => {},
     removeContentBlock: () => {},
     undo: () => {},
+    undoBufferUsedCapacity: 0,
     redo: () => {},
+    redoBufferUsedCapacity: 0,
     rowCount: GridConstants.COLUMNS,
     updateRowCount: () => {}
 });

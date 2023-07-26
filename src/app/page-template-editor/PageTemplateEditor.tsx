@@ -1,23 +1,25 @@
-﻿"use client";
+﻿'use client';
 
-import styles from "./styles/PageTemplateEditor.module.scss";
+import styles from './styles/PageTemplateEditor.module.scss';
 
 import Grid from '@/app/page-template-editor/Grid';
 import PageTemplateEditorHeader from '@/app/page-template-editor/PageTemplateEditorHeader';
-import {HTML5Backend} from 'react-dnd-html5-backend';
-import {DndProvider} from 'react-dnd';
-import {GridContext} from '@/app/page-template-editor/context/GridContext';
-import {useCallback, useEffect, useRef, useState, useMemo} from 'react';
-import {canResizeOrMove} from '@/app/page-template-editor/helpers/ContentBlockHelpers';
-import {ContentBlockType} from '@/app/page-template-editor/types/ContentBlockType';
-import {CircularBuffer} from '@/util/circularBuffer';
-import {GridConstants} from '@/app/page-template-editor/constants/GridConstants';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
+import { GridContext } from '@/app/page-template-editor/context/GridContext';
+import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
+import { canResizeOrMove } from '@/app/page-template-editor/helpers/ContentBlockHelpers';
+import { ContentBlockType } from '@/app/page-template-editor/types/ContentBlockType';
+import { CircularBuffer } from '@/util/circularBuffer';
+import { GridConstants } from '@/app/page-template-editor/constants/GridConstants';
 
 const PageTemplateEditor = () => {
     const [contentBlocks, setContentBlocks] = useState<ContentBlockType[]>([]);
     const [undoBuffer, setUndoBuffer] = useState<CircularBuffer<(ContentBlockType)[]>>(new CircularBuffer<(ContentBlockType)[]>());
     const [redoBuffer, setRedoBuffer] = useState<CircularBuffer<(ContentBlockType)[]>>(new CircularBuffer<(ContentBlockType)[]>());
     const [rowCount, setRowCount] = useState<number>(GridConstants.COLUMNS);
+    const [undoBufferUsedCapacity, setUndoBufferUsedCapacity] = useState<number>(0);
+    const [redoBufferUsedCapacity, setRedoBufferUsedCapacity] = useState<number>(0);
     const contentBlocksRef = useRef(contentBlocks);
     const rowCountRef = useRef(rowCount);
 
@@ -30,8 +32,10 @@ const PageTemplateEditor = () => {
 
         redoBuffer.push(contentBlocks);
         setRedoBuffer(redoBuffer);
-
+        
         setContentBlocks(previousState);
+        setUndoBufferUsedCapacity(undoBuffer.size());
+        setRedoBufferUsedCapacity(redoBuffer.size());
     }, [contentBlocks, undoBuffer, redoBuffer]);
 
     const redo = useCallback(() => {
@@ -45,15 +49,17 @@ const PageTemplateEditor = () => {
         setUndoBuffer(undoBuffer);
 
         setContentBlocks(nextState);
+        setUndoBufferUsedCapacity(undoBuffer.size());
+        setRedoBufferUsedCapacity(redoBuffer.size());
     }, [contentBlocks, undoBuffer, redoBuffer]);
 
     const canMoveContentBlock = useCallback((id: string, x: number, y: number, width?: number, height?: number) => {
         const contentBlock: ContentBlockType | undefined = contentBlocksRef.current.find(block => block.id === id);
-        if(!contentBlock) {
+        if (!contentBlock) {
             if (!width || !height) return false;
             return canResizeOrMove(width, height, x, y, id, contentBlocksRef.current, rowCountRef.current);
         }
-        
+
         return canResizeOrMove(
             width ? width : contentBlock.width,
             height ? height : contentBlock.height,
@@ -61,17 +67,14 @@ const PageTemplateEditor = () => {
             y,
             id,
             contentBlocksRef.current,
-            rowCountRef.current
+            rowCountRef.current,
         );
-    }, [contentBlocksRef]);
+    }, [contentBlocksRef, rowCountRef]);
 
     useEffect(() => {
         contentBlocksRef.current = contentBlocks;
-    }, [contentBlocks]);
-    
-    useEffect(() => {
         rowCountRef.current = rowCount;
-    }, [rowCount]);
+    }, [contentBlocks, rowCount]);
 
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
@@ -81,21 +84,21 @@ const PageTemplateEditor = () => {
                 redo();
             }
         };
-        
+
         document.addEventListener('keydown', handleKeyPress);
-        
+
         return () => {
             document.removeEventListener('keydown', handleKeyPress);
         };
     }, [undo, redo]);
-    
+
     const moveContentBlock = useCallback((id: string, x: number, y: number) => {
         if (!canMoveContentBlock(id, x, y)) return;
-        
+
         setContentBlocks(prevBlocks => {
             updateUndoBuffer(prevBlocks);
             return prevBlocks.map(block =>
-                block.id === id ? { ...block, x, y } : block
+                block.id === id ? { ...block, x, y } : block,
             );
         });
     }, [canMoveContentBlock]);
@@ -103,18 +106,17 @@ const PageTemplateEditor = () => {
     const resizeContentBlock = useCallback((id: string, width: number, height: number) => {
         const currentBlock = contentBlocks.find(block => block.id === id);
         if (!currentBlock) return;
-        
+
         const { x, y } = currentBlock;
         if (!canMoveContentBlock(id, x, y, width, height)) return;
-        
+
         setContentBlocks(prevBlocks => {
             updateUndoBuffer(prevBlocks);
             return prevBlocks.map(block =>
-                block.id === id ? { ...block, width, height } : block
+                block.id === id ? { ...block, width, height } : block,
             );
         });
     }, [canMoveContentBlock, contentBlocks]);
-
 
     const addContentBlock = useCallback((contentBlock: ContentBlockType) => {
         setContentBlocks(prevBlocks => {
@@ -122,7 +124,7 @@ const PageTemplateEditor = () => {
             return [...prevBlocks, contentBlock];
         });
     }, []);
-    
+
     const removeContentBlock = useCallback((id: string) => {
         setContentBlocks(prevBlocks => {
             updateUndoBuffer(prevBlocks);
@@ -133,14 +135,16 @@ const PageTemplateEditor = () => {
     const updateUndoBuffer = (snapshot: ContentBlockType[]) => {
         undoBuffer.push(snapshot);
         setUndoBuffer(undoBuffer);
-        
+
+        setUndoBufferUsedCapacity(undoBuffer.size());
+        setRedoBufferUsedCapacity(0);
         setRedoBuffer(new CircularBuffer<ContentBlockType[]>());
     };
-    
+
     const updateRowCount = useCallback((rows: number) => {
         setRowCount(rows);
     }, []);
-    
+
     const contextValue = useMemo(() => ({
         contentBlocks,
         moveContentBlock,
@@ -149,9 +153,11 @@ const PageTemplateEditor = () => {
         addContentBlock,
         removeContentBlock,
         undo,
+        undoBufferUsedCapacity,
         redo,
+        redoBufferUsedCapacity,
         rowCount,
-        updateRowCount
+        updateRowCount,
     }), [
         contentBlocks,
         moveContentBlock,
@@ -160,20 +166,22 @@ const PageTemplateEditor = () => {
         addContentBlock,
         removeContentBlock,
         undo,
+        undoBufferUsedCapacity,
         redo,
+        redoBufferUsedCapacity,
         rowCount,
-        updateRowCount
+        updateRowCount,
     ]);
-    
+
     return (
         <GridContext.Provider value={contextValue}>
             <DndProvider backend={HTML5Backend}>
                 <div className={styles.PageTemplateEditor}>
                     <PageTemplateEditorHeader
-                        onUndo={undo}    
+                        onUndo={undo}
                         onRedo={redo}
                     />
-                    <Grid />
+                    <Grid/>
                 </div>
             </DndProvider>
         </GridContext.Provider>

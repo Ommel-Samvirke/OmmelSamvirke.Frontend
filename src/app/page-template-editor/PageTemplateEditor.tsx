@@ -20,6 +20,7 @@ const PageTemplateEditor = () => {
     const [rowCount, setRowCount] = useState<number>(GridConstants.COLUMNS);
     const [undoBufferUsedCapacity, setUndoBufferUsedCapacity] = useState<number>(0);
     const [redoBufferUsedCapacity, setRedoBufferUsedCapacity] = useState<number>(0);
+    const [color, setColor] = useState<string>('#ffffff');
     const contentBlocksRef = useRef(contentBlocks);
     const rowCountRef = useRef(rowCount);
 
@@ -144,6 +145,10 @@ const PageTemplateEditor = () => {
     const updateRowCount = useCallback((rows: number) => {
         setRowCount(rows);
     }, []);
+    
+    const updateColor = useCallback((color: string) => {
+        setColor(color);
+    }, []);
 
     const contextValue = useMemo(() => ({
         contentBlocks,
@@ -158,6 +163,8 @@ const PageTemplateEditor = () => {
         redoBufferUsedCapacity,
         rowCount,
         updateRowCount,
+        color,
+        updateColor,
     }), [
         contentBlocks,
         moveContentBlock,
@@ -171,6 +178,8 @@ const PageTemplateEditor = () => {
         redoBufferUsedCapacity,
         rowCount,
         updateRowCount,
+        color,
+        updateColor
     ]);
 
     return (

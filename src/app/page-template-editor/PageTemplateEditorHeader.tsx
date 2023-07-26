@@ -2,6 +2,7 @@
 import { roboto } from '../fonts';
 
 import React, { useState, useRef, useContext } from 'react';
+import ColorPicker from '@/components/ColorPicker';
 import Button from '@mui/joy/Button';
 import { Input } from '@mui/joy';
 import IconButton from '@mui/joy/IconButton';
@@ -79,17 +80,18 @@ const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
                 </div>
 
                 <div className={styles.rightContainer}>
-                    <Tooltip title="Computer">
+                    <ColorPicker/>
+                    <Tooltip title="Computer (1920px)">
                         <IconButton variant="soft">
                             <DesktopWindowsOutlinedIcon/>
                         </IconButton>
                     </Tooltip>
-                    <Tooltip title="Tablet">
+                    <Tooltip title="Tablet (820px)">
                         <IconButton>
                             <TabletMacOutlinedIcon/>
                         </IconButton>
                     </Tooltip>
-                    <Tooltip title="Smartphone">
+                    <Tooltip title="Smartphone(360px)">
                         <IconButton>
                             <PhoneIphoneOutlinedIcon/>
                         </IconButton>

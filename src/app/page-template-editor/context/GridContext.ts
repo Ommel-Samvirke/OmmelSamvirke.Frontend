@@ -21,6 +21,8 @@ export interface GridContextState {
     redoBufferUsedCapacity: number;
     rowCount: number;
     updateRowCount: (rowCount: number) => void;
+    color: string;
+    updateColor: (color: string) => void;
 }
 
 export const GridContext = createContext<GridContextState>({
@@ -41,6 +43,7 @@ export const GridContext = createContext<GridContextState>({
     },
     redoBufferUsedCapacity: 0,
     rowCount: GridConstants.COLUMNS,
-    updateRowCount: () => {
-    },
+    updateRowCount: () => {},
+    color: '#ffffff',
+    updateColor: () => {},
 });

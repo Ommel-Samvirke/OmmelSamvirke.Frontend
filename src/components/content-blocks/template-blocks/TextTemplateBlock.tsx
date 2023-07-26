@@ -1,10 +1,13 @@
+import { GridContext } from '@/app/page-template-editor/context/GridContext';
 import styles from './styles/TextTemplateBlock.module.scss';
 
-import {forwardRef, ForwardedRef} from 'react';
+import { forwardRef, ForwardedRef, useContext } from 'react';
 
 const TextTemplateBlock = forwardRef((_, ref: ForwardedRef<HTMLDivElement>) => {
+    const gridContext = useContext(GridContext);
+    
     return (
-        <div ref={ref} className={styles.textContent}>
+        <div ref={ref} className={styles.textContent} style={{ backgroundColor: gridContext.color }}>
             <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas fringilla non enim sed euismod.
                 Nullam tincidunt ullamcorper nulla at laoreet. Donec hendrerit nunc et facilisis condimentum.

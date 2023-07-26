@@ -1,0 +1,36 @@
+﻿.colorPickerWrapper {
+    position: relative;
+}
+
+.colorDisplay {
+    border-radius: 25px;
+    width: 37px;
+    height: 37px;
+    border: 2px solid #054DA7;
+    background-color: white; /* default color or any color you want to start with */
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.colorPickerInput {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.colorPickerInput:active + .colorDisplay,
+.colorPickerInput:focus + .colorDisplay {
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+.colorPickerInput::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.colorPickerInput::-webkit-color-swatch {
+    border: none;
+}

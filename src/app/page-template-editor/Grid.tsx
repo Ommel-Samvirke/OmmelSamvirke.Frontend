@@ -61,6 +61,13 @@ const Grid = () => {
         setInitialContentBlocks();
         adjustGridSize();
     }, []);
+    
+    useEffect(() => {
+        if (!gridContext.color) return;
+        if (!containerRef.current) return;
+
+        containerRef.current.style.backgroundColor = gridContext.color;
+    }, [gridContext.color]);
 
     const adjustGridSize = () => {
         if (!containerRef.current) return;

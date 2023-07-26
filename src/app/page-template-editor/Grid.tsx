@@ -21,7 +21,7 @@ const Grid = () => {
     const [cols] = useState<number>(GridConstants.COLUMNS);
     const [currentCoordinate, setCurrentCoordinate] = useState<[number, number]>([0, 0]);
     const [selectedContentBlockId, setSelectedContentBlockId] = useState<string | null>(null);
-    const [displayGrid, setDisplayGrid] = useState<boolean>(false);
+    const [displayGrid, setDisplayGrid] = useState<boolean>(true);
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -41,7 +41,7 @@ const Grid = () => {
         };
 
         const handleKeyPress = (event: KeyboardEvent) => {
-            if (event.key === 'Escape' || event.key === 'Backspace' || event.key === 'Delete') {
+            if (event.key === 'Escape' || event.key === 'Delete') {
                 if (!selectedContentBlockId) return;
                 gridContext.removeContentBlock(selectedContentBlockId);
             }

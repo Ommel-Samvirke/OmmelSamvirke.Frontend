@@ -1,9 +1,17 @@
-.textContent {
+.textContainer {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     height: 100%;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    padding: 0 0 0.5rem 0;
+    .textContent {
+        width: 100%;
+        height: 100%;
+        text-align: justify;
+    }
     p {
         padding: 0.5rem;
     }

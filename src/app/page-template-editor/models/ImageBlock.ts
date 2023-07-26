@@ -1,7 +1,7 @@
 import { AbstractContentBlocks } from './AbstractContentBlocks';
 
 export class ImageBlock extends AbstractContentBlocks {
-    public imageUrl: string = 'https://via.placeholder.com/600';
+    public imageUrl: string = 'https://fakeimg.pl/1600x1200?text=Billede';
     public width: number = ImageBlock.defaultWidth;
     public height: number = ImageBlock.defaultHeight;
     public static defaultWidth: number = 8;

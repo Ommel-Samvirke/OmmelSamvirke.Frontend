@@ -6,7 +6,7 @@
     right: 0;
     top: $header-height;
     height: calc(100% - $header-height);
-    z-index: 1;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     background: white;

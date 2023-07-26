@@ -1,26 +1,81 @@
 import { GridContext } from '@/app/page-template-editor/context/GridContext';
+import { loremIpsum } from 'lorem-ipsum';
+import React, { ForwardedRef, forwardRef, useContext, useEffect, useRef, useState } from 'react';
 import styles from './styles/TextTemplateBlock.module.scss';
-
-import { forwardRef, ForwardedRef, useContext } from 'react';
 
 const TextTemplateBlock = forwardRef((_, ref: ForwardedRef<HTMLDivElement>) => {
     const gridContext = useContext(GridContext);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [text, setText] = useState('');
+
+    useEffect(() => {
+        const newText = generateText();
+        setText(newText);
+    }, []);
+
+    useEffect(() => {
+        const resizeObserver = new ResizeObserver(() => {
+            const newText = generateText();
+            setText(newText);
+        });
+
+        if (containerRef.current) {
+            resizeObserver.observe(containerRef.current);
+        }
+
+        return () => {
+            if (containerRef.current) {
+                resizeObserver.unobserve(containerRef.current);
+            }
+        };
+    }, []);
+
+    const generateText = () => {
+        if (containerRef.current) {
+            const rootFontSize = parseInt(getComputedStyle(document.documentElement).fontSize, 10);
+            const lineHeightInPx = 1.5 * (rootFontSize || 16);
+
+            const height = containerRef.current.offsetHeight;
+            const width = containerRef.current.offsetWidth;
+            
+            const avgCharArea = 14 * lineHeightInPx;
+
+            const containerArea = width * height;
+            const estimatedChars = Math.floor(containerArea / avgCharArea);
+
+            const estimatedWords = Math.floor(estimatedChars / 5);
+
+            const rawText = loremIpsum({
+                count: estimatedWords,
+                units: 'words',
+                format: 'plain',
+            });
+            
+            const wordsPerParagraph = 50;
+            
+            const paragraphs = [];
+            const words = rawText.split(' ');
+
+            while (words.length > 0) {
+                const segment = words.splice(0, wordsPerParagraph).join(' ');
+                paragraphs.push(segment);
+            }
+
+            return paragraphs.join('\n\n');
+        }
+        return '';
+    };
     
     return (
-        <div ref={ref} className={styles.textContent} style={{ backgroundColor: gridContext.color }}>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas fringilla non enim sed euismod.
-                Nullam tincidunt ullamcorper nulla at laoreet. Donec hendrerit nunc et facilisis condimentum.
-                Pellentesque accumsan ligula a dolor commodo bibendum. Nulla cursus tincidunt dui ac elementum.
-                Maecenas ac congue felis, at pretium nisl. Donec sodales nibh nec lorem scelerisque, non pulvinar quam volutpat.
-                Nam non congue tortor. Aliquam gravida bibendum lorem, eget elementum mi tempus venenatis. Nam ut euismod dolor.
-                Vivamus lacinia arcu ac vehicula rutrum. Nulla consequat pellentesque ipsum at convallis. Morbi quis mollis odio, a pulvinar purus.
-            </p>
-            <p>
-                Praesent ornare mollis ipsum non vulputate. Nullam eleifend lorem purus, vel ullamcorper lectus pellentesque vitae.
-                Nunc ullamcorper rhoncus ipsum sed mollis. Nulla fringilla tortor libero, ac condimentum enim aliquam sit amet. 
-                Aenean ut odio augue. Quisque sagittis auctor imperdiet. Duis in viverra eros, et mattis sem.
-            </p>
+        <div ref={ref} className={styles.textContainer}>
+            <div ref={containerRef} className={styles.textContent}>
+                {text.split('\n').map((line, index) => (
+                    <React.Fragment key={index}>
+                        {line}
+                        <br />
+                    </React.Fragment>
+                ))}
+            </div>
         </div>
     );
 });

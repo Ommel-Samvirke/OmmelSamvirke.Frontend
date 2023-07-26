@@ -1,4 +1,4 @@
-import { AbstractContentBlocks } from "./AbstractContentBlocks";
+import { AbstractContentBlocks } from './AbstractContentBlocks';
 
 export class VideoBlock extends AbstractContentBlocks {
     public videoUrl: string = '';
@@ -11,9 +11,9 @@ export class VideoBlock extends AbstractContentBlocks {
         super(
             type,
             x ? x : 0,
-            y ? y : 0, 
-            width ? width : VideoBlock.defaultWidth, 
-            height ? height : VideoBlock.defaultHeight
+            y ? y : 0,
+            width ? width : VideoBlock.defaultWidth,
+            height ? height : VideoBlock.defaultHeight,
         );
     }
 }

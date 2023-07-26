@@ -65,7 +65,7 @@ const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
                             </span>
                         </Tooltip>
                     }
-                    
+
                     <Input
                         ref={inputRef}
                         type="text"

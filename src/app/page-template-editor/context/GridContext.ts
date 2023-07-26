@@ -1,12 +1,12 @@
-﻿import {createContext} from 'react';
+﻿import { createContext } from 'react';
 import { HeadlineBlock } from '../models/HeadlineBlock';
 import { ImageBlock } from '../models/ImageBlock';
 import { PdfBlock } from '../models/PdfBlock';
 import { SlideshowBlock } from '../models/SlideshowBlock';
 import { VideoBlock } from '../models/VideoBlock';
 import { TextBlock } from '../models/TextBlock';
-import {ContentBlockType} from '@/app/page-template-editor/types/ContentBlockType';
-import {GridConstants} from '@/app/page-template-editor/constants/GridConstants';
+import { ContentBlockType } from '@/app/page-template-editor/types/ContentBlockType';
+import { GridConstants } from '@/app/page-template-editor/constants/GridConstants';
 
 export interface GridContextState {
     contentBlocks: (HeadlineBlock | ImageBlock | PdfBlock | SlideshowBlock | VideoBlock | TextBlock)[];
@@ -23,18 +23,24 @@ export interface GridContextState {
     updateRowCount: (rowCount: number) => void;
 }
 
-
 export const GridContext = createContext<GridContextState>({
     contentBlocks: [],
-    moveContentBlock: () => {},
+    moveContentBlock: () => {
+    },
     canMoveContentBlock: () => false,
-    resizeContentBlock: () => {},
-    addContentBlock: () => {},
-    removeContentBlock: () => {},
-    undo: () => {},
+    resizeContentBlock: () => {
+    },
+    addContentBlock: () => {
+    },
+    removeContentBlock: () => {
+    },
+    undo: () => {
+    },
     undoBufferUsedCapacity: 0,
-    redo: () => {},
+    redo: () => {
+    },
     redoBufferUsedCapacity: 0,
     rowCount: GridConstants.COLUMNS,
-    updateRowCount: () => {}
+    updateRowCount: () => {
+    },
 });

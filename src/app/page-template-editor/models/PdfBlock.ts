@@ -1,4 +1,4 @@
-import { AbstractContentBlocks } from "./AbstractContentBlocks";
+import { AbstractContentBlocks } from './AbstractContentBlocks';
 
 export class PdfBlock extends AbstractContentBlocks {
     public pdfUrl: string = '';
@@ -12,9 +12,9 @@ export class PdfBlock extends AbstractContentBlocks {
         super(
             type,
             x ? x : 0,
-            y ? y : 0, 
-            width ? width : PdfBlock.defaultWidth, 
-            height ? height : PdfBlock.defaultHeight
+            y ? y : 0,
+            width ? width : PdfBlock.defaultWidth,
+            height ? height : PdfBlock.defaultHeight,
         );
     }
 }

@@ -1,5 +1,5 @@
-﻿import styles from "./styles/CoordinateWidget.module.scss";
-import {roboto} from '@/app/fonts';
+﻿import styles from './styles/CoordinateWidget.module.scss';
+import { roboto } from '@/app/fonts';
 
 interface CoordinateWidgetProps {
     x: number,
@@ -8,10 +8,10 @@ interface CoordinateWidgetProps {
 
 const CoordinateWidget = (props: CoordinateWidgetProps) => {
     return (
-        <div className={styles.CoordinateWidget + " " + roboto.className}>
+        <div className={styles.CoordinateWidget + ' ' + roboto.className}>
             {props.x}, {props.y}
         </div>
-    )
+    );
 };
 
 export default CoordinateWidget;

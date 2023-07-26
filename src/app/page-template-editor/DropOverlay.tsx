@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 
 export interface DropOverlayProps {
-    color: "red" | "yellow"
+    color: 'red' | 'yellow';
 }
 
 const DropOverlay = (props: DropOverlayProps) => {
@@ -18,7 +18,7 @@ const DropOverlay = (props: DropOverlayProps) => {
                 backgroundColor: props.color,
             }}
         />
-    )
-}
+    );
+};
 
 export default DropOverlay;

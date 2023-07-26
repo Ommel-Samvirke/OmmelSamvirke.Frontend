@@ -1,8 +1,8 @@
-import IContentBlock from "../interfaces/IContentBlock";
+import IContentBlock from '../interfaces/IContentBlock';
 import { v1 as uuidv1 } from 'uuid';
 
 export abstract class AbstractContentBlocks implements IContentBlock {
-    
+
     public id: string;
     public x: number;
     public y: number;

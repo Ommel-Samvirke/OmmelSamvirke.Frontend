@@ -1,4 +1,4 @@
-import { AbstractContentBlocks } from "./AbstractContentBlocks";
+import { AbstractContentBlocks } from './AbstractContentBlocks';
 
 export class ImageBlock extends AbstractContentBlocks {
     public imageUrl: string = 'https://via.placeholder.com/600';
@@ -11,9 +11,9 @@ export class ImageBlock extends AbstractContentBlocks {
         super(
             type,
             x ? x : 0,
-            y ? y : 0, 
-            width ? width : ImageBlock.defaultWidth, 
-            height ? height : ImageBlock.defaultHeight
+            y ? y : 0,
+            width ? width : ImageBlock.defaultWidth,
+            height ? height : ImageBlock.defaultHeight,
         );
     }
 }

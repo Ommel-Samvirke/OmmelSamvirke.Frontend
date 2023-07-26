@@ -32,7 +32,7 @@ const PageTemplateEditor = () => {
 
         redoBuffer.push(contentBlocks);
         setRedoBuffer(redoBuffer);
-        
+
         setContentBlocks(previousState);
         setUndoBufferUsedCapacity(undoBuffer.size());
         setRedoBufferUsedCapacity(redoBuffer.size());

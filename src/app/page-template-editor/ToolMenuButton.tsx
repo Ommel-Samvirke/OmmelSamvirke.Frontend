@@ -2,23 +2,23 @@
 import Tooltip from '@mui/joy/Tooltip';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
-import {GridConstants} from '@/app/page-template-editor/constants/GridConstants';
+import { GridConstants } from '@/app/page-template-editor/constants/GridConstants';
 
-interface ToolMenuIconProps { 
-    type: 'add-row' | 'remove-row'
-    tooltip: string
-    onClick: () => void
-    rowCount: number
+interface ToolMenuIconProps {
+    type: 'add-row' | 'remove-row';
+    tooltip: string;
+    onClick: () => void;
+    rowCount: number;
 }
 
 const ToolMenuButton = (props: ToolMenuIconProps) => {
     return (
         <>
             {
-                props.type === 'add-row' && 
+                props.type === 'add-row' &&
                 <Tooltip title={props.tooltip}>
                     <IconButton onClick={props.onClick}>
-                        <AddIcon />
+                        <AddIcon/>
                     </IconButton>
                 </Tooltip>
             }
@@ -26,16 +26,16 @@ const ToolMenuButton = (props: ToolMenuIconProps) => {
                 props.type === 'remove-row' && props.rowCount > GridConstants.COLUMNS &&
                 <Tooltip title={props.tooltip}>
                     <IconButton onClick={props.onClick}>
-                        <RemoveIcon />
+                        <RemoveIcon/>
                     </IconButton>
                 </Tooltip>
             }
             {
                 props.type === 'remove-row' && props.rowCount <= GridConstants.COLUMNS &&
-                <Tooltip title={"Kan ikke fjerne flere rækker"}>
+                <Tooltip title={'Kan ikke fjerne flere rækker'}>
                     <span style={{ cursor: 'not-allowed' }}>
                         <IconButton disabled={true}>
-                            <RemoveIcon />
+                            <RemoveIcon/>
                         </IconButton>
                     </span>
                 </Tooltip>

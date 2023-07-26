@@ -1,4 +1,4 @@
-import { AbstractContentBlocks } from "./AbstractContentBlocks";
+import { AbstractContentBlocks } from './AbstractContentBlocks';
 
 export class TextBlock extends AbstractContentBlocks {
     public text: string = 'Tekstindhold';
@@ -11,9 +11,9 @@ export class TextBlock extends AbstractContentBlocks {
         super(
             type,
             x ? x : 0,
-            y ? y : 0, 
-            width ? width : TextBlock.defaultWidth, 
-            height ? height : TextBlock.defaultHeight
+            y ? y : 0,
+            width ? width : TextBlock.defaultWidth,
+            height ? height : TextBlock.defaultHeight,
         );
     }
 }

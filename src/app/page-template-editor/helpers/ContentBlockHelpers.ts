@@ -1,5 +1,5 @@
 ﻿import IContentBlock from '@/app/page-template-editor/interfaces/IContentBlock';
-import {GridConstants} from '@/app/page-template-editor/constants/GridConstants';
+import { GridConstants } from '@/app/page-template-editor/constants/GridConstants';
 
 const isOverlapping = (
     x1: number,
@@ -9,13 +9,13 @@ const isOverlapping = (
     x2: number,
     y2: number,
     w2: number,
-    h2: number
+    h2: number,
 ) => {
     return !(x2 >= x1 + w1 ||
         x2 + w2 <= x1 ||
         y2 >= y1 + h1 ||
         y2 + h2 <= y1);
-}
+};
 
 export const canResizeOrMove = (
     width: number,
@@ -24,19 +24,19 @@ export const canResizeOrMove = (
     y: number,
     id: string,
     contentBlocks: IContentBlock[],
-    rowCount: number
+    rowCount: number,
 ) => {
-    for(let block of contentBlocks) {
-        if(block.id === id) continue;
+    for (let block of contentBlocks) {
+        if (block.id === id) continue;
 
         if (x + width > GridConstants.COLUMNS) return false;
         if (x + width < 0) return false;
         if (y + height < 0) return false;
         if ((y + height) > rowCount) return false;
-        
-        if(isOverlapping(x, y, width, height, block.x, block.y, block.width, block.height)) {
+
+        if (isOverlapping(x, y, width, height, block.x, block.y, block.width, block.height)) {
             return false;
         }
     }
     return true;
-}
+};

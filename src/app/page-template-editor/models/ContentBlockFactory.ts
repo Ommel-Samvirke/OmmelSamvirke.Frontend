@@ -1,12 +1,11 @@
-import { DraggableTypes } from "../constants/DraggableTypes";
-import { AbstractContentBlocks } from "./AbstractContentBlocks";
-import { HeadlineBlock } from "./HeadlineBlock";
-import { ImageBlock } from "./ImageBlock";
-import { PdfBlock } from "./PdfBlock";
-import { SlideshowBlock } from "./SlideshowBlock";
-import { TextBlock } from "./TextBlock";
-import { VideoBlock } from "./VideoBlock";
-import {ContentBlockType} from '@/app/page-template-editor/types/ContentBlockType';
+import { DraggableTypes } from '../constants/DraggableTypes';
+import { HeadlineBlock } from './HeadlineBlock';
+import { ImageBlock } from './ImageBlock';
+import { PdfBlock } from './PdfBlock';
+import { SlideshowBlock } from './SlideshowBlock';
+import { TextBlock } from './TextBlock';
+import { VideoBlock } from './VideoBlock';
+import { ContentBlockType } from '@/app/page-template-editor/types/ContentBlockType';
 
 export class ContentBlockFactory {
     public static createContentBlock(type: string, x?: number, y?: number): ContentBlockType {

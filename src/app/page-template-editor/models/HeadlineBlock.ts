@@ -1,4 +1,4 @@
-import { AbstractContentBlocks } from "./AbstractContentBlocks";
+import { AbstractContentBlocks } from './AbstractContentBlocks';
 
 export class HeadlineBlock extends AbstractContentBlocks {
     public headline: string = 'Lorem ipsum dolor sit amet';
@@ -12,9 +12,9 @@ export class HeadlineBlock extends AbstractContentBlocks {
         super(
             type,
             x ? x : 0,
-            y ? y : 0, 
-            width ? width : HeadlineBlock.defaultWidth, 
-            height ? height : HeadlineBlock.defaultHeight
+            y ? y : 0,
+            width ? width : HeadlineBlock.defaultWidth,
+            height ? height : HeadlineBlock.defaultHeight,
         );
     }
 }

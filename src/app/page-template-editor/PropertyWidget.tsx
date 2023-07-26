@@ -1,11 +1,11 @@
-﻿import styles from "./styles/PropertyWidget.module.scss";
+﻿import styles from './styles/PropertyWidget.module.scss';
 import Button from '@mui/joy/Button';
-import {Delete} from '@mui/icons-material';
-import {FormControl, FormLabel, Input} from '@mui/joy';
-import {ChangeEvent, ForwardedRef, forwardRef} from 'react';
-import {GridConstants} from '@/app/page-template-editor/constants/GridConstants';
+import { Delete } from '@mui/icons-material';
+import { FormControl, FormLabel, Input } from '@mui/joy';
+import { ChangeEvent, ForwardedRef, forwardRef } from 'react';
+import { GridConstants } from '@/app/page-template-editor/constants/GridConstants';
 
-interface PropertyWidgetProps { 
+interface PropertyWidgetProps {
     id: string,
     x: number,
     y: number,
@@ -18,7 +18,7 @@ interface PropertyWidgetProps {
 
 const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef<HTMLDivElement>) => {
     return (
-        <div ref={ref} className={styles.PropertyWidget + " content-block-controls"}>
+        <div ref={ref} className={styles.PropertyWidget + ' content-block-controls'}>
             <div className={styles.Header}>
                 Egenskaber
                 <div className={styles.separator}></div>
@@ -27,10 +27,10 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
                 <div className={styles.propertyInputRow}>
                     <FormControl className={styles.propertyInput}>
                         <FormLabel>X-Position</FormLabel>
-                        <Input 
-                            placeholder="X" 
+                        <Input
+                            placeholder="X"
                             value={props.x}
-                            type={"number"}
+                            type={'number'}
                             slotProps={{
                                 input: {
                                     min: 0,
@@ -42,10 +42,10 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
                     </FormControl>
                     <FormControl className={styles.propertyInput}>
                         <FormLabel>Y-Position</FormLabel>
-                        <Input 
-                            placeholder="Y" 
+                        <Input
+                            placeholder="Y"
                             value={props.y}
-                            type={"number"}
+                            type={'number'}
                             slotProps={{
                                 input: {
                                     min: 0,
@@ -58,10 +58,10 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
                 <div className={styles.propertyInputRow}>
                     <FormControl className={styles.propertyInput}>
                         <FormLabel>Bredde</FormLabel>
-                        <Input 
-                            placeholder="Bredde" 
+                        <Input
+                            placeholder="Bredde"
                             value={props.width}
-                            type={"number"}
+                            type={'number'}
                             slotProps={{
                                 input: {
                                     min: 1,
@@ -73,29 +73,29 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
                     </FormControl>
                     <FormControl className={styles.propertyInput}>
                         <FormLabel>Højde</FormLabel>
-                        <Input 
+                        <Input
                             placeholder="Højde"
                             value={props.height}
-                            type={"number"}
+                            type={'number'}
                             slotProps={{
                                 input: {
                                     min: 1,
                                     max: 100,
                                 },
                             }}
-                            onChange={(event: ChangeEvent<HTMLInputElement>) => props.resizeContentBlock(props.id, props.width, +event.target.value)} 
+                            onChange={(event: ChangeEvent<HTMLInputElement>) => props.resizeContentBlock(props.id, props.width, +event.target.value)}
                         />
                     </FormControl>
                 </div>
             </div>
             <div className={styles.Footer}>
                 <div className={styles.separator}></div>
-                <Button startDecorator={<Delete />} color={'danger'} onClick={() => props.deleteContentBlock(props.id)}>
+                <Button startDecorator={<Delete/>} color={'danger'} onClick={() => props.deleteContentBlock(props.id)}>
                     Slet
                 </Button>
             </div>
         </div>
-    )  
+    );
 });
 
 export default PropertyWidget;

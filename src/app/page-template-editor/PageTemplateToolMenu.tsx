@@ -7,6 +7,7 @@ interface PageTemplateToolMenuProps {
     addRow: () => void;
     removeRow: () => void;
     rowCount: number;
+    toggleGrid: () => void;
 }
 
 const PageTemplateToolMenu = (props: PageTemplateToolMenuProps) => {
@@ -19,8 +20,8 @@ const PageTemplateToolMenu = (props: PageTemplateToolMenuProps) => {
         <DraggableToolMenuIcon type={DraggableTypes.SLIDESHOW_BLOCK} tooltip="Galleri"/>
         <div className={styles.separator}></div>
         <ToolMenuButton type={'add-row'} tooltip={'Tilføj række'} onClick={props.addRow} rowCount={props.rowCount}/>
-        <ToolMenuButton type={'remove-row'} tooltip={'Fjern række'} onClick={props.removeRow}
-                        rowCount={props.rowCount}/>
+        <ToolMenuButton type={'remove-row'} tooltip={'Fjern række'} onClick={props.removeRow} rowCount={props.rowCount}/>
+        <ToolMenuButton type={'toggle-grid'} tooltip={'Gitter til/fra'} onClick={props.toggleGrid} rowCount={props.rowCount}/>
     </div>;
 };
 

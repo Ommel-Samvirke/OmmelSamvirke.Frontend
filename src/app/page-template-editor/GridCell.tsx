@@ -19,6 +19,7 @@ export interface GridCellProps {
     y: number,
     children?: React.ReactNode,
     setCoordinate?: (x: number, y: number) => void
+    displayGrid?: boolean;
 }
 
 const GridCell = (props: GridCellProps) => {
@@ -77,6 +78,7 @@ const GridCell = (props: GridCellProps) => {
             ref={drop}
             className={styles.gridCell}
             onMouseEnter={() => setCoordinate(props.x, props.y)}
+            style={{ border: props.displayGrid ? '1px solid #E4E4E4' : 'none' }}
         >
             {isOver && canDrop && <DropOverlay color={'yellow'}/>}
             {isOver && !canDrop && <DropOverlay color={'red'}/>}

@@ -21,6 +21,7 @@ const Grid = () => {
     const [cols] = useState<number>(GridConstants.COLUMNS);
     const [currentCoordinate, setCurrentCoordinate] = useState<[number, number]>([0, 0]);
     const [selectedContentBlockId, setSelectedContentBlockId] = useState<string | null>(null);
+    const [displayGrid, setDisplayGrid] = useState<boolean>(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -131,6 +132,7 @@ const Grid = () => {
                     y={gridCellProps.y}
                     key={`${gridCellProps.x}-${gridCellProps.y}`}
                     setCoordinate={(x: number, y: number) => setCurrentCoordinate([x, y])}
+                    displayGrid={displayGrid}
                 />,
             )}
             {gridContext.contentBlocks.map(block =>
@@ -151,6 +153,7 @@ const Grid = () => {
                 addRow={addRow}
                 removeRow={removeRow}
                 rowCount={gridCells.length / GridConstants.COLUMNS}
+                toggleGrid={() => setDisplayGrid(!displayGrid)}
             />
             <CoordinateWidget x={currentCoordinate[0]} y={currentCoordinate[1]}/>
         </div>

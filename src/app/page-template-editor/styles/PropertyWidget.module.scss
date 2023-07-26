@@ -1,9 +1,11 @@
-﻿.PropertyWidget {
+﻿@import "./variables.module.scss";
+
+.PropertyWidget {
     position: fixed;
     width: 300px;
     right: 0;
-    top: 5rem;
-    height: calc(100% - 5rem);
+    top: $header-height;
+    height: calc(100% - $header-height);
     z-index: 1;
     display: flex;
     flex-direction: column;

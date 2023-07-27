@@ -1,18 +1,20 @@
-﻿import { EditHistoryContext } from '@/app/page-template-editor/context/EditHistoryContext';
-import styles from './styles/PageTemplateEditorHeader.module.scss';
-import { roboto } from '../fonts';
-
-import React, { useState, useRef, useContext } from 'react';
+﻿import { Layout } from '@/app/page-template-editor/constants/Layouts';
+import { EditHistoryContext } from '@/app/page-template-editor/context/EditHistoryContext';
+import { LayoutContext } from '@/app/page-template-editor/context/LayoutContext';
 import ColorPicker from '@/components/ColorPicker';
-import Button from '@mui/joy/Button';
-import { Input } from '@mui/joy';
-import IconButton from '@mui/joy/IconButton';
 import DesktopWindowsOutlinedIcon from '@mui/icons-material/DesktopWindowsOutlined';
-import TabletMacOutlinedIcon from '@mui/icons-material/TabletMacOutlined';
 import PhoneIphoneOutlinedIcon from '@mui/icons-material/PhoneIphoneOutlined';
-import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
+import TabletMacOutlinedIcon from '@mui/icons-material/TabletMacOutlined';
+import UndoIcon from '@mui/icons-material/Undo';
+import { Input } from '@mui/joy';
+import Button from '@mui/joy/Button';
+import IconButton from '@mui/joy/IconButton';
 import Tooltip from '@mui/joy/Tooltip';
+
+import React, { useContext, useRef, useState } from 'react';
+import { roboto } from '../fonts';
+import styles from './styles/PageTemplateEditorHeader.module.scss';
 
 interface PageTemplateEditorHeaderProps {
     onUndo: () => void,
@@ -23,6 +25,7 @@ const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
     const [templateName, setTemplateName] = useState<string>('Unavngiven Side');
     const [isInputHovered, setIsInputHovered] = useState<boolean>(false);
     const editHistoryContext = useContext(EditHistoryContext);
+    const layoutContext = useContext(LayoutContext);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -82,17 +85,26 @@ const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
                 <div className={styles.rightContainer}>
                     <ColorPicker/>
                     <Tooltip title="Computer (1920px)">
-                        <IconButton variant="soft">
+                        <IconButton 
+                            color={layoutContext.currentLayout == Layout.DESKTOP ? 'primary' : 'neutral'}
+                            onClick={() => layoutContext.selectLayout(Layout.DESKTOP)}
+                        >
                             <DesktopWindowsOutlinedIcon/>
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Tablet (820px)">
-                        <IconButton>
+                        <IconButton
+                            color={layoutContext.currentLayout == Layout.TABLET ? 'primary' : 'neutral'}
+                            onClick={() => layoutContext.selectLayout(Layout.TABLET)}
+                        >
                             <TabletMacOutlinedIcon/>
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Smartphone(360px)">
-                        <IconButton>
+                        <IconButton
+                            color={layoutContext.currentLayout == Layout.MOBILE ? 'primary' : 'neutral'}
+                            onClick={() => layoutContext.selectLayout(Layout.MOBILE)}
+                        >
                             <PhoneIphoneOutlinedIcon/>
                         </IconButton>
                     </Tooltip>

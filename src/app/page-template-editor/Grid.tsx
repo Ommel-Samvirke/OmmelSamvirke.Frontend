@@ -1,20 +1,20 @@
-﻿import { EditorContext } from '@/app/page-template-editor/context/EditorContext';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import styles from './styles/Grid.module.scss';
+﻿import styles from './styles/Grid.module.scss';
 
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { debounce } from '@/util/debounce';
-import GridCell, { GridCellProps } from '@/app/page-template-editor/GridCell';
-import ContentBlock from '@/app/page-template-editor/ContentBlock';
-import { LayoutContext } from '@/app/page-template-editor/context/LayoutContext';
 import { DraggableTypes } from '@/app/page-template-editor/constants/DraggableTypes';
-import { ImageBlock } from './models/ImageBlock';
-import { HeadlineBlock } from './models/HeadlineBlock';
 import { GridConstants } from '@/app/page-template-editor/constants/GridConstants';
+import { Layout } from '@/app/page-template-editor/constants/Layouts';
+import ContentBlock from '@/app/page-template-editor/ContentBlock';
+import { EditorContext } from '@/app/page-template-editor/context/EditorContext';
+import { LayoutContext } from '@/app/page-template-editor/context/LayoutContext';
+import GridCell, { GridCellProps } from '@/app/page-template-editor/GridCell';
 import PageTemplateToolMenu from '@/app/page-template-editor/PageTemplateToolMenu';
-
-const minRows = GridConstants.COLUMNS;
+import { debounce } from '@/util/debounce';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { HeadlineBlock } from './models/HeadlineBlock';
+import { ImageBlock } from './models/ImageBlock';
+import classNames from 'classnames';
 
 const Grid = () => {
     const layoutContext = useContext(LayoutContext);
@@ -25,6 +25,7 @@ const Grid = () => {
     const [currentCoordinate, setCurrentCoordinate] = useState<[number, number]>([0, 0]);
     const [selectedContentBlockId, setSelectedContentBlockId] = useState<string | null>(null);
     const [displayGrid, setDisplayGrid] = useState<boolean>(true);
+    const [minRows, setMinRows] = useState<number>(GridConstants.COLUMNS);
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -59,12 +60,35 @@ const Grid = () => {
             document.removeEventListener('keydown', handleKeyPress);
             window.removeEventListener('resize', debouncedAdjustGridSize);
         };
-    }, [cols, layoutContext.desktopLayout, selectedContentBlockId]);
-
+    }, [cols, layoutContext.desktopLayout, layoutContext.tabletLayout, layoutContext.mobileLayout, selectedContentBlockId]);
+    
     useEffect(() => {
         setInitialContentBlocks();
         adjustGridSize();
     }, []);
+    
+    useEffect(() => {
+        let columnMultiplier: number = 1;
+        
+        switch (layoutContext.currentLayout) {
+            case Layout.DESKTOP:
+                columnMultiplier = 0.85;
+                break;
+            case Layout.TABLET:
+                columnMultiplier = 1.5;
+                break;
+            case Layout.MOBILE:
+                columnMultiplier = 3;
+                break;
+        }
+
+        setMinRows(Math.floor(GridConstants.COLUMNS * columnMultiplier));
+        layoutContext.updateMinRows(Math.floor(GridConstants.COLUMNS * columnMultiplier));
+    }, [layoutContext.currentLayout]);
+    
+    useEffect(() => {
+        adjustGridSize();
+    }, [minRows]);
     
     useEffect(() => {
         if (!editorContext.color) return;
@@ -127,8 +151,18 @@ const Grid = () => {
         setCurrentCoordinate([x, y]);
     };
 
+    const className = classNames(styles.container, {
+        [styles.desktop]: layoutContext.currentLayout === Layout.DESKTOP,
+        [styles.tablet]: layoutContext.currentLayout === Layout.TABLET,
+        [styles.mobile]: layoutContext.currentLayout === Layout.MOBILE
+    });
+
     return (
-        <div className={styles.container} ref={containerRef} id={styles.grid} onMouseMove={calculateCurrentGridCell}>
+        <div
+            className={className}
+            ref={containerRef} 
+            id={styles.grid} onMouseMove={calculateCurrentGridCell}
+        >
             <DndProvider backend={HTML5Backend}>
                 {gridCells.map((gridCellProps) =>
                     <GridCell
@@ -139,7 +173,35 @@ const Grid = () => {
                         displayGrid={displayGrid}
                     />,
                 )}
-                {layoutContext.desktopLayout.map(block =>
+                {layoutContext.currentLayout === Layout.DESKTOP && layoutContext.desktopLayout.map(block =>
+                    <ContentBlock
+                        key={block.id}
+                        contentBlock={block}
+                        gridCellWidth={gridCellWidth}
+                        isSelected={block.id === selectedContentBlockId}
+                        onSelect={() => setSelectedContentBlockId(block.id)}
+                        onDeselect={() => setSelectedContentBlockId(null)}
+                        mouseGridX={currentCoordinate[0]}
+                        mouseGridY={currentCoordinate[1]}
+                        gridContainerLeft={containerRef.current?.getBoundingClientRect().left || 0}
+                        gridContainerTop={containerRef.current?.getBoundingClientRect().top || 0}
+                    />,
+                )}
+                {layoutContext.currentLayout === Layout.TABLET && layoutContext.tabletLayout.map(block =>
+                    <ContentBlock
+                        key={block.id}
+                        contentBlock={block}
+                        gridCellWidth={gridCellWidth}
+                        isSelected={block.id === selectedContentBlockId}
+                        onSelect={() => setSelectedContentBlockId(block.id)}
+                        onDeselect={() => setSelectedContentBlockId(null)}
+                        mouseGridX={currentCoordinate[0]}
+                        mouseGridY={currentCoordinate[1]}
+                        gridContainerLeft={containerRef.current?.getBoundingClientRect().left || 0}
+                        gridContainerTop={containerRef.current?.getBoundingClientRect().top || 0}
+                    />,
+                )}
+                {layoutContext.currentLayout === Layout.MOBILE && layoutContext.mobileLayout.map(block =>
                     <ContentBlock
                         key={block.id}
                         contentBlock={block}

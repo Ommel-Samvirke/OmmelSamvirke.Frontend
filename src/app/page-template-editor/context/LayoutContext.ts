@@ -1,4 +1,5 @@
-﻿import { Layout } from '@/app/page-template-editor/constants/Layouts';
+﻿import { GridConstants } from '@/app/page-template-editor/constants/GridConstants';
+import { Layout } from '@/app/page-template-editor/constants/Layouts';
 import { ContentBlockType } from '@/app/page-template-editor/types/ContentBlockType';
 import { createContext } from 'react';
 
@@ -8,6 +9,8 @@ export interface LayoutContextState {
     mobileLayout: ContentBlockType[];
     currentLayout: Layout;
     selectLayout: (layout: Layout) => void;
+    currentMinRows: number;
+    updateMinRows: (minRows: number) => void;
 }
 
 export const LayoutContext = createContext<LayoutContextState>({
@@ -15,5 +18,7 @@ export const LayoutContext = createContext<LayoutContextState>({
     tabletLayout: [],
     mobileLayout: [],
     currentLayout: Layout.DESKTOP,
-    selectLayout: () => {}
+    selectLayout: () => {},
+    currentMinRows: GridConstants.COLUMNS,
+    updateMinRows: () => {},
 });

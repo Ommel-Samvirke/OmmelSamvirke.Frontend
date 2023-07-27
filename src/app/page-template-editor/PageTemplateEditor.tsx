@@ -27,6 +27,7 @@ const PageTemplateEditor = () => {
     const [undoBufferUsedCapacity, setUndoBufferUsedCapacity] = useState<number>(0);
     const [redoBufferUsedCapacity, setRedoBufferUsedCapacity] = useState<number>(0);
     const [color, setColor] = useState<string>('#ffffff');
+    const [currentMinRows, setCurrentMinRows] = useState<number>(GridConstants.COLUMNS);
     const desktopLayoutRef = useRef(desktopLayout);
     const tabletLayoutRef = useRef(tabletLayout);
     const mobileLayoutRef = useRef(mobileLayout);
@@ -260,13 +261,19 @@ const PageTemplateEditor = () => {
         setCurrentLayout(layout);
     }, []);
     
+    const updateMinRows = useCallback((rows: number) => {
+        setCurrentMinRows(rows);
+    }, []);
+    
     const layoutContextValue = useMemo(() => ({
         desktopLayout,
         tabletLayout,
         mobileLayout,
         currentLayout,
         selectLayout,
-    }), [desktopLayout, tabletLayout, mobileLayout, currentLayout, selectLayout]);
+        currentMinRows,
+        updateMinRows
+    }), [desktopLayout, tabletLayout, mobileLayout, currentLayout, selectLayout, currentMinRows, updateMinRows]);
     
     const editorContextValue = useMemo(() => ({
         moveContentBlock,

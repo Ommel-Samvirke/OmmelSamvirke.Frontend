@@ -1,4 +1,4 @@
-﻿import { GridContext } from '@/app/page-template-editor/context/GridContext';
+﻿import { EditorContext } from '@/app/page-template-editor/context/EditorContext';
 import Tooltip from '@mui/joy/Tooltip';
 import styles from './styles/ColorPicker.module.scss';
 
@@ -7,10 +7,10 @@ import { useContext, useEffect, useRef, useState } from 'react';
 const ColorPicker = () => {
     const [color, setColor] = useState('#ffffff');
     const colorDisplayRef = useRef<HTMLDivElement>(null);
-    const gridContext = useContext(GridContext);
+    const editorContext = useContext(EditorContext);
 
     useEffect(() => {
-        gridContext.updateColor(color);
+        editorContext.updateColor(color);
         
         if (!colorDisplayRef.current) return;
         colorDisplayRef.current.style.backgroundColor = color;

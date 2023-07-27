@@ -23,10 +23,10 @@ export const canResizeOrMove = (
     x: number,
     y: number,
     id: string,
-    contentBlocks: IContentBlock[],
+    desktopLayout: IContentBlock[],
     rowCount: number,
 ) => {
-    for (let block of contentBlocks) {
+    for (let block of desktopLayout) {
         if (block.id === id) continue;
 
         if (x + width > GridConstants.COLUMNS) return false;

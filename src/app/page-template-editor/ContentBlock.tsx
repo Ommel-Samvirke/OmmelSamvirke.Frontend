@@ -1,9 +1,10 @@
-﻿import styles from './styles/ContentBlock.module.scss';
+﻿import { EditorContext } from '@/app/page-template-editor/context/EditorContext';
+import styles from './styles/ContentBlock.module.scss';
 import 'react-resizable/css/styles.css';
 
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 import { DraggableTypes } from '@/app/page-template-editor/constants/DraggableTypes';
-import { GridContext } from '@/app/page-template-editor/context/GridContext';
+import { LayoutContext } from '@/app/page-template-editor/context/LayoutContext';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Resizable } from 'react-resizable';
 import { canResizeOrMove } from '@/app/page-template-editor/helpers/ContentBlockHelpers';
@@ -35,7 +36,8 @@ export interface ContentBlockProps {
 }
 
 const ContentBlock = (props: ContentBlockProps) => {
-    const gridContext = useContext(GridContext);
+    const layoutContext = useContext(LayoutContext);
+    const editorContext = useContext(EditorContext);
     const [isSelectionBlocked, setIsSelectionBlocked] = useState<boolean>(false);
     const propertyWidget = useRef(null);
     const resizableRef = useRef(null);
@@ -64,8 +66,8 @@ const ContentBlock = (props: ContentBlockProps) => {
             if (item.source === DragSource.CONTENT_BLOCK && clientOffset) {
                 const gridX = Math.floor((clientOffset.x - props.gridContainerLeft) / props.gridCellWidth);
                 const gridY = Math.floor((clientOffset.y - props.gridContainerTop) / props.gridCellWidth);
-                if (gridContext.canMoveContentBlock(item.id, gridX, gridY)) {
-                    gridContext.moveContentBlock(item.id, gridX, gridY);
+                if (editorContext.canMoveContentBlock(layoutContext.currentLayout, item.id, gridX, gridY)) {
+                    editorContext.moveContentBlock(layoutContext.currentLayout, item.id, gridX, gridY);
                 }
             }
         },
@@ -99,9 +101,9 @@ const ContentBlock = (props: ContentBlockProps) => {
                     y={props.contentBlock.y}
                     width={props.contentBlock.width}
                     height={props.contentBlock.height}
-                    moveContentBlock={gridContext.moveContentBlock}
-                    resizeContentBlock={gridContext.resizeContentBlock}
-                    deleteContentBlock={gridContext.removeContentBlock}
+                    moveContentBlock={editorContext.moveContentBlock}
+                    resizeContentBlock={editorContext.resizeContentBlock}
+                    deleteContentBlock={editorContext.removeContentBlock}
                 />
             }
             <Resizable
@@ -122,13 +124,13 @@ const ContentBlock = (props: ContentBlockProps) => {
                         props.contentBlock.x,
                         props.contentBlock.y,
                         props.contentBlock.id,
-                        gridContext.contentBlocks,
-                        gridContext.rowCount,
+                        layoutContext.desktopLayout,
+                        editorContext.rowCount,
                     )) {
                         return;
                     }
 
-                    gridContext.resizeContentBlock(props.contentBlock.id, newWidth, newHeight);
+                    editorContext.resizeContentBlock(layoutContext.currentLayout, props.contentBlock.id, newWidth, newHeight);
                 }}
                 onResizeStart={props.onDeselect}
                 onResizeStop={() => setIsSelectionBlocked(true)}

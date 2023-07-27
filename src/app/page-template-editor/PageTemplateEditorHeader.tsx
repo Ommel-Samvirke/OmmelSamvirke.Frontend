@@ -1,4 +1,5 @@
-﻿import styles from './styles/PageTemplateEditorHeader.module.scss';
+﻿import { EditHistoryContext } from '@/app/page-template-editor/context/EditHistoryContext';
+import styles from './styles/PageTemplateEditorHeader.module.scss';
 import { roboto } from '../fonts';
 
 import React, { useState, useRef, useContext } from 'react';
@@ -12,7 +13,6 @@ import PhoneIphoneOutlinedIcon from '@mui/icons-material/PhoneIphoneOutlined';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
 import Tooltip from '@mui/joy/Tooltip';
-import { GridContext } from '@/app/page-template-editor/context/GridContext';
 
 interface PageTemplateEditorHeaderProps {
     onUndo: () => void,
@@ -22,7 +22,7 @@ interface PageTemplateEditorHeaderProps {
 const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
     const [templateName, setTemplateName] = useState<string>('Unavngiven Side');
     const [isInputHovered, setIsInputHovered] = useState<boolean>(false);
-    const gridContext = useContext(GridContext);
+    const editHistoryContext = useContext(EditHistoryContext);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -31,7 +31,7 @@ const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
             <div className={styles.innerContainer}>
                 <div className={styles.leftContainer}>
                     {
-                        gridContext.undoBufferUsedCapacity > 0 &&
+                        editHistoryContext.undoBufferUsedCapacity > 0 &&
                         <Tooltip title="Fortryd (Ctrl+Z)">
                             <IconButton variant="soft" onClick={props.onUndo}>
                                 <UndoIcon/>
@@ -39,7 +39,7 @@ const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
                         </Tooltip>
                     }
                     {
-                        gridContext.undoBufferUsedCapacity == 0 &&
+                        editHistoryContext.undoBufferUsedCapacity == 0 &&
                         <Tooltip title="Fortryd (Ctrl+Z)">
                             <span style={{ cursor: 'not-allowed' }}>
                                 <IconButton variant="soft" disabled={true}>
@@ -49,7 +49,7 @@ const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
                         </Tooltip>
                     }
                     {
-                        gridContext.redoBufferUsedCapacity > 0 &&
+                        editHistoryContext.redoBufferUsedCapacity > 0 &&
                         <Tooltip title="Annuller fortryd (Ctrl+Y)">
                             <IconButton variant="soft" onClick={props.onRedo}>
                                 <RedoIcon/>
@@ -57,7 +57,7 @@ const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
                         </Tooltip>
                     }
                     {
-                        gridContext.redoBufferUsedCapacity == 0 &&
+                        editHistoryContext.redoBufferUsedCapacity == 0 &&
                         <Tooltip title="Annuller fortryd (Ctrl+Y)">
                             <span style={{ cursor: 'not-allowed' }}>
                                 <IconButton variant="soft" disabled={true}>

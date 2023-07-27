@@ -1,4 +1,4 @@
-import { GridContext } from '@/app/page-template-editor/context/GridContext';
+import { EditorContext } from '@/app/page-template-editor/context/EditorContext';
 import { loremIpsum } from 'lorem-ipsum';
 import React, { ForwardedRef, forwardRef, useContext, useEffect, useRef, useState } from 'react';
 import styles from './styles/TextTemplateBlock.module.scss';
@@ -6,7 +6,7 @@ import styles from './styles/TextTemplateBlock.module.scss';
 const TextTemplateBlock = forwardRef((_, ref: ForwardedRef<HTMLDivElement>) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [text, setText] = useState('');
-    const gridContext = useContext(GridContext);
+    const editorContext = useContext(EditorContext);
 
     useEffect(() => {
         const newText = generateText();
@@ -67,7 +67,7 @@ const TextTemplateBlock = forwardRef((_, ref: ForwardedRef<HTMLDivElement>) => {
     };
     
     return (
-        <div ref={ref} className={styles.textContainer} style={{ backgroundColor: gridContext.color }}>
+        <div ref={ref} className={styles.textContainer} style={{ backgroundColor: editorContext.color }}>
             <div ref={containerRef} className={styles.textContent}>
                 {text.split('\n').map((line, index) => (
                     <React.Fragment key={index}>

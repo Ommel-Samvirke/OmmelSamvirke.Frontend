@@ -1,21 +1,24 @@
-﻿import styles from './styles/Grid.module.scss';
+﻿import { EditorContext } from '@/app/page-template-editor/context/EditorContext';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import styles from './styles/Grid.module.scss';
 
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { debounce } from '@/util/debounce';
 import GridCell, { GridCellProps } from '@/app/page-template-editor/GridCell';
 import ContentBlock from '@/app/page-template-editor/ContentBlock';
-import { GridContext } from '@/app/page-template-editor/context/GridContext';
+import { LayoutContext } from '@/app/page-template-editor/context/LayoutContext';
 import { DraggableTypes } from '@/app/page-template-editor/constants/DraggableTypes';
 import { ImageBlock } from './models/ImageBlock';
 import { HeadlineBlock } from './models/HeadlineBlock';
-import CoordinateWidget from '@/app/page-template-editor/CoordinateWidget';
 import { GridConstants } from '@/app/page-template-editor/constants/GridConstants';
 import PageTemplateToolMenu from '@/app/page-template-editor/PageTemplateToolMenu';
 
 const minRows = GridConstants.COLUMNS;
 
 const Grid = () => {
-    const gridContext = useContext(GridContext);
+    const layoutContext = useContext(LayoutContext);
+    const editorContext = useContext(EditorContext);
     const [gridCells, setGridCells] = useState<GridCellProps[]>([]);
     const [gridCellWidth, setGridCellWidth] = useState<number>(0);
     const [cols] = useState<number>(GridConstants.COLUMNS);
@@ -43,7 +46,7 @@ const Grid = () => {
         const handleKeyPress = (event: KeyboardEvent) => {
             if (event.key === 'Escape' || event.key === 'Delete') {
                 if (!selectedContentBlockId) return;
-                gridContext.removeContentBlock(selectedContentBlockId);
+                editorContext.removeContentBlock(layoutContext.currentLayout, selectedContentBlockId);
             }
         };
 
@@ -56,7 +59,7 @@ const Grid = () => {
             document.removeEventListener('keydown', handleKeyPress);
             window.removeEventListener('resize', debouncedAdjustGridSize);
         };
-    }, [cols, gridContext.contentBlocks, selectedContentBlockId]);
+    }, [cols, layoutContext.desktopLayout, selectedContentBlockId]);
 
     useEffect(() => {
         setInitialContentBlocks();
@@ -64,11 +67,11 @@ const Grid = () => {
     }, []);
     
     useEffect(() => {
-        if (!gridContext.color) return;
+        if (!editorContext.color) return;
         if (!containerRef.current) return;
 
-        containerRef.current.style.backgroundColor = gridContext.color;
-    }, [gridContext.color]);
+        containerRef.current.style.backgroundColor = editorContext.color;
+    }, [editorContext.color]);
 
     const adjustGridSize = () => {
         if (!containerRef.current) return;
@@ -96,7 +99,7 @@ const Grid = () => {
         }
 
         setGridCells(newGridCells);
-        gridContext.updateRowCount(rowCount);
+        editorContext.updateRowCount(rowCount);
     };
 
     const addRow = () => {
@@ -110,8 +113,8 @@ const Grid = () => {
     };
 
     const setInitialContentBlocks = () => {
-        gridContext.addContentBlock(new HeadlineBlock(DraggableTypes.HEADLINE_BLOCK, 0, 0, 8, 1));
-        gridContext.addContentBlock(new ImageBlock(DraggableTypes.IMAGE_BLOCK, 0, 3, 6, 6));
+        editorContext.addContentBlock(layoutContext.currentLayout, new HeadlineBlock(DraggableTypes.HEADLINE_BLOCK, 0, 0, 8, 1));
+        editorContext.addContentBlock(layoutContext.currentLayout, new ImageBlock(DraggableTypes.IMAGE_BLOCK, 0, 3, 6, 6));
     };
 
     const calculateCurrentGridCell = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -126,37 +129,40 @@ const Grid = () => {
 
     return (
         <div className={styles.container} ref={containerRef} id={styles.grid} onMouseMove={calculateCurrentGridCell}>
-            {gridCells.map((gridCellProps) =>
-                <GridCell
-                    x={gridCellProps.x}
-                    y={gridCellProps.y}
-                    key={`${gridCellProps.x}-${gridCellProps.y}`}
-                    setCoordinate={(x: number, y: number) => setCurrentCoordinate([x, y])}
-                    displayGrid={displayGrid}
-                />,
-            )}
-            {gridContext.contentBlocks.map(block =>
-                <ContentBlock
-                    key={block.id}
-                    contentBlock={block}
-                    gridCellWidth={gridCellWidth}
-                    isSelected={block.id === selectedContentBlockId}
-                    onSelect={() => setSelectedContentBlockId(block.id)}
-                    onDeselect={() => setSelectedContentBlockId(null)}
-                    mouseGridX={currentCoordinate[0]}
-                    mouseGridY={currentCoordinate[1]}
-                    gridContainerLeft={containerRef.current?.getBoundingClientRect().left || 0}
-                    gridContainerTop={containerRef.current?.getBoundingClientRect().top || 0}
-                />,
-            )}
-            <PageTemplateToolMenu
-                addRow={addRow}
-                removeRow={removeRow}
-                rowCount={gridCells.length / GridConstants.COLUMNS}
-                toggleGrid={() => setDisplayGrid(!displayGrid)}
-                isGridVisible={displayGrid}
-            />
-            <CoordinateWidget x={currentCoordinate[0]} y={currentCoordinate[1]}/>
+            <DndProvider backend={HTML5Backend}>
+                {gridCells.map((gridCellProps) =>
+                    <GridCell
+                        x={gridCellProps.x}
+                        y={gridCellProps.y}
+                        key={`${gridCellProps.x}-${gridCellProps.y}`}
+                        setCoordinate={(x: number, y: number) => setCurrentCoordinate([x, y])}
+                        displayGrid={displayGrid}
+                    />,
+                )}
+                {layoutContext.desktopLayout.map(block =>
+                    <ContentBlock
+                        key={block.id}
+                        contentBlock={block}
+                        gridCellWidth={gridCellWidth}
+                        isSelected={block.id === selectedContentBlockId}
+                        onSelect={() => setSelectedContentBlockId(block.id)}
+                        onDeselect={() => setSelectedContentBlockId(null)}
+                        mouseGridX={currentCoordinate[0]}
+                        mouseGridY={currentCoordinate[1]}
+                        gridContainerLeft={containerRef.current?.getBoundingClientRect().left || 0}
+                        gridContainerTop={containerRef.current?.getBoundingClientRect().top || 0}
+                    />,
+                )}
+                <PageTemplateToolMenu
+                    addRow={addRow}
+                    removeRow={removeRow}
+                    rowCount={gridCells.length / GridConstants.COLUMNS}
+                    toggleGrid={() => setDisplayGrid(!displayGrid)}
+                    isGridVisible={displayGrid}
+                    currentXCoordinate={currentCoordinate[0]}
+                    currentYCoordinate={currentCoordinate[1]}
+                />
+            </DndProvider>
         </div>
     );
 };

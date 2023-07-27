@@ -47,7 +47,7 @@ const SlideshowTemplateBlock = forwardRef((props: SlideshowTemplateBlockProps, r
                         <Box
                             component="img"
                             src={url}
-                            alt={`Billedegalleri: Billede nummer ${index + 1}`}
+                            alt={`Billedgalleri: Billede nummer ${index + 1}`}
                         />
                         ) : null}
                     </div>

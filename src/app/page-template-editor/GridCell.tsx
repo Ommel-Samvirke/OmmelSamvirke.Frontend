@@ -1,8 +1,9 @@
-﻿import styles from './styles/GridCell.module.scss';
+﻿import { EditorContext } from '@/app/page-template-editor/context/EditorContext';
+import styles from './styles/GridCell.module.scss';
 import React, { useContext } from 'react';
 import { DraggableTypes } from '@/app/page-template-editor/constants/DraggableTypes';
 import { useDrop } from 'react-dnd';
-import { GridContext } from '@/app/page-template-editor/context/GridContext';
+import { LayoutContext } from '@/app/page-template-editor/context/LayoutContext';
 import DropOverlay from '@/app/page-template-editor/DropOverlay';
 import { IDraggableItem } from '@/app/page-template-editor/interfaces/IDraggableItem';
 import { DragSource } from '@/app/page-template-editor/constants/DragSource';
@@ -23,7 +24,8 @@ export interface GridCellProps {
 }
 
 const GridCell = (props: GridCellProps) => {
-    const gridContext = useContext(GridContext);
+    const layoutContext = useContext(LayoutContext);
+    const editorContext = useContext(EditorContext);
 
     const setCoordinate = (x: number, y: number) => {
         if (!props.setCoordinate) return;
@@ -43,27 +45,27 @@ const GridCell = (props: GridCellProps) => {
             if (item.source === DragSource.TOOL_MENU) {
                 switch (item.type) {
                     case DraggableTypes.HEADLINE_BLOCK:
-                        return gridContext.canMoveContentBlock(item.id, props.x, props.y, HeadlineBlock.defaultWidth, HeadlineBlock.defaultHeight);
+                        return editorContext.canMoveContentBlock(layoutContext.currentLayout, item.id, props.x, props.y, HeadlineBlock.defaultWidth, HeadlineBlock.defaultHeight);
                     case DraggableTypes.TEXT_BLOCK:
-                        return gridContext.canMoveContentBlock(item.id, props.x, props.y, TextBlock.defaultWidth, TextBlock.defaultHeight);
+                        return editorContext.canMoveContentBlock(layoutContext.currentLayout, item.id, props.x, props.y, TextBlock.defaultWidth, TextBlock.defaultHeight);
                     case DraggableTypes.IMAGE_BLOCK:
-                        return gridContext.canMoveContentBlock(item.id, props.x, props.y, ImageBlock.defaultWidth, ImageBlock.defaultHeight);
+                        return editorContext.canMoveContentBlock(layoutContext.currentLayout, item.id, props.x, props.y, ImageBlock.defaultWidth, ImageBlock.defaultHeight);
                     case DraggableTypes.PDF_BLOCK:
-                        return gridContext.canMoveContentBlock(item.id, props.x, props.y, PdfBlock.defaultWidth, PdfBlock.defaultHeight);
+                        return editorContext.canMoveContentBlock(layoutContext.currentLayout, item.id, props.x, props.y, PdfBlock.defaultWidth, PdfBlock.defaultHeight);
                     case DraggableTypes.VIDEO_BLOCK:
-                        return gridContext.canMoveContentBlock(item.id, props.x, props.y, VideoBlock.defaultWidth, VideoBlock.defaultHeight);
+                        return editorContext.canMoveContentBlock(layoutContext.currentLayout, item.id, props.x, props.y, VideoBlock.defaultWidth, VideoBlock.defaultHeight);
                     case DraggableTypes.SLIDESHOW_BLOCK:
-                        return gridContext.canMoveContentBlock(item.id, props.x, props.y, SlideshowBlock.defaultWidth, SlideshowBlock.defaultHeight);
+                        return editorContext.canMoveContentBlock(layoutContext.currentLayout, item.id, props.x, props.y, SlideshowBlock.defaultWidth, SlideshowBlock.defaultHeight);
                 }
             }
 
-            return gridContext.canMoveContentBlock(item.id, props.x, props.y);
+            return editorContext.canMoveContentBlock(layoutContext.currentLayout,item.id, props.x, props.y);
         },
         drop: (item: IDraggableItem) => {
             if (item.source === DragSource.TOOL_MENU) {
-                gridContext.addContentBlock(ContentBlockFactory.createContentBlock(item.type, props.x, props.y));
+                editorContext.addContentBlock(layoutContext.currentLayout, ContentBlockFactory.createContentBlock(item.type, props.x, props.y));
             } else if (item.source === DragSource.CONTENT_BLOCK) {
-                gridContext.moveContentBlock(item.id, props.x, props.y);
+                editorContext.moveContentBlock(layoutContext.currentLayout, item.id, props.x, props.y);
             }
         },
         collect: monitor => ({

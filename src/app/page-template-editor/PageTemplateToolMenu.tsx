@@ -1,13 +1,15 @@
-﻿import styles from './styles/PageTemplateToolMenu.module.scss';
+﻿import ToggleGridButton from '@/app/page-template-editor/ToggleGridButton';
+import styles from './styles/PageTemplateToolMenu.module.scss';
 import DraggableToolMenuIcon from '@/app/page-template-editor/DraggableToolMenuIcon';
 import { DraggableTypes } from '@/app/page-template-editor/constants/DraggableTypes';
-import ToolMenuButton from '@/app/page-template-editor/ToolMenuButton';
+import ManageRowCountButton from '@/app/page-template-editor/ManageRowCountButton';
 
 interface PageTemplateToolMenuProps {
     addRow: () => void;
     removeRow: () => void;
     rowCount: number;
     toggleGrid: () => void;
+    isGridVisible: boolean;
 }
 
 const PageTemplateToolMenu = (props: PageTemplateToolMenuProps) => {
@@ -19,9 +21,9 @@ const PageTemplateToolMenu = (props: PageTemplateToolMenuProps) => {
         <DraggableToolMenuIcon type={DraggableTypes.VIDEO_BLOCK} tooltip="Video"/>
         <DraggableToolMenuIcon type={DraggableTypes.SLIDESHOW_BLOCK} tooltip="Galleri"/>
         <div className={styles.separator}></div>
-        <ToolMenuButton type={'add-row'} tooltip={'Tilføj række'} onClick={props.addRow} rowCount={props.rowCount}/>
-        <ToolMenuButton type={'remove-row'} tooltip={'Fjern række'} onClick={props.removeRow} rowCount={props.rowCount}/>
-        <ToolMenuButton type={'toggle-grid'} tooltip={'Gitter til/fra'} onClick={props.toggleGrid} rowCount={props.rowCount}/>
+        <ManageRowCountButton type={'add-row'} tooltip={'Tilføj række'} onClick={props.addRow} rowCount={props.rowCount}/>
+        <ManageRowCountButton type={'remove-row'} tooltip={'Fjern række'} onClick={props.removeRow} rowCount={props.rowCount}/>
+        <ToggleGridButton onClick={props.toggleGrid} isGridVisible={props.isGridVisible}/>
     </div>;
 };
 

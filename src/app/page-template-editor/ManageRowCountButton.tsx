@@ -3,16 +3,15 @@ import Tooltip from '@mui/joy/Tooltip';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import { GridConstants } from '@/app/page-template-editor/constants/GridConstants';
-import Grid4x4Icon from '@mui/icons-material/Grid4x4';
 
-interface ToolMenuIconProps {
-    type: 'add-row' | 'remove-row' | 'toggle-grid';
+interface ManageRowCountButtonProps {
+    type: 'add-row' | 'remove-row';
     tooltip: string;
     onClick: () => void;
     rowCount: number;
 }
 
-const ToolMenuButton = (props: ToolMenuIconProps) => {
+const ManageRowCountButton = (props: ManageRowCountButtonProps) => {
     return (
         <>
             {
@@ -41,16 +40,8 @@ const ToolMenuButton = (props: ToolMenuIconProps) => {
                     </span>
                 </Tooltip>
             }
-            {
-                props.type === 'toggle-grid' &&
-                <Tooltip title={props.tooltip}>
-                    <IconButton onClick={props.onClick}>
-                        <Grid4x4Icon/>
-                    </IconButton>
-                </Tooltip>
-            }
         </>
     );
 };
 
-export default ToolMenuButton;
+export default ManageRowCountButton;

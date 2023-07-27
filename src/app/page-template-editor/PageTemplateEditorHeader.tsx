@@ -20,7 +20,7 @@ interface PageTemplateEditorHeaderProps {
 }
 
 const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
-    const [templateName, setTemplateName] = useState<string>('Unavngiven skabelon');
+    const [templateName, setTemplateName] = useState<string>('Unavngiven Side');
     const [isInputHovered, setIsInputHovered] = useState<boolean>(false);
     const gridContext = useContext(GridContext);
 
@@ -96,7 +96,7 @@ const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
                             <PhoneIphoneOutlinedIcon/>
                         </IconButton>
                     </Tooltip>
-                    <Button>Gem Skabelon</Button>
+                    <Button>Gem Side</Button>
                 </div>
             </div>
         </div>

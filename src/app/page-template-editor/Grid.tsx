@@ -154,6 +154,7 @@ const Grid = () => {
                 removeRow={removeRow}
                 rowCount={gridCells.length / GridConstants.COLUMNS}
                 toggleGrid={() => setDisplayGrid(!displayGrid)}
+                isGridVisible={displayGrid}
             />
             <CoordinateWidget x={currentCoordinate[0]} y={currentCoordinate[1]}/>
         </div>

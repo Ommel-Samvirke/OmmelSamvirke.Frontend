@@ -1,6 +1,6 @@
 ﻿import { EditorContext } from '@/app/page-template-editor/context/EditorContext';
 import styles from './styles/GridCell.module.scss';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { DraggableTypes } from '@/app/page-template-editor/constants/DraggableTypes';
 import { useDrop } from 'react-dnd';
 import { LayoutContext } from '@/app/page-template-editor/context/LayoutContext';
@@ -24,9 +24,28 @@ export interface GridCellProps {
 }
 
 const GridCell = (props: GridCellProps) => {
+    const [gridBorderColor, setGridBorderColor] = useState<string>('#e0e0e0');
     const layoutContext = useContext(LayoutContext);
     const editorContext = useContext(EditorContext);
 
+    useEffect(() => {
+        let colorWithoutHash = editorContext.color;
+        
+        if (editorContext.color.startsWith("#")) {
+            colorWithoutHash = editorContext.color.slice(1);
+        }
+        
+        let output = "#";
+        for (let i = 0; i < 3; i++) {
+            let colorComponent = parseInt(colorWithoutHash.substring(i * 2, i * 2 + 2), 16);
+            colorComponent = Math.floor(colorComponent * 0.85);
+            
+            output += ("0" + colorComponent.toString(16)).slice(-2);
+        }
+
+        setGridBorderColor(output);
+    }, [editorContext.color])
+    
     const setCoordinate = (x: number, y: number) => {
         if (!props.setCoordinate) return;
         props.setCoordinate(x, y);
@@ -80,7 +99,7 @@ const GridCell = (props: GridCellProps) => {
             ref={drop}
             className={styles.gridCell}
             onMouseEnter={() => setCoordinate(props.x, props.y)}
-            style={{ border: props.displayGrid ? '1px solid #E4E4E4' : 'none' }}
+            style={{ border: props.displayGrid ? `1px solid ${gridBorderColor}` : 'none' }}
         >
             {isOver && canDrop && <DropOverlay color={'yellow'}/>}
             {isOver && !canDrop && <DropOverlay color={'red'}/>}

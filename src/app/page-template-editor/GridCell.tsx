@@ -29,10 +29,10 @@ const GridCell = (props: GridCellProps) => {
     const editorContext = useContext(EditorContext);
 
     useEffect(() => {
-        let colorWithoutHash = editorContext.color;
+        let colorWithoutHash = layoutContext.color;
         
-        if (editorContext.color.startsWith("#")) {
-            colorWithoutHash = editorContext.color.slice(1);
+        if (layoutContext.color.startsWith("#")) {
+            colorWithoutHash = layoutContext.color.slice(1);
         }
         
         let output = "#";
@@ -44,7 +44,7 @@ const GridCell = (props: GridCellProps) => {
         }
 
         setGridBorderColor(output);
-    }, [editorContext.color])
+    }, [layoutContext.color])
     
     const setCoordinate = (x: number, y: number) => {
         if (!props.setCoordinate) return;
@@ -64,27 +64,27 @@ const GridCell = (props: GridCellProps) => {
             if (item.source === DragSource.TOOL_MENU) {
                 switch (item.type) {
                     case DraggableTypes.HEADLINE_BLOCK:
-                        return editorContext.canMoveContentBlock(layoutContext.currentLayout, item.id, props.x, props.y, HeadlineBlock.defaultWidth, HeadlineBlock.defaultHeight);
+                        return editorContext.canMoveContentBlock(item.id, props.x, props.y, HeadlineBlock.defaultWidth, HeadlineBlock.defaultHeight);
                     case DraggableTypes.TEXT_BLOCK:
-                        return editorContext.canMoveContentBlock(layoutContext.currentLayout, item.id, props.x, props.y, TextBlock.defaultWidth, TextBlock.defaultHeight);
+                        return editorContext.canMoveContentBlock(item.id, props.x, props.y, TextBlock.defaultWidth, TextBlock.defaultHeight);
                     case DraggableTypes.IMAGE_BLOCK:
-                        return editorContext.canMoveContentBlock(layoutContext.currentLayout, item.id, props.x, props.y, ImageBlock.defaultWidth, ImageBlock.defaultHeight);
+                        return editorContext.canMoveContentBlock(item.id, props.x, props.y, ImageBlock.defaultWidth, ImageBlock.defaultHeight);
                     case DraggableTypes.PDF_BLOCK:
-                        return editorContext.canMoveContentBlock(layoutContext.currentLayout, item.id, props.x, props.y, PdfBlock.defaultWidth, PdfBlock.defaultHeight);
+                        return editorContext.canMoveContentBlock(item.id, props.x, props.y, PdfBlock.defaultWidth, PdfBlock.defaultHeight);
                     case DraggableTypes.VIDEO_BLOCK:
-                        return editorContext.canMoveContentBlock(layoutContext.currentLayout, item.id, props.x, props.y, VideoBlock.defaultWidth, VideoBlock.defaultHeight);
+                        return editorContext.canMoveContentBlock(item.id, props.x, props.y, VideoBlock.defaultWidth, VideoBlock.defaultHeight);
                     case DraggableTypes.SLIDESHOW_BLOCK:
-                        return editorContext.canMoveContentBlock(layoutContext.currentLayout, item.id, props.x, props.y, SlideshowBlock.defaultWidth, SlideshowBlock.defaultHeight);
+                        return editorContext.canMoveContentBlock(item.id, props.x, props.y, SlideshowBlock.defaultWidth, SlideshowBlock.defaultHeight);
                 }
             }
-
-            return editorContext.canMoveContentBlock(layoutContext.currentLayout,item.id, props.x, props.y);
+            
+            return editorContext.canMoveContentBlock(item.id, props.x, props.y);
         },
         drop: (item: IDraggableItem) => {
             if (item.source === DragSource.TOOL_MENU) {
-                editorContext.addContentBlock(layoutContext.currentLayout, ContentBlockFactory.createContentBlock(item.type, props.x, props.y));
+                editorContext.addContentBlock(ContentBlockFactory.createContentBlock(layoutContext.currentLayout, item.type, props.x, props.y));
             } else if (item.source === DragSource.CONTENT_BLOCK) {
-                editorContext.moveContentBlock(layoutContext.currentLayout, item.id, props.x, props.y);
+                editorContext.moveContentBlock(item.id, props.x, props.y);
             }
         },
         collect: monitor => ({
@@ -92,7 +92,7 @@ const GridCell = (props: GridCellProps) => {
             canDrop: monitor.canDrop(),
         }),
     }),
-    [props.x, props.y]);
+    [props.x, props.y, layoutContext.currentLayout, layoutContext.getCurrentLayoutContent]);
 
     return (
         <div

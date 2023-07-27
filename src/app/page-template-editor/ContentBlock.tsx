@@ -1,27 +1,28 @@
-﻿import { EditorContext } from '@/app/page-template-editor/context/EditorContext';
-import styles from './styles/ContentBlock.module.scss';
-import 'react-resizable/css/styles.css';
-
-import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
-import { DraggableTypes } from '@/app/page-template-editor/constants/DraggableTypes';
+﻿import { DraggableTypes } from '@/app/page-template-editor/constants/DraggableTypes';
+import { DragSource } from '@/app/page-template-editor/constants/DragSource';
+import { GridConstants } from '@/app/page-template-editor/constants/GridConstants';
+import { Layout } from '@/app/page-template-editor/constants/Layouts';
+import { EditorContext } from '@/app/page-template-editor/context/EditorContext';
 import { LayoutContext } from '@/app/page-template-editor/context/LayoutContext';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Resizable } from 'react-resizable';
 import { canResizeOrMove } from '@/app/page-template-editor/helpers/ContentBlockHelpers';
 import { IDraggableItem } from '@/app/page-template-editor/interfaces/IDraggableItem';
-import { DragSource } from '@/app/page-template-editor/constants/DragSource';
+import PropertyWidget from '@/app/page-template-editor/PropertyWidget';
+import { ContentBlockType } from '@/app/page-template-editor/types/ContentBlockType';
+import HeadlineTemplateBlock from '@/components/content-blocks/template-blocks/HeadlineTemplateBlock';
+import ImageTemplateBlock from '@/components/content-blocks/template-blocks/ImageTemplateBlock';
+import PdfTemplateBlock from '@/components/content-blocks/template-blocks/PdfTemplateBlock';
+import SlideshowTemplateBlock from '@/components/content-blocks/template-blocks/SlideshowTemplateBlock';
+import TextTemplateBlock from '@/components/content-blocks/template-blocks/TextTemplateBlock';
+import VideoTemplateBlock from '@/components/content-blocks/template-blocks/VideoTemplateBlock';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+
+import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
+import { Resizable } from 'react-resizable';
+import 'react-resizable/css/styles.css';
 import { HeadlineBlock } from './models/HeadlineBlock';
 import { ImageBlock } from './models/ImageBlock';
 import { SlideshowBlock } from './models/SlideshowBlock';
-import SlideshowTemplateBlock from '@/components/content-blocks/template-blocks/SlideshowTemplateBlock';
-import PdfTemplateBlock from '@/components/content-blocks/template-blocks/PdfTemplateBlock';
-import TextTemplateBlock from '@/components/content-blocks/template-blocks/TextTemplateBlock';
-import VideoTemplateBlock from '@/components/content-blocks/template-blocks/VideoTemplateBlock';
-import ImageTemplateBlock from '@/components/content-blocks/template-blocks/ImageTemplateBlock';
-import HeadlineTemplateBlock from '@/components/content-blocks/template-blocks/HeadlineTemplateBlock';
-import PropertyWidget from '@/app/page-template-editor/PropertyWidget';
-import { GridConstants } from '@/app/page-template-editor/constants/GridConstants';
-import { ContentBlockType } from '@/app/page-template-editor/types/ContentBlockType';
+import styles from './styles/ContentBlock.module.scss';
 
 export interface ContentBlockProps {
     contentBlock: ContentBlockType,
@@ -66,12 +67,12 @@ const ContentBlock = (props: ContentBlockProps) => {
             if (item.source === DragSource.CONTENT_BLOCK && clientOffset) {
                 const gridX = Math.floor((clientOffset.x - props.gridContainerLeft) / props.gridCellWidth);
                 const gridY = Math.floor((clientOffset.y - props.gridContainerTop) / props.gridCellWidth);
-                if (editorContext.canMoveContentBlock(layoutContext.currentLayout, item.id, gridX, gridY)) {
-                    editorContext.moveContentBlock(layoutContext.currentLayout, item.id, gridX, gridY);
+                if (editorContext.canMoveContentBlock(item.id, gridX, gridY)) {
+                    editorContext.moveContentBlock(item.id, gridX, gridY);
                 }
             }
         },
-    }), [props.mouseGridX, props.mouseGridY]);
+    }), [props.mouseGridX, props.mouseGridY, layoutContext.currentLayout]);
 
     useEffect(() => {
         // Prevent resizing when mouseup is triggered while the mouse is over an iframe or an embed element.
@@ -124,13 +125,18 @@ const ContentBlock = (props: ContentBlockProps) => {
                         props.contentBlock.x,
                         props.contentBlock.y,
                         props.contentBlock.id,
-                        layoutContext.desktopLayout,
-                        editorContext.rowCount,
+                        (layoutContext.currentLayout === Layout.DESKTOP ? 
+                                layoutContext.desktopLayout :
+                                layoutContext.currentLayout === Layout.TABLET ?
+                                    layoutContext.tabletLayout :
+                                    layoutContext.mobileLayout
+                        ),  
+                        layoutContext.getRowCount(),
                     )) {
                         return;
                     }
 
-                    editorContext.resizeContentBlock(layoutContext.currentLayout, props.contentBlock.id, newWidth, newHeight);
+                    editorContext.resizeContentBlock(props.contentBlock.id, newWidth, newHeight);
                 }}
                 onResizeStart={props.onDeselect}
                 onResizeStop={() => setIsSelectionBlocked(true)}

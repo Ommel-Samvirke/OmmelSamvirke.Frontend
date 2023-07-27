@@ -16,7 +16,8 @@ const ImageTemplateBlock = forwardRef((props: ImageTemplateBlockProps, ref: Forw
             alt={"Skabelon af billede"} 
             className={styles.image}
             width={1600}
-            height={1200} 
+            height={1200}
+            priority={true}
         />
     )
 });

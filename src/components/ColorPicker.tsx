@@ -1,4 +1,4 @@
-﻿import { EditorContext } from '@/app/page-template-editor/context/EditorContext';
+﻿import { LayoutContext } from '@/app/page-template-editor/context/LayoutContext';
 import Tooltip from '@mui/joy/Tooltip';
 import styles from './styles/ColorPicker.module.scss';
 
@@ -7,10 +7,10 @@ import { useContext, useEffect, useRef, useState } from 'react';
 const ColorPicker = () => {
     const [color, setColor] = useState('#ffffff');
     const colorDisplayRef = useRef<HTMLDivElement>(null);
-    const editorContext = useContext(EditorContext);
+    const layoutContext = useContext(LayoutContext);
 
     useEffect(() => {
-        editorContext.updateColor(color);
+        layoutContext.updateColor(color);
         
         if (!colorDisplayRef.current) return;
         colorDisplayRef.current.style.backgroundColor = color;

@@ -1,7 +1,7 @@
-import IContentBlock from '../interfaces/IContentBlock';
+import { Layout } from '@/app/page-template-editor/constants/Layouts';
 import { v1 as uuidv1 } from 'uuid';
 
-export abstract class AbstractContentBlocks implements IContentBlock {
+export abstract class AbstractContentBlocks {
 
     public id: string;
     public x: number;
@@ -9,9 +9,11 @@ export abstract class AbstractContentBlocks implements IContentBlock {
     public width: number;
     public height: number;
     public type: string;
+    public layout: Layout;
 
-    protected constructor(type: string, x: number, y: number, width: number, height: number) {
+    protected constructor(layout: Layout, type: string, x: number, y: number, width: number, height: number) {
         this.id = uuidv1();
+        this.layout = layout;
         this.type = type;
         this.x = x;
         this.y = y;

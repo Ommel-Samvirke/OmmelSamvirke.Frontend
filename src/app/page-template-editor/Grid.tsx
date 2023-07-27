@@ -1,7 +1,4 @@
-﻿import styles from './styles/Grid.module.scss';
-
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { DraggableTypes } from '@/app/page-template-editor/constants/DraggableTypes';
+﻿import { DraggableTypes } from '@/app/page-template-editor/constants/DraggableTypes';
 import { GridConstants } from '@/app/page-template-editor/constants/GridConstants';
 import { Layout } from '@/app/page-template-editor/constants/Layouts';
 import ContentBlock from '@/app/page-template-editor/ContentBlock';
@@ -10,11 +7,14 @@ import { LayoutContext } from '@/app/page-template-editor/context/LayoutContext'
 import GridCell, { GridCellProps } from '@/app/page-template-editor/GridCell';
 import PageTemplateToolMenu from '@/app/page-template-editor/PageTemplateToolMenu';
 import { debounce } from '@/util/debounce';
+import classNames from 'classnames';
+
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { HeadlineBlock } from './models/HeadlineBlock';
 import { ImageBlock } from './models/ImageBlock';
-import classNames from 'classnames';
+import styles from './styles/Grid.module.scss';
 
 const Grid = () => {
     const layoutContext = useContext(LayoutContext);
@@ -47,7 +47,7 @@ const Grid = () => {
         const handleKeyPress = (event: KeyboardEvent) => {
             if (event.key === 'Escape' || event.key === 'Delete') {
                 if (!selectedContentBlockId) return;
-                editorContext.removeContentBlock(layoutContext.currentLayout, selectedContentBlockId);
+                editorContext.removeContentBlock(selectedContentBlockId);
             }
         };
 
@@ -60,7 +60,7 @@ const Grid = () => {
             document.removeEventListener('keydown', handleKeyPress);
             window.removeEventListener('resize', debouncedAdjustGridSize);
         };
-    }, [cols, layoutContext.desktopLayout, layoutContext.tabletLayout, layoutContext.mobileLayout, selectedContentBlockId]);
+    }, [cols, layoutContext.desktopLayout, layoutContext.tabletLayout, layoutContext.mobileLayout, layoutContext.currentLayout, selectedContentBlockId]);
     
     useEffect(() => {
         setInitialContentBlocks();
@@ -91,11 +91,11 @@ const Grid = () => {
     }, [minRows]);
     
     useEffect(() => {
-        if (!editorContext.color) return;
+        if (!layoutContext.color) return;
         if (!containerRef.current) return;
 
-        containerRef.current.style.backgroundColor = editorContext.color;
-    }, [editorContext.color]);
+        containerRef.current.style.backgroundColor = layoutContext.color;
+    }, [layoutContext.color]);
 
     const adjustGridSize = () => {
         if (!containerRef.current) return;
@@ -123,7 +123,7 @@ const Grid = () => {
         }
 
         setGridCells(newGridCells);
-        editorContext.updateRowCount(rowCount);
+        layoutContext.updateRowCount(rowCount);
     };
 
     const addRow = () => {
@@ -137,8 +137,8 @@ const Grid = () => {
     };
 
     const setInitialContentBlocks = () => {
-        editorContext.addContentBlock(layoutContext.currentLayout, new HeadlineBlock(DraggableTypes.HEADLINE_BLOCK, 0, 0, 8, 1));
-        editorContext.addContentBlock(layoutContext.currentLayout, new ImageBlock(DraggableTypes.IMAGE_BLOCK, 0, 3, 6, 6));
+        editorContext.addContentBlock(new HeadlineBlock(Layout.DESKTOP, DraggableTypes.HEADLINE_BLOCK, 0, 0, 8, 1));
+        editorContext.addContentBlock(new ImageBlock(Layout.DESKTOP, DraggableTypes.IMAGE_BLOCK, 0, 3, 6, 6));
     };
 
     const calculateCurrentGridCell = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -173,7 +173,7 @@ const Grid = () => {
                         displayGrid={displayGrid}
                     />,
                 )}
-                {layoutContext.currentLayout === Layout.DESKTOP && layoutContext.desktopLayout.map(block =>
+                {layoutContext.currentLayout === Layout.DESKTOP && layoutContext.desktopLayout?.map(block =>
                     <ContentBlock
                         key={block.id}
                         contentBlock={block}

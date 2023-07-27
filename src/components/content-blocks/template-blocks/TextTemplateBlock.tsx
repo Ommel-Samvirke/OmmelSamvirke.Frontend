@@ -1,4 +1,4 @@
-import { EditorContext } from '@/app/page-template-editor/context/EditorContext';
+import { LayoutContext } from '@/app/page-template-editor/context/LayoutContext';
 import { loremIpsum } from 'lorem-ipsum';
 import React, { ForwardedRef, forwardRef, useContext, useEffect, useRef, useState } from 'react';
 import styles from './styles/TextTemplateBlock.module.scss';
@@ -6,7 +6,7 @@ import styles from './styles/TextTemplateBlock.module.scss';
 const TextTemplateBlock = forwardRef((_, ref: ForwardedRef<HTMLDivElement>) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [text, setText] = useState('');
-    const editorContext = useContext(EditorContext);
+    const layoutContext = useContext(LayoutContext);
 
     useEffect(() => {
         const newText = generateText();
@@ -67,7 +67,7 @@ const TextTemplateBlock = forwardRef((_, ref: ForwardedRef<HTMLDivElement>) => {
     };
     
     return (
-        <div ref={ref} className={styles.textContainer} style={{ backgroundColor: editorContext.color }}>
+        <div ref={ref} className={styles.textContainer} style={{ backgroundColor: layoutContext.color }}>
             <div ref={containerRef} className={styles.textContent}>
                 {text.split('\n').map((line, index) => (
                     <React.Fragment key={index}>

@@ -3,7 +3,6 @@ import IconButton from '@mui/joy/IconButton';
 import Tooltip from '@mui/joy/Tooltip';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
-import { GridConstants } from '@/app/page-template-editor/constants/GridConstants';
 import { useContext } from 'react';
 
 interface ManageRowCountButtonProps {
@@ -27,7 +26,7 @@ const ManageRowCountButton = (props: ManageRowCountButtonProps) => {
                 </Tooltip>
             }
             {
-                props.type === 'remove-row' && props.rowCount > layoutContext.currentMinRows &&
+                props.type === 'remove-row' && props.rowCount > layoutContext.getRowCount() &&
                 <Tooltip title={props.tooltip}>
                     <IconButton onClick={props.onClick}>
                         <RemoveIcon/>
@@ -35,7 +34,7 @@ const ManageRowCountButton = (props: ManageRowCountButtonProps) => {
                 </Tooltip>
             }
             {
-                props.type === 'remove-row' && props.rowCount <= layoutContext.currentMinRows &&
+                props.type === 'remove-row' && props.rowCount <= layoutContext.getRowCount() &&
                 <Tooltip title={'Kan ikke fjerne flere rækker'}>
                     <span style={{ cursor: 'not-allowed' }}>
                         <IconButton disabled={true}>

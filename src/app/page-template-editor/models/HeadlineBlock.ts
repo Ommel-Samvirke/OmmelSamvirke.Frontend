@@ -1,3 +1,4 @@
+import { Layout } from '@/app/page-template-editor/constants/Layouts';
 import { AbstractContentBlocks } from './AbstractContentBlocks';
 
 export class HeadlineBlock extends AbstractContentBlocks {
@@ -8,8 +9,9 @@ export class HeadlineBlock extends AbstractContentBlocks {
     public static defaultWidth: number = 8;
     public static defaultHeight: number = 1;
 
-    constructor(type: string, x?: number, y?: number, width?: number, height?: number) {
+    constructor(layout: Layout, type: string, x?: number, y?: number, width?: number, height?: number) {
         super(
+            layout,
             type,
             x ? x : 0,
             y ? y : 0,

@@ -12,16 +12,11 @@ import Button from '@mui/joy/Button';
 import IconButton from '@mui/joy/IconButton';
 import Tooltip from '@mui/joy/Tooltip';
 
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { roboto } from '../fonts';
 import styles from './styles/PageTemplateEditorHeader.module.scss';
 
-interface PageTemplateEditorHeaderProps {
-    onUndo: () => void,
-    onRedo: () => void
-}
-
-const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
+const PageTemplateEditorHeader = () => {
     const [templateName, setTemplateName] = useState<string>('Unavngiven Side');
     const [isInputHovered, setIsInputHovered] = useState<boolean>(false);
     const editHistoryContext = useContext(EditHistoryContext);
@@ -29,20 +24,36 @@ const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
 
     const inputRef = useRef<HTMLInputElement>(null);
 
+    useEffect(() => {
+        const handleKeyPress = (event: KeyboardEvent) => {
+            if ((event.ctrlKey || event.metaKey) && event.key === 'z') {
+                editHistoryContext.undo(layoutContext.currentLayout);
+            } else if ((event.ctrlKey || event.metaKey) && event.key === 'y') {
+                editHistoryContext.redo(layoutContext.currentLayout);
+            }
+        }
+
+        document.addEventListener('keydown', handleKeyPress);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [editHistoryContext, layoutContext.currentLayout]);
+
     return (
         <div className={styles.pageTemplateEditorHeader}>
             <div className={styles.innerContainer}>
                 <div className={styles.leftContainer}>
                     {
-                        editHistoryContext.undoBufferUsedCapacity > 0 &&
+                        !editHistoryContext.isUndoCapacityEmpty(layoutContext.currentLayout) &&
                         <Tooltip title="Fortryd (Ctrl+Z)">
-                            <IconButton variant="soft" onClick={props.onUndo}>
+                            <IconButton variant="soft" onClick={() => editHistoryContext.undo(layoutContext.currentLayout)}>
                                 <UndoIcon/>
                             </IconButton>
                         </Tooltip>
                     }
                     {
-                        editHistoryContext.undoBufferUsedCapacity == 0 &&
+                        editHistoryContext.isUndoCapacityEmpty(layoutContext.currentLayout) &&
                         <Tooltip title="Fortryd (Ctrl+Z)">
                             <span style={{ cursor: 'not-allowed' }}>
                                 <IconButton variant="soft" disabled={true}>
@@ -52,15 +63,15 @@ const PageTemplateEditorHeader = (props: PageTemplateEditorHeaderProps) => {
                         </Tooltip>
                     }
                     {
-                        editHistoryContext.redoBufferUsedCapacity > 0 &&
+                        !editHistoryContext.isRedoCapacityEmpty(layoutContext.currentLayout) &&
                         <Tooltip title="Annuller fortryd (Ctrl+Y)">
-                            <IconButton variant="soft" onClick={props.onRedo}>
+                            <IconButton variant="soft" onClick={() => editHistoryContext.redo(layoutContext.currentLayout)}>
                                 <RedoIcon/>
                             </IconButton>
                         </Tooltip>
                     }
                     {
-                        editHistoryContext.redoBufferUsedCapacity == 0 &&
+                        editHistoryContext.isRedoCapacityEmpty(layoutContext.currentLayout) &&
                         <Tooltip title="Annuller fortryd (Ctrl+Y)">
                             <span style={{ cursor: 'not-allowed' }}>
                                 <IconButton variant="soft" disabled={true}>

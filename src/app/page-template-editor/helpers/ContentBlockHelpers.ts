@@ -1,5 +1,5 @@
-﻿import IContentBlock from '@/app/page-template-editor/interfaces/IContentBlock';
-import { GridConstants } from '@/app/page-template-editor/constants/GridConstants';
+﻿import { GridConstants } from '@/app/page-template-editor/constants/GridConstants';
+import { ContentBlockType } from '@/app/page-template-editor/types/ContentBlockType';
 
 const isOverlapping = (
     x1: number,
@@ -23,10 +23,10 @@ export const canResizeOrMove = (
     x: number,
     y: number,
     id: string,
-    desktopLayout: IContentBlock[],
+    contentBlocks: ContentBlockType[],
     rowCount: number,
 ) => {
-    for (let block of desktopLayout) {
+    for (let block of contentBlocks) {
         if (block.id === id) continue;
 
         if (x + width > GridConstants.COLUMNS) return false;

@@ -1,3 +1,4 @@
+import { Layout } from '@/app/page-template-editor/constants/Layouts';
 import { AbstractContentBlocks } from './AbstractContentBlocks';
 
 export class PdfBlock extends AbstractContentBlocks {
@@ -8,8 +9,9 @@ export class PdfBlock extends AbstractContentBlocks {
     public static defaultWidth: number = 12;
     public static defaultHeight: number = 14;
 
-    constructor(type: string, x?: number, y?: number, width?: number, height?: number) {
+    constructor(layout: Layout, type: string, x?: number, y?: number, width?: number, height?: number) {
         super(
+            layout,
             type,
             x ? x : 0,
             y ? y : 0,

@@ -1,7 +1,7 @@
 ﻿export class CircularBuffer<T> {
-    private storage: T[] = [];
+    storage: T[] = [];
 
-    constructor(private capacity: number = 20) {}
+    constructor(public capacity: number = 100) {}
 
     push(item: T): void {
         if (this.size() === this.capacity) {
@@ -20,5 +20,13 @@
 
     size(): number {
         return this.storage.length;
+    }
+
+    isEmpty(): boolean {
+        return this.size() === 0;
+    }
+    
+    clear(): void {
+        this.storage = [];
     }
 }

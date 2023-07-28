@@ -1,7 +1,7 @@
 ﻿import { useDrag } from "react-dnd";
 
 import { DraggableTypes } from "@/features/pages/constants/DraggableTypes";
-import { DragSource } from "@/features/pages/constants/DragSource";
+import { DragSource } from "@/features/pages/enums/DragSource";
 import { IDraggableItem } from "@/features/pages/interfaces/IDraggableItem";
 import AbcOutlinedIcon from "@mui/icons-material/AbcOutlined";
 import CollectionsOutlinedIcon from "@mui/icons-material/CollectionsOutlined";
@@ -27,24 +27,12 @@ const DraggableToolMenuIcon = (props: ToolMenuIconProps) => {
         <>
             <Tooltip title={props.tooltip}>
                 <IconButton ref={drag}>
-                    {props.type === DraggableTypes.HEADLINE_BLOCK && (
-                        <AbcOutlinedIcon />
-                    )}
-                    {props.type === DraggableTypes.TEXT_BLOCK && (
-                        <NotesOutlinedIcon />
-                    )}
-                    {props.type === DraggableTypes.IMAGE_BLOCK && (
-                        <ImageOutlinedIcon />
-                    )}
-                    {props.type === DraggableTypes.PDF_BLOCK && (
-                        <PictureAsPdfOutlinedIcon />
-                    )}
-                    {props.type === DraggableTypes.VIDEO_BLOCK && (
-                        <VideoCameraBackOutlinedIcon />
-                    )}
-                    {props.type === DraggableTypes.SLIDESHOW_BLOCK && (
-                        <CollectionsOutlinedIcon />
-                    )}
+                    {props.type === DraggableTypes.HEADLINE_BLOCK && <AbcOutlinedIcon />}
+                    {props.type === DraggableTypes.TEXT_BLOCK && <NotesOutlinedIcon />}
+                    {props.type === DraggableTypes.IMAGE_BLOCK && <ImageOutlinedIcon />}
+                    {props.type === DraggableTypes.PDF_BLOCK && <PictureAsPdfOutlinedIcon />}
+                    {props.type === DraggableTypes.VIDEO_BLOCK && <VideoCameraBackOutlinedIcon />}
+                    {props.type === DraggableTypes.SLIDESHOW_BLOCK && <CollectionsOutlinedIcon />}
                 </IconButton>
             </Tooltip>
         </>

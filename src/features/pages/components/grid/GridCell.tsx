@@ -5,9 +5,9 @@ import { useDrop } from "react-dnd";
 
 import DropOverlay from "@/features/pages/components/grid/DropOverlay";
 import { DraggableTypes } from "@/features/pages/constants/DraggableTypes";
-import { DragSource } from "@/features/pages/constants/DragSource";
 import { EditorContext } from "@/features/pages/context/EditorContext";
 import { LayoutContext } from "@/features/pages/context/LayoutContext";
+import { DragSource } from "@/features/pages/enums/DragSource";
 import { IDraggableItem } from "@/features/pages/interfaces/IDraggableItem";
 import { ContentBlockFactory } from "@/features/pages/models/ContentBlockFactory";
 import { HeadlineBlock } from "@/features/pages/models/HeadlineBlock";
@@ -39,10 +39,7 @@ const GridCell = (props: GridCellProps) => {
 
         let output = "#";
         for (let i = 0; i < 3; i++) {
-            let colorComponent = parseInt(
-                colorWithoutHash.substring(i * 2, i * 2 + 2),
-                16,
-            );
+            let colorComponent = parseInt(colorWithoutHash.substring(i * 2, i * 2 + 2), 16);
             colorComponent = Math.floor(colorComponent * 0.85);
 
             output += ("0" + colorComponent.toString(16)).slice(-2);
@@ -56,11 +53,7 @@ const GridCell = (props: GridCellProps) => {
         props.setCoordinate(x, y);
     };
 
-    const [{ isOver, canDrop }, drop] = useDrop<
-        IDraggableItem,
-        void,
-        { isOver: boolean; canDrop: boolean }
-    >(
+    const [{ isOver, canDrop }, drop] = useDrop<IDraggableItem, void, { isOver: boolean; canDrop: boolean }>(
         () => ({
             accept: [
                 DraggableTypes.HEADLINE_BLOCK,
@@ -124,11 +117,7 @@ const GridCell = (props: GridCellProps) => {
                     }
                 }
 
-                return editorContext.canMoveContentBlock(
-                    item.id,
-                    props.x,
-                    props.y,
-                );
+                return editorContext.canMoveContentBlock(item.id, props.x, props.y);
             },
             drop: (item: IDraggableItem) => {
                 if (item.source === DragSource.TOOL_MENU) {
@@ -149,12 +138,7 @@ const GridCell = (props: GridCellProps) => {
                 canDrop: monitor.canDrop(),
             }),
         }),
-        [
-            props.x,
-            props.y,
-            layoutContext.currentLayout,
-            layoutContext.getCurrentLayoutContent,
-        ],
+        [props.x, props.y, layoutContext.currentLayout, layoutContext.getCurrentLayoutContent],
     );
 
     return (
@@ -163,9 +147,7 @@ const GridCell = (props: GridCellProps) => {
             className={styles.gridCell}
             onMouseEnter={() => setCoordinate(props.x, props.y)}
             style={{
-                border: props.displayGrid
-                    ? `1px solid ${gridBorderColor}`
-                    : "none",
+                border: props.displayGrid ? `1px solid ${gridBorderColor}` : "none",
             }}
         >
             {isOver && canDrop && <DropOverlay color={"yellow"} />}

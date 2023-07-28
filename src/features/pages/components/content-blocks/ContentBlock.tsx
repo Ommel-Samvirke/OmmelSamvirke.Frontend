@@ -13,11 +13,11 @@ import TextBlockComponent from "@/features/pages/components/content-blocks/TextB
 import VideoBlockComponent from "@/features/pages/components/content-blocks/VideoBlockComponent";
 import PropertyWidget from "@/features/pages/components/page-editor/PropertyWidget";
 import { DraggableTypes } from "@/features/pages/constants/DraggableTypes";
-import { DragSource } from "@/features/pages/constants/DragSource";
 import { GridConstants } from "@/features/pages/constants/GridConstants";
-import { Layout } from "@/features/pages/enums/Layouts";
 import { EditorContext } from "@/features/pages/context/EditorContext";
 import { LayoutContext } from "@/features/pages/context/LayoutContext";
+import { DragSource } from "@/features/pages/enums/DragSource";
+import { Layout } from "@/features/pages/enums/Layouts";
 import { canResizeOrMove } from "@/features/pages/helpers/ContentBlockHelpers";
 import { IDraggableItem } from "@/features/pages/interfaces/IDraggableItem";
 import { HeadlineBlock } from "@/features/pages/models/HeadlineBlock";
@@ -40,16 +40,11 @@ export interface ContentBlockProps {
 const ContentBlock = (props: ContentBlockProps) => {
     const layoutContext = useContext(LayoutContext);
     const editorContext = useContext(EditorContext);
-    const [isSelectionBlocked, setIsSelectionBlocked] =
-        useState<boolean>(false);
+    const [isSelectionBlocked, setIsSelectionBlocked] = useState<boolean>(false);
     const propertyWidget = useRef(null);
     const resizableRef = useRef(null);
 
-    const [{ isDragging }, drag, preview] = useDrag<
-        IDraggableItem,
-        void,
-        { isDragging: boolean }
-    >(() => ({
+    const [{ isDragging }, drag, preview] = useDrag<IDraggableItem, void, { isDragging: boolean }>(() => ({
         type: props.contentBlock.type,
         item: {
             id: props.contentBlock.id,
@@ -72,24 +67,13 @@ const ContentBlock = (props: ContentBlockProps) => {
                 DraggableTypes.VIDEO_BLOCK,
                 DraggableTypes.SLIDESHOW_BLOCK,
             ],
-            drop: (
-                item: IDraggableItem,
-                monitor: DropTargetMonitor<IDraggableItem, void>,
-            ) => {
+            drop: (item: IDraggableItem, monitor: DropTargetMonitor<IDraggableItem, void>) => {
                 const clientOffset = monitor.getClientOffset();
 
                 if (item.source === DragSource.CONTENT_BLOCK && clientOffset) {
-                    const gridX = Math.floor(
-                        (clientOffset.x - props.gridContainerLeft) /
-                            props.gridCellWidth,
-                    );
-                    const gridY = Math.floor(
-                        (clientOffset.y - props.gridContainerTop) /
-                            props.gridCellWidth,
-                    );
-                    if (
-                        editorContext.canMoveContentBlock(item.id, gridX, gridY)
-                    ) {
+                    const gridX = Math.floor((clientOffset.x - props.gridContainerLeft) / props.gridCellWidth);
+                    const gridY = Math.floor((clientOffset.y - props.gridContainerTop) / props.gridCellWidth);
+                    if (editorContext.canMoveContentBlock(item.id, gridX, gridY)) {
                         editorContext.moveContentBlock(item.id, gridX, gridY);
                     }
                 }
@@ -119,6 +103,7 @@ const ContentBlock = (props: ContentBlockProps) => {
         <>
             {props.isSelected && (
                 <PropertyWidget
+                    contentBlock={props.contentBlock}
                     ref={propertyWidget}
                     id={props.contentBlock.id}
                     x={props.contentBlock.x}
@@ -141,10 +126,7 @@ const ContentBlock = (props: ContentBlockProps) => {
                     let newWidth = props.mouseGridX - props.contentBlock.x + 1;
                     let newHeight = props.mouseGridY - props.contentBlock.y + 1;
 
-                    newWidth = Math.min(
-                        Math.max(newWidth, 1),
-                        GridConstants.COLUMNS,
-                    );
+                    newWidth = Math.min(Math.max(newWidth, 1), GridConstants.COLUMNS);
                     newHeight = Math.min(Math.max(newHeight, 1), 200);
 
                     if (
@@ -165,11 +147,7 @@ const ContentBlock = (props: ContentBlockProps) => {
                         return;
                     }
 
-                    editorContext.resizeContentBlock(
-                        props.contentBlock.id,
-                        newWidth,
-                        newHeight,
-                    );
+                    editorContext.resizeContentBlock(props.contentBlock.id, newWidth, newHeight);
                 }}
                 onResizeStart={props.onDeselect}
                 onResizeStop={() => setIsSelectionBlocked(true)}
@@ -181,20 +159,14 @@ const ContentBlock = (props: ContentBlockProps) => {
                         drop(node);
                     }}
                     className={
-                        styles.contentBlock +
-                        " content-block " +
-                        (props.isSelected ? " " + styles.selected : "")
+                        styles.contentBlock + " content-block " + (props.isSelected ? " " + styles.selected : "")
                     }
                     style={{
                         position: "absolute",
                         left: `${props.contentBlock.x * props.gridCellWidth}px`,
                         top: `${props.contentBlock.y * props.gridCellWidth}px`,
-                        width: `${
-                            props.contentBlock.width * props.gridCellWidth
-                        }px`,
-                        height: `${
-                            props.contentBlock.height * props.gridCellWidth
-                        }px`,
+                        width: `${props.contentBlock.width * props.gridCellWidth}px`,
+                        height: `${props.contentBlock.height * props.gridCellWidth}px`,
                         opacity: isDragging ? 0.5 : 1,
                     }}
                     onClick={() => {
@@ -209,35 +181,19 @@ const ContentBlock = (props: ContentBlockProps) => {
                         }
                     }}
                 >
-                    {props.contentBlock.type ===
-                        DraggableTypes.HEADLINE_BLOCK && (
-                        <HeadlineBlockComponent
-                            ref={drag}
-                            headlineBlock={props.contentBlock as HeadlineBlock}
-                        />
+                    {props.contentBlock.type === DraggableTypes.HEADLINE_BLOCK && (
+                        <HeadlineBlockComponent ref={drag} headlineBlock={props.contentBlock as HeadlineBlock} />
                     )}
                     {props.contentBlock.type === DraggableTypes.IMAGE_BLOCK && (
-                        <ImageBlockComponent
-                            ref={drag}
-                            imageBlock={props.contentBlock as ImageBlock}
-                        />
+                        <ImageBlockComponent ref={drag} imageBlock={props.contentBlock as ImageBlock} />
                     )}
-                    {props.contentBlock.type === DraggableTypes.VIDEO_BLOCK && (
-                        <VideoBlockComponent ref={drag} />
-                    )}
-                    {props.contentBlock.type === DraggableTypes.TEXT_BLOCK && (
-                        <TextBlockComponent ref={drag} />
-                    )}
-                    {props.contentBlock.type === DraggableTypes.PDF_BLOCK && (
-                        <PdfBlockComponent ref={drag} />
-                    )}
-                    {props.contentBlock.type ===
-                        DraggableTypes.SLIDESHOW_BLOCK && (
+                    {props.contentBlock.type === DraggableTypes.VIDEO_BLOCK && <VideoBlockComponent ref={drag} />}
+                    {props.contentBlock.type === DraggableTypes.TEXT_BLOCK && <TextBlockComponent ref={drag} />}
+                    {props.contentBlock.type === DraggableTypes.PDF_BLOCK && <PdfBlockComponent ref={drag} />}
+                    {props.contentBlock.type === DraggableTypes.SLIDESHOW_BLOCK && (
                         <SlideshowBlockComponent
                             ref={drag}
-                            slideshowBlock={
-                                props.contentBlock as SlideshowBlock
-                            }
+                            slideshowBlock={props.contentBlock as SlideshowBlock}
                             onSwipe={() => setIsSelectionBlocked(true)}
                         />
                     )}

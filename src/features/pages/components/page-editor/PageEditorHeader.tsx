@@ -4,9 +4,9 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 
 import { roboto } from "@/app/fonts";
 import ColorPicker from "@/features/pages/components/color-picker/ColorPicker";
-import { Layout } from "@/features/pages/enums/Layouts";
 import { EditHistoryContext } from "@/features/pages/context/EditHistoryContext";
 import { LayoutContext } from "@/features/pages/context/LayoutContext";
+import { Layout } from "@/features/pages/enums/Layouts";
 import DesktopWindowsOutlinedIcon from "@mui/icons-material/DesktopWindowsOutlined";
 import PhoneIphoneOutlinedIcon from "@mui/icons-material/PhoneIphoneOutlined";
 import RedoIcon from "@mui/icons-material/Redo";

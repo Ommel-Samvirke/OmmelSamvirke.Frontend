@@ -1,6 +1,6 @@
 ﻿import { useDrag } from "react-dnd";
 
-import { DraggableTypes } from "@/features/pages/constants/DraggableTypes";
+import { ContentBlock } from "@/features/pages/enums/ContentBlock";
 import { DragSource } from "@/features/pages/enums/DragSource";
 import { IDraggableItem } from "@/features/pages/interfaces/IDraggableItem";
 import AbcOutlinedIcon from "@mui/icons-material/AbcOutlined";
@@ -27,12 +27,12 @@ const DraggableToolMenuIcon = (props: ToolMenuIconProps) => {
         <>
             <Tooltip title={props.tooltip}>
                 <IconButton ref={drag}>
-                    {props.type === DraggableTypes.HEADLINE_BLOCK && <AbcOutlinedIcon />}
-                    {props.type === DraggableTypes.TEXT_BLOCK && <NotesOutlinedIcon />}
-                    {props.type === DraggableTypes.IMAGE_BLOCK && <ImageOutlinedIcon />}
-                    {props.type === DraggableTypes.PDF_BLOCK && <PictureAsPdfOutlinedIcon />}
-                    {props.type === DraggableTypes.VIDEO_BLOCK && <VideoCameraBackOutlinedIcon />}
-                    {props.type === DraggableTypes.SLIDESHOW_BLOCK && <CollectionsOutlinedIcon />}
+                    {props.type === ContentBlock.HEADLINE_BLOCK && <AbcOutlinedIcon />}
+                    {props.type === ContentBlock.TEXT_BLOCK && <NotesOutlinedIcon />}
+                    {props.type === ContentBlock.IMAGE_BLOCK && <ImageOutlinedIcon />}
+                    {props.type === ContentBlock.PDF_BLOCK && <PictureAsPdfOutlinedIcon />}
+                    {props.type === ContentBlock.VIDEO_BLOCK && <VideoCameraBackOutlinedIcon />}
+                    {props.type === ContentBlock.SLIDESHOW_BLOCK && <CollectionsOutlinedIcon />}
                 </IconButton>
             </Tooltip>
         </>

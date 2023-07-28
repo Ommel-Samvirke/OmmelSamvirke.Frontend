@@ -1,3 +1,4 @@
+import { ContentBlock } from "@/features/pages/enums/ContentBlock";
 import { Layout } from "@/features/pages/enums/Layouts";
 import { AbstractContentBlocks } from "@/features/pages/models/AbstractContentBlocks";
 
@@ -13,19 +14,12 @@ export class SlideshowBlock extends AbstractContentBlocks {
     public static defaultWidth: number = 8;
     public static defaultHeight: number = 6;
 
-    constructor(
-        layout: Layout,
-        type: string,
-        x?: number,
-        y?: number,
-        width?: number,
-        height?: number,
-    ) {
+    constructor(layout: Layout, x: number, y: number, width?: number, height?: number) {
         super(
             layout,
-            type,
-            x ? x : 0,
-            y ? y : 0,
+            ContentBlock.SLIDESHOW_BLOCK,
+            x,
+            y,
             width ? width : SlideshowBlock.defaultWidth,
             height ? height : SlideshowBlock.defaultHeight,
         );

@@ -4,10 +4,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { useDrop } from "react-dnd";
 
 import DropOverlay from "@/features/pages/components/grid/DropOverlay";
-import { DraggableTypes } from "@/features/pages/constants/DraggableTypes";
-import { EditorContext } from "@/features/pages/context/EditorContext";
 import { LayoutContext } from "@/features/pages/context/LayoutContext";
+import { ContentBlock } from "@/features/pages/enums/ContentBlock";
 import { DragSource } from "@/features/pages/enums/DragSource";
+import { useContentBlockManager } from "@/features/pages/hooks/useContentBlockManager";
 import { IDraggableItem } from "@/features/pages/interfaces/IDraggableItem";
 import { ContentBlockFactory } from "@/features/pages/models/ContentBlockFactory";
 import { HeadlineBlock } from "@/features/pages/models/HeadlineBlock";
@@ -28,7 +28,7 @@ export interface GridCellProps {
 const GridCell = (props: GridCellProps) => {
     const [gridBorderColor, setGridBorderColor] = useState<string>("#e0e0e0");
     const layoutContext = useContext(LayoutContext);
-    const editorContext = useContext(EditorContext);
+    const contentBlockManager = useContentBlockManager();
 
     useEffect(() => {
         let colorWithoutHash = layoutContext.color;
@@ -56,58 +56,58 @@ const GridCell = (props: GridCellProps) => {
     const [{ isOver, canDrop }, drop] = useDrop<IDraggableItem, void, { isOver: boolean; canDrop: boolean }>(
         () => ({
             accept: [
-                DraggableTypes.HEADLINE_BLOCK,
-                DraggableTypes.TEXT_BLOCK,
-                DraggableTypes.IMAGE_BLOCK,
-                DraggableTypes.PDF_BLOCK,
-                DraggableTypes.VIDEO_BLOCK,
-                DraggableTypes.SLIDESHOW_BLOCK,
+                ContentBlock.HEADLINE_BLOCK,
+                ContentBlock.TEXT_BLOCK,
+                ContentBlock.IMAGE_BLOCK,
+                ContentBlock.PDF_BLOCK,
+                ContentBlock.VIDEO_BLOCK,
+                ContentBlock.SLIDESHOW_BLOCK,
             ],
             canDrop: (item: IDraggableItem) => {
                 if (item.source === DragSource.TOOL_MENU) {
                     switch (item.type) {
-                        case DraggableTypes.HEADLINE_BLOCK:
-                            return editorContext.canMoveContentBlock(
+                        case ContentBlock.HEADLINE_BLOCK:
+                            return contentBlockManager.canMoveContentBlock(
                                 item.id,
                                 props.x,
                                 props.y,
                                 HeadlineBlock.defaultWidth,
                                 HeadlineBlock.defaultHeight,
                             );
-                        case DraggableTypes.TEXT_BLOCK:
-                            return editorContext.canMoveContentBlock(
+                        case ContentBlock.TEXT_BLOCK:
+                            return contentBlockManager.canMoveContentBlock(
                                 item.id,
                                 props.x,
                                 props.y,
                                 TextBlock.defaultWidth,
                                 TextBlock.defaultHeight,
                             );
-                        case DraggableTypes.IMAGE_BLOCK:
-                            return editorContext.canMoveContentBlock(
+                        case ContentBlock.IMAGE_BLOCK:
+                            return contentBlockManager.canMoveContentBlock(
                                 item.id,
                                 props.x,
                                 props.y,
                                 ImageBlock.defaultWidth,
                                 ImageBlock.defaultHeight,
                             );
-                        case DraggableTypes.PDF_BLOCK:
-                            return editorContext.canMoveContentBlock(
+                        case ContentBlock.PDF_BLOCK:
+                            return contentBlockManager.canMoveContentBlock(
                                 item.id,
                                 props.x,
                                 props.y,
                                 PdfBlock.defaultWidth,
                                 PdfBlock.defaultHeight,
                             );
-                        case DraggableTypes.VIDEO_BLOCK:
-                            return editorContext.canMoveContentBlock(
+                        case ContentBlock.VIDEO_BLOCK:
+                            return contentBlockManager.canMoveContentBlock(
                                 item.id,
                                 props.x,
                                 props.y,
                                 VideoBlock.defaultWidth,
                                 VideoBlock.defaultHeight,
                             );
-                        case DraggableTypes.SLIDESHOW_BLOCK:
-                            return editorContext.canMoveContentBlock(
+                        case ContentBlock.SLIDESHOW_BLOCK:
+                            return contentBlockManager.canMoveContentBlock(
                                 item.id,
                                 props.x,
                                 props.y,
@@ -117,11 +117,11 @@ const GridCell = (props: GridCellProps) => {
                     }
                 }
 
-                return editorContext.canMoveContentBlock(item.id, props.x, props.y);
+                return contentBlockManager.canMoveContentBlock(item.id, props.x, props.y);
             },
             drop: (item: IDraggableItem) => {
                 if (item.source === DragSource.TOOL_MENU) {
-                    editorContext.addContentBlock(
+                    contentBlockManager.addContentBlock(
                         ContentBlockFactory.createContentBlock(
                             layoutContext.currentLayout,
                             item.type,
@@ -130,7 +130,7 @@ const GridCell = (props: GridCellProps) => {
                         ),
                     );
                 } else if (item.source === DragSource.CONTENT_BLOCK) {
-                    editorContext.moveContentBlock(item.id, props.x, props.y);
+                    contentBlockManager.moveContentBlock(item.id, props.x, props.y);
                 }
             },
             collect: (monitor) => ({

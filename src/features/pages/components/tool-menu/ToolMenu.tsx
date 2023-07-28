@@ -2,11 +2,12 @@
 
 import React from "react";
 
-import { DraggableTypes } from "../../constants/DraggableTypes";
 import CoordinateWidget from "./CoordinateWidget";
 import DraggableToolMenuIcon from "./DraggableToolMenuIcon";
 import ManageRowCountButton from "./ManageRowCountButton";
 import ToggleGridButton from "./ToggleGridButton";
+
+import { ContentBlock } from "@/features/pages/enums/ContentBlock";
 
 interface ToolMenuProps {
     addRow: () => void;
@@ -22,30 +23,12 @@ const ToolMenu = (props: ToolMenuProps) => {
     return (
         <>
             <div className={styles.toolMenu}>
-                <DraggableToolMenuIcon
-                    type={DraggableTypes.HEADLINE_BLOCK}
-                    tooltip="Overskrift"
-                />
-                <DraggableToolMenuIcon
-                    type={DraggableTypes.TEXT_BLOCK}
-                    tooltip="Tekst"
-                />
-                <DraggableToolMenuIcon
-                    type={DraggableTypes.IMAGE_BLOCK}
-                    tooltip="Billede"
-                />
-                <DraggableToolMenuIcon
-                    type={DraggableTypes.PDF_BLOCK}
-                    tooltip="PDF"
-                />
-                <DraggableToolMenuIcon
-                    type={DraggableTypes.VIDEO_BLOCK}
-                    tooltip="Video"
-                />
-                <DraggableToolMenuIcon
-                    type={DraggableTypes.SLIDESHOW_BLOCK}
-                    tooltip="Galleri"
-                />
+                <DraggableToolMenuIcon type={ContentBlock.HEADLINE_BLOCK} tooltip="Overskrift" />
+                <DraggableToolMenuIcon type={ContentBlock.TEXT_BLOCK} tooltip="Tekst" />
+                <DraggableToolMenuIcon type={ContentBlock.IMAGE_BLOCK} tooltip="Billede" />
+                <DraggableToolMenuIcon type={ContentBlock.PDF_BLOCK} tooltip="PDF" />
+                <DraggableToolMenuIcon type={ContentBlock.VIDEO_BLOCK} tooltip="Video" />
+                <DraggableToolMenuIcon type={ContentBlock.SLIDESHOW_BLOCK} tooltip="Galleri" />
                 <div className={styles.separator}></div>
                 <ManageRowCountButton
                     type={"add-row"}
@@ -59,15 +42,9 @@ const ToolMenu = (props: ToolMenuProps) => {
                     onClick={props.removeRow}
                     rowCount={props.rowCount}
                 />
-                <ToggleGridButton
-                    onClick={props.toggleGrid}
-                    isGridVisible={props.isGridVisible}
-                />
+                <ToggleGridButton onClick={props.toggleGrid} isGridVisible={props.isGridVisible} />
             </div>
-            <CoordinateWidget
-                x={props.currentXCoordinate}
-                y={props.currentYCoordinate}
-            />
+            <CoordinateWidget x={props.currentXCoordinate} y={props.currentYCoordinate} />
         </>
     );
 };

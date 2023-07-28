@@ -12,13 +12,13 @@ import SlideshowBlockComponent from "@/features/pages/components/content-blocks/
 import TextBlockComponent from "@/features/pages/components/content-blocks/TextBlockComponent";
 import VideoBlockComponent from "@/features/pages/components/content-blocks/VideoBlockComponent";
 import PropertyWidget from "@/features/pages/components/page-editor/PropertyWidget";
-import { DraggableTypes } from "@/features/pages/constants/DraggableTypes";
 import { GridConstants } from "@/features/pages/constants/GridConstants";
-import { EditorContext } from "@/features/pages/context/EditorContext";
 import { LayoutContext } from "@/features/pages/context/LayoutContext";
+import { ContentBlock } from "@/features/pages/enums/ContentBlock";
 import { DragSource } from "@/features/pages/enums/DragSource";
 import { Layout } from "@/features/pages/enums/Layouts";
 import { canResizeOrMove } from "@/features/pages/helpers/ContentBlockHelpers";
+import { useContentBlockManager } from "@/features/pages/hooks/useContentBlockManager";
 import { IDraggableItem } from "@/features/pages/interfaces/IDraggableItem";
 import { HeadlineBlock } from "@/features/pages/models/HeadlineBlock";
 import { ImageBlock } from "@/features/pages/models/ImageBlock";
@@ -37,12 +37,12 @@ export interface ContentBlockProps {
     gridContainerLeft: number;
 }
 
-const ContentBlock = (props: ContentBlockProps) => {
+const ContentBlockComponent = (props: ContentBlockProps) => {
     const layoutContext = useContext(LayoutContext);
-    const editorContext = useContext(EditorContext);
     const [isSelectionBlocked, setIsSelectionBlocked] = useState<boolean>(false);
     const propertyWidget = useRef(null);
     const resizableRef = useRef(null);
+    const contentBlockManager = useContentBlockManager();
 
     const [{ isDragging }, drag, preview] = useDrag<IDraggableItem, void, { isDragging: boolean }>(() => ({
         type: props.contentBlock.type,
@@ -60,12 +60,12 @@ const ContentBlock = (props: ContentBlockProps) => {
     const [_, drop] = useDrop<IDraggableItem>(
         () => ({
             accept: [
-                DraggableTypes.HEADLINE_BLOCK,
-                DraggableTypes.TEXT_BLOCK,
-                DraggableTypes.IMAGE_BLOCK,
-                DraggableTypes.PDF_BLOCK,
-                DraggableTypes.VIDEO_BLOCK,
-                DraggableTypes.SLIDESHOW_BLOCK,
+                ContentBlock.HEADLINE_BLOCK,
+                ContentBlock.TEXT_BLOCK,
+                ContentBlock.IMAGE_BLOCK,
+                ContentBlock.PDF_BLOCK,
+                ContentBlock.VIDEO_BLOCK,
+                ContentBlock.SLIDESHOW_BLOCK,
             ],
             drop: (item: IDraggableItem, monitor: DropTargetMonitor<IDraggableItem, void>) => {
                 const clientOffset = monitor.getClientOffset();
@@ -73,8 +73,8 @@ const ContentBlock = (props: ContentBlockProps) => {
                 if (item.source === DragSource.CONTENT_BLOCK && clientOffset) {
                     const gridX = Math.floor((clientOffset.x - props.gridContainerLeft) / props.gridCellWidth);
                     const gridY = Math.floor((clientOffset.y - props.gridContainerTop) / props.gridCellWidth);
-                    if (editorContext.canMoveContentBlock(item.id, gridX, gridY)) {
-                        editorContext.moveContentBlock(item.id, gridX, gridY);
+                    if (contentBlockManager.canMoveContentBlock(item.id, gridX, gridY)) {
+                        contentBlockManager.moveContentBlock(item.id, gridX, gridY);
                     }
                 }
             },
@@ -110,9 +110,9 @@ const ContentBlock = (props: ContentBlockProps) => {
                     y={props.contentBlock.y}
                     width={props.contentBlock.width}
                     height={props.contentBlock.height}
-                    moveContentBlock={editorContext.moveContentBlock}
-                    resizeContentBlock={editorContext.resizeContentBlock}
-                    deleteContentBlock={editorContext.removeContentBlock}
+                    moveContentBlock={contentBlockManager.moveContentBlock}
+                    resizeContentBlock={contentBlockManager.resizeContentBlock}
+                    deleteContentBlock={contentBlockManager.removeContentBlock}
                 />
             )}
             <Resizable
@@ -147,7 +147,7 @@ const ContentBlock = (props: ContentBlockProps) => {
                         return;
                     }
 
-                    editorContext.resizeContentBlock(props.contentBlock.id, newWidth, newHeight);
+                    contentBlockManager.resizeContentBlock(props.contentBlock.id, newWidth, newHeight);
                 }}
                 onResizeStart={props.onDeselect}
                 onResizeStop={() => setIsSelectionBlocked(true)}
@@ -181,16 +181,16 @@ const ContentBlock = (props: ContentBlockProps) => {
                         }
                     }}
                 >
-                    {props.contentBlock.type === DraggableTypes.HEADLINE_BLOCK && (
+                    {props.contentBlock.type === ContentBlock.HEADLINE_BLOCK && (
                         <HeadlineBlockComponent ref={drag} headlineBlock={props.contentBlock as HeadlineBlock} />
                     )}
-                    {props.contentBlock.type === DraggableTypes.IMAGE_BLOCK && (
+                    {props.contentBlock.type === ContentBlock.IMAGE_BLOCK && (
                         <ImageBlockComponent ref={drag} imageBlock={props.contentBlock as ImageBlock} />
                     )}
-                    {props.contentBlock.type === DraggableTypes.VIDEO_BLOCK && <VideoBlockComponent ref={drag} />}
-                    {props.contentBlock.type === DraggableTypes.TEXT_BLOCK && <TextBlockComponent ref={drag} />}
-                    {props.contentBlock.type === DraggableTypes.PDF_BLOCK && <PdfBlockComponent ref={drag} />}
-                    {props.contentBlock.type === DraggableTypes.SLIDESHOW_BLOCK && (
+                    {props.contentBlock.type === ContentBlock.VIDEO_BLOCK && <VideoBlockComponent ref={drag} />}
+                    {props.contentBlock.type === ContentBlock.TEXT_BLOCK && <TextBlockComponent ref={drag} />}
+                    {props.contentBlock.type === ContentBlock.PDF_BLOCK && <PdfBlockComponent ref={drag} />}
+                    {props.contentBlock.type === ContentBlock.SLIDESHOW_BLOCK && (
                         <SlideshowBlockComponent
                             ref={drag}
                             slideshowBlock={props.contentBlock as SlideshowBlock}
@@ -203,4 +203,4 @@ const ContentBlock = (props: ContentBlockProps) => {
     );
 };
 
-export default ContentBlock;
+export default ContentBlockComponent;

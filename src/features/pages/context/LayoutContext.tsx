@@ -8,22 +8,14 @@ import { ContentBlockType } from "@/features/pages/types/ContentBlockType";
 
 export interface LayoutContextState {
     desktopLayout: ContentBlockType[];
-    updateDesktopLayout: (
-        updateFn: (prevContent: ContentBlockType[]) => ContentBlockType[],
-    ) => void;
+    updateDesktopLayout: (updateFn: (prevContent: ContentBlockType[]) => ContentBlockType[]) => void;
     tabletLayout: ContentBlockType[];
-    updateTabletLayout: (
-        updateFn: (prevContent: ContentBlockType[]) => ContentBlockType[],
-    ) => void;
+    updateTabletLayout: (updateFn: (prevContent: ContentBlockType[]) => ContentBlockType[]) => void;
     mobileLayout: ContentBlockType[];
-    updateMobileLayout: (
-        updateFn: (prevContent: ContentBlockType[]) => ContentBlockType[],
-    ) => void;
+    updateMobileLayout: (updateFn: (prevContent: ContentBlockType[]) => ContentBlockType[]) => void;
     currentLayout: Layout;
     getCurrentLayoutContent: () => ContentBlockType[];
-    updateCurrentLayoutContent: (
-        updateFn: (prevContent: ContentBlockType[]) => ContentBlockType[],
-    ) => void;
+    updateCurrentLayoutContent: (updateFn: (prevContent: ContentBlockType[]) => ContentBlockType[]) => void;
     selectLayout: (layout: Layout) => void;
     currentMinRows: number;
     getRowCount: () => number;
@@ -73,11 +65,7 @@ export const LayoutContextProvider = (props: LayoutContextProviderProps) => {
         }
 
         return 0;
-    }, [
-        DesktopLayoutManager.rowCount,
-        TabletLayoutManager.rowCount,
-        MobileLayoutManager.rowCount,
-    ]);
+    }, [LayoutManager.layout, DesktopLayoutManager, TabletLayoutManager, MobileLayoutManager]);
 
     const updateRowCount = useCallback(
         (rowCount: number) => {
@@ -93,12 +81,7 @@ export const LayoutContextProvider = (props: LayoutContextProviderProps) => {
                     break;
             }
         },
-        [
-            LayoutManager.layout,
-            DesktopLayoutManager.updateRowCount,
-            TabletLayoutManager.updateRowCount,
-            MobileLayoutManager.updateRowCount,
-        ],
+        [LayoutManager.layout, DesktopLayoutManager, TabletLayoutManager, MobileLayoutManager],
     );
 
     const getCurrentLayoutContent = useCallback(() => {
@@ -112,12 +95,7 @@ export const LayoutContextProvider = (props: LayoutContextProviderProps) => {
         }
 
         return [];
-    }, [
-        LayoutManager.layout,
-        DesktopLayoutManager.content,
-        TabletLayoutManager.content,
-        MobileLayoutManager.content,
-    ]);
+    }, [LayoutManager.layout, DesktopLayoutManager.content, TabletLayoutManager.content, MobileLayoutManager.content]);
 
     const updateCurrentLayoutContent = useCallback(
         (updateFn: (prevContent: ContentBlockType[]) => ContentBlockType[]) => {
@@ -130,12 +108,7 @@ export const LayoutContextProvider = (props: LayoutContextProviderProps) => {
                     return MobileLayoutManager.updateContent(updateFn);
             }
         },
-        [
-            LayoutManager.layout,
-            DesktopLayoutManager.updateContent,
-            TabletLayoutManager.updateContent,
-            MobileLayoutManager.updateContent,
-        ],
+        [LayoutManager.layout, DesktopLayoutManager, TabletLayoutManager, MobileLayoutManager],
     );
 
     return (

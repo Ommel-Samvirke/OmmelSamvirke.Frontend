@@ -1,4 +1,4 @@
-import { Layout } from "@/features/pages/constants/Layouts";
+import { Layout } from "@/features/pages/enums/Layouts";
 import { AbstractContentBlocks } from "@/features/pages/models/AbstractContentBlocks";
 
 export class SlideshowBlock extends AbstractContentBlocks {

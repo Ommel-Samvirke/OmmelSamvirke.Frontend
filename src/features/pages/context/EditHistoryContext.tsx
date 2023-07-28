@@ -1,7 +1,7 @@
 ﻿import React, { createContext, useCallback, useContext } from "react";
 
-import { Layout } from "@/features/pages/constants/Layouts";
 import { LayoutContext } from "@/features/pages/context/LayoutContext";
+import { Layout } from "@/features/pages/enums/Layouts";
 import { useUndoRedo } from "@/features/pages/hooks/useUndoRedo";
 import { ContentBlockType } from "@/features/pages/types/ContentBlockType";
 

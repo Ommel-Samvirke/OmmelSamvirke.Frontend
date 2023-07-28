@@ -1,4 +1,4 @@
-import { Layout } from "@/features/pages/constants/Layouts";
+import { Layout } from "@/features/pages/enums/Layouts";
 import { v1 as UUID1 } from "uuid";
 
 export abstract class AbstractContentBlocks {

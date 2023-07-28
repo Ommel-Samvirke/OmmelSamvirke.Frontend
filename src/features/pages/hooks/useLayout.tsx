@@ -1,7 +1,7 @@
 ﻿import { useCallback, useState } from "react";
 
 import { GridConstants } from "@/features/pages/constants/GridConstants";
-import { Layout } from "@/features/pages/constants/Layouts";
+import { Layout } from "@/features/pages/enums/Layouts";
 
 export const useLayout = (initialLayout: Layout) => {
     const [layout, setLayout] = useState<Layout>(initialLayout);

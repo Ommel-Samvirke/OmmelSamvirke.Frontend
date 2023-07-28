@@ -15,7 +15,7 @@ import PropertyWidget from "@/features/pages/components/page-editor/PropertyWidg
 import { DraggableTypes } from "@/features/pages/constants/DraggableTypes";
 import { DragSource } from "@/features/pages/constants/DragSource";
 import { GridConstants } from "@/features/pages/constants/GridConstants";
-import { Layout } from "@/features/pages/constants/Layouts";
+import { Layout } from "@/features/pages/enums/Layouts";
 import { EditorContext } from "@/features/pages/context/EditorContext";
 import { LayoutContext } from "@/features/pages/context/LayoutContext";
 import { canResizeOrMove } from "@/features/pages/helpers/ContentBlockHelpers";

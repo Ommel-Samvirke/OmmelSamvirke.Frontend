@@ -1,4 +1,5 @@
-﻿import styles from "./styles/PropertyWidget.module.scss";
+﻿import { ContentBlockType } from "@/features/pages/types/ContentBlockType";
+import styles from "./styles/PropertyWidget.module.scss";
 
 import { ChangeEvent, ForwardedRef, forwardRef } from "react";
 
@@ -8,6 +9,7 @@ import { FormControl, FormLabel, Input } from "@mui/joy";
 import Button from "@mui/joy/Button";
 
 interface PropertyWidgetProps {
+    contentBlock: ContentBlockType;
     id: string;
     x: number;
     y: number;

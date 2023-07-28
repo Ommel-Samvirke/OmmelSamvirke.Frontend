@@ -1,5 +1,5 @@
 import { DraggableTypes } from "@/features/pages/constants/DraggableTypes";
-import { Layout } from "@/features/pages/constants/Layouts";
+import { Layout } from "@/features/pages/enums/Layouts";
 import { HeadlineBlock } from "@/features/pages/models/HeadlineBlock";
 import { ImageBlock } from "@/features/pages/models/ImageBlock";
 import { PdfBlock } from "@/features/pages/models/PdfBlock";

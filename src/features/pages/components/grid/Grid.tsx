@@ -11,7 +11,7 @@ import GridCell, {
 import ToolMenu from "@/features/pages/components/tool-menu/ToolMenu";
 import { DraggableTypes } from "@/features/pages/constants/DraggableTypes";
 import { GridConstants } from "@/features/pages/constants/GridConstants";
-import { Layout } from "@/features/pages/constants/Layouts";
+import { Layout } from "@/features/pages/enums/Layouts";
 import { EditorContext } from "@/features/pages/context/EditorContext";
 import { LayoutContext } from "@/features/pages/context/LayoutContext";
 import { HeadlineBlock } from "@/features/pages/models/HeadlineBlock";

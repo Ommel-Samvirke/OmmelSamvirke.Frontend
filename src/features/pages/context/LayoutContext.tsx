@@ -1,7 +1,7 @@
 ﻿import React, { createContext, useCallback } from "react";
 
 import { GridConstants } from "@/features/pages/constants/GridConstants";
-import { Layout } from "@/features/pages/constants/Layouts";
+import { Layout } from "@/features/pages/enums/Layouts";
 import { useLayout } from "@/features/pages/hooks/useLayout";
 import { useLayoutState } from "@/features/pages/hooks/UseLayoutState";
 import { ContentBlockType } from "@/features/pages/types/ContentBlockType";

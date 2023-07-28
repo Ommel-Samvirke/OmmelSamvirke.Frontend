@@ -1,29 +1,30 @@
-﻿import "react-resizable/css/styles.css";
-import styles from "./styles/ContentBlock.module.scss";
+﻿import 'react-resizable/css/styles.css';
+import styles from './styles/ContentBlock.module.scss';
 
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
-import { Resizable } from "react-resizable";
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
+import { Resizable } from 'react-resizable';
 
-import HeadlineBlockComponent from "@/features/pages/components/content-blocks/HeadlineBlockComponent";
-import ImageBlockComponent from "@/features/pages/components/content-blocks/ImageBlockComponent";
-import PdfBlockComponent from "@/features/pages/components/content-blocks/PdfBlockComponent";
-import SlideshowBlockComponent from "@/features/pages/components/content-blocks/SlideshowBlockComponent";
-import TextBlockComponent from "@/features/pages/components/content-blocks/TextBlockComponent";
-import VideoBlockComponent from "@/features/pages/components/content-blocks/VideoBlockComponent";
-import PropertyWidget from "@/features/pages/components/page-editor/PropertyWidget";
-import { GridConstants } from "@/features/pages/constants/GridConstants";
-import { LayoutContext } from "@/features/pages/context/LayoutContext";
-import { ContentBlock } from "@/features/pages/enums/ContentBlock";
-import { DragSource } from "@/features/pages/enums/DragSource";
-import { Layout } from "@/features/pages/enums/Layouts";
-import { canResizeOrMove } from "@/features/pages/helpers/ContentBlockHelpers";
-import { useContentBlockManager } from "@/features/pages/hooks/useContentBlockManager";
-import { IDraggableItem } from "@/features/pages/interfaces/IDraggableItem";
-import { HeadlineBlock } from "@/features/pages/models/HeadlineBlock";
-import { ImageBlock } from "@/features/pages/models/ImageBlock";
-import { SlideshowBlock } from "@/features/pages/models/SlideshowBlock";
-import { ContentBlockType } from "@/features/pages/types/ContentBlockType";
+import HeadlineBlockComponent from '@/features/pages/components/content-blocks/HeadlineBlockComponent';
+import ImageBlockComponent from '@/features/pages/components/content-blocks/ImageBlockComponent';
+import PdfBlockComponent from '@/features/pages/components/content-blocks/PdfBlockComponent';
+import SlideshowBlockComponent from '@/features/pages/components/content-blocks/SlideshowBlockComponent';
+import TextBlockComponent from '@/features/pages/components/content-blocks/TextBlockComponent';
+import VideoBlockComponent from '@/features/pages/components/content-blocks/VideoBlockComponent';
+import PropertyWidget from '@/features/pages/components/page-editor/PropertyWidget';
+import { GridConstants } from '@/features/pages/constants/GridConstants';
+import { LayoutContext } from '@/features/pages/context/LayoutContext';
+import { ContentBlock } from '@/features/pages/enums/ContentBlock';
+import { DragSource } from '@/features/pages/enums/DragSource';
+import { Layout } from '@/features/pages/enums/Layouts';
+import { canResizeOrMove } from '@/features/pages/helpers/ContentBlockHelpers';
+import { useContentBlockManager } from '@/features/pages/hooks/useContentBlockManager';
+import { IDraggableItem } from '@/features/pages/interfaces/IDraggableItem';
+import { HeadlineBlock } from '@/features/pages/models/HeadlineBlock';
+import { ImageBlock } from '@/features/pages/models/ImageBlock';
+import { SlideshowBlock } from '@/features/pages/models/SlideshowBlock';
+import { TextBlock } from '@/features/pages/models/TextBlock';
+import { ContentBlockType } from '@/features/pages/types/ContentBlockType';
 
 export interface ContentBlockProps {
     contentBlock: ContentBlockType;
@@ -86,35 +87,22 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
         // Prevent resizing when mouseup is triggered while the mouse is over an iframe or an embed element.
         const handleMouseMove = (event: MouseEvent) => {
             if (event.buttons === 0 && resizableRef.current) {
-                document.dispatchEvent(new Event("mouseup"));
+                document.dispatchEvent(new Event('mouseup'));
             }
         };
 
         if (resizableRef.current) {
-            document.addEventListener("mousemove", handleMouseMove);
+            document.addEventListener('mousemove', handleMouseMove);
         }
 
         return () => {
-            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener('mousemove', handleMouseMove);
         };
     }, [resizableRef]);
 
     return (
         <>
-            {props.isSelected && (
-                <PropertyWidget
-                    contentBlock={props.contentBlock}
-                    ref={propertyWidget}
-                    id={props.contentBlock.id}
-                    x={props.contentBlock.x}
-                    y={props.contentBlock.y}
-                    width={props.contentBlock.width}
-                    height={props.contentBlock.height}
-                    moveContentBlock={contentBlockManager.moveContentBlock}
-                    resizeContentBlock={contentBlockManager.resizeContentBlock}
-                    deleteContentBlock={contentBlockManager.removeContentBlock}
-                />
-            )}
+            {props.isSelected && <PropertyWidget contentBlock={props.contentBlock} ref={propertyWidget} />}
             <Resizable
                 width={props.contentBlock.width * props.gridCellWidth}
                 height={props.contentBlock.height * props.gridCellWidth}
@@ -151,7 +139,7 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
                 }}
                 onResizeStart={props.onDeselect}
                 onResizeStop={() => setIsSelectionBlocked(true)}
-                resizeHandles={["se"]}
+                resizeHandles={['se']}
             >
                 <div
                     ref={(node) => {
@@ -159,10 +147,10 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
                         drop(node);
                     }}
                     className={
-                        styles.contentBlock + " content-block " + (props.isSelected ? " " + styles.selected : "")
+                        styles.contentBlock + ' content-block ' + (props.isSelected ? ' ' + styles.selected : '')
                     }
                     style={{
-                        position: "absolute",
+                        position: 'absolute',
                         left: `${props.contentBlock.x * props.gridCellWidth}px`,
                         top: `${props.contentBlock.y * props.gridCellWidth}px`,
                         width: `${props.contentBlock.width * props.gridCellWidth}px`,
@@ -188,7 +176,9 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
                         <ImageBlockComponent ref={drag} imageBlock={props.contentBlock as ImageBlock} />
                     )}
                     {props.contentBlock.type === ContentBlock.VIDEO_BLOCK && <VideoBlockComponent ref={drag} />}
-                    {props.contentBlock.type === ContentBlock.TEXT_BLOCK && <TextBlockComponent ref={drag} />}
+                    {props.contentBlock.type === ContentBlock.TEXT_BLOCK && (
+                        <TextBlockComponent textBlock={props.contentBlock as TextBlock} ref={drag} />
+                    )}
                     {props.contentBlock.type === ContentBlock.PDF_BLOCK && <PdfBlockComponent ref={drag} />}
                     {props.contentBlock.type === ContentBlock.SLIDESHOW_BLOCK && (
                         <SlideshowBlockComponent

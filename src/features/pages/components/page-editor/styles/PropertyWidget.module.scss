@@ -1,0 +1,64 @@
+﻿@import "src/common/variables.module.scss";
+
+.PropertyWidget {
+    position: fixed;
+    width: 300px;
+    right: 0;
+    top: $header-height;
+    height: calc(100% - $header-height);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-left: 1px solid #c7c7c7;
+
+    .Header {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        color: #838383;
+        font-size: 1.1rem;
+        font-weight: 400;
+
+        .separator {
+            width: 90%;
+            height: 2px;
+            background: $separator-color;
+            margin-top: 1rem;
+        }
+    }
+
+    .Body {
+        display: flex;
+        flex-direction: column;
+
+        .propertyInputRow {
+            display: flex;
+            flex-direction: row;
+            margin: 0.3rem 0;
+
+            .propertyInput {
+                width: calc(50% - 1rem);
+                margin: 0 0.5rem;
+            }
+        }
+    }
+
+    .Footer {
+        width: 100%;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .separator {
+            width: 90%;
+            height: 2px;
+            background: $separator-color;
+            margin-bottom: 1rem;
+        }
+    }
+}

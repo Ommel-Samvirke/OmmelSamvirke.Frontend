@@ -5,11 +5,20 @@
     padding: 0.5rem;
 }
 
+.slideshowButtons {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+}
+
 .slideshowContent {
-    height: 100%;
+    height: calc(100% - 50px);
     width: 100%;
     & > div:first-child {
-        height: calc(100% - 50px);
+        height: 100%;
         width: 100%;
         & div {
             height: 100%;

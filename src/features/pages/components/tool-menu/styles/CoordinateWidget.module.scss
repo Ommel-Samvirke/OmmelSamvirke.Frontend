@@ -1,6 +1,6 @@
 ﻿.CoordinateWidget {
     position: fixed;
-    bottom: 2rem;
+    bottom: calc(3rem + 2rem + 40px);
     left: 50%;
     transform: translateX(-50%) translateY(50%);
     z-index: 4;
@@ -11,4 +11,9 @@
     box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.4);
     font-size: 1rem;
     color: #5e5e5e;
+    transition: 0.2s;
+
+    &.hidden {
+        bottom: calc(-3rem - 2rem - 40px);
+    }
 }

@@ -1,6 +1,6 @@
 ﻿import styles from './styles/ToolMenu.module.scss';
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import CoordinateWidget from '@/features/pages/components/tool-menu/CoordinateWidget';
 import DeleteChanges from '@/features/pages/components/tool-menu/DeleteChanges';
@@ -8,6 +8,7 @@ import DraggableToolMenuIcon from '@/features/pages/components/tool-menu/Draggab
 import ManageRowCountButton from '@/features/pages/components/tool-menu/ManageRowCountButton';
 import ToggleGridButton from '@/features/pages/components/tool-menu/ToggleGridButton';
 import { ContentBlock } from '@/features/pages/enums/ContentBlock';
+import { KeyboardArrowDown } from '@mui/icons-material';
 
 interface ToolMenuProps {
     addRow: () => void;
@@ -21,9 +22,22 @@ interface ToolMenuProps {
 }
 
 const ToolMenu = (props: ToolMenuProps) => {
+    const [isVisible, setIsVisible] = React.useState<boolean>(true);
+    const [animate, setAnimate] = useState(false);
+    const [allowAnimation, setAllowAnimation] = useState(false);
+    const handleMouseOver = () => {
+        setAllowAnimation(true);
+    };
+
+    const handleClick = () => {
+        if (allowAnimation) {
+            setAnimate(true);
+        }
+    };
+
     return (
         <>
-            <div className={styles.toolMenu}>
+            <div className={styles.toolMenu + ' ' + (isVisible ? '' : styles.hidden)}>
                 <DraggableToolMenuIcon type={ContentBlock.HEADLINE_BLOCK} tooltip="Overskrift" />
                 <DraggableToolMenuIcon type={ContentBlock.TEXT_BLOCK} tooltip="Tekst" />
                 <DraggableToolMenuIcon type={ContentBlock.IMAGE_BLOCK} tooltip="Billede" />
@@ -48,7 +62,19 @@ const ToolMenu = (props: ToolMenuProps) => {
                 <ToggleGridButton onClick={props.toggleGrid} isGridVisible={props.isGridVisible} />
                 <DeleteChanges />
             </div>
-            <CoordinateWidget x={props.currentXCoordinate} y={props.currentYCoordinate} />
+            <CoordinateWidget x={props.currentXCoordinate} y={props.currentYCoordinate} hide={!isVisible} />
+            <div
+                className={
+                    styles.toggleToolMenu + ' ' + (isVisible ? '' : styles.open) + ' ' + (animate ? styles.animate : '')
+                }
+                onMouseOver={handleMouseOver}
+                onClick={() => {
+                    handleClick();
+                    setIsVisible(!isVisible);
+                }}
+            >
+                <KeyboardArrowDown />
+            </div>
         </>
     );
 };

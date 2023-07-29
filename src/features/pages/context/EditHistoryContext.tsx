@@ -1,9 +1,9 @@
-﻿import React, { createContext, useCallback, useContext } from "react";
+﻿import React, { createContext, useCallback, useContext } from 'react';
 
-import { LayoutContext } from "@/features/pages/context/LayoutContext";
-import { Layout } from "@/features/pages/enums/Layouts";
-import { useUndoRedo } from "@/features/pages/hooks/useUndoRedo";
-import { ContentBlockType } from "@/features/pages/types/ContentBlockType";
+import { LayoutContext } from '@/features/pages/context/LayoutContext';
+import { Layout } from '@/features/pages/enums/Layouts';
+import { useUndoRedo } from '@/features/pages/hooks/useUndoRedo';
+import { ContentBlockType } from '@/features/pages/types/ContentBlockType';
 
 export interface EditHistoryContextState {
     undo: () => void;
@@ -25,9 +25,7 @@ interface EditHistoryContextProviderProps {
     children: React.ReactNode;
 }
 
-export const EditHistoryContextProvider = (
-    props: EditHistoryContextProviderProps,
-) => {
+export const EditHistoryContextProvider = (props: EditHistoryContextProviderProps) => {
     const UndoRedoDesktopManager = useUndoRedo();
     const UndoRedoTabletManager = useUndoRedo();
     const UndoRedoMobileManager = useUndoRedo();
@@ -36,60 +34,36 @@ export const EditHistoryContextProvider = (
     const undo = useCallback(() => {
         switch (layoutContext.currentLayout) {
             case Layout.DESKTOP:
-                const prevStateDesktop = UndoRedoDesktopManager.undo(
-                    layoutContext.getCurrentLayoutContent(),
-                );
+                const prevStateDesktop = UndoRedoDesktopManager.undo(layoutContext.getCurrentLayoutContent());
                 layoutContext.updateDesktopLayout((p) => prevStateDesktop || p);
                 break;
             case Layout.TABLET:
-                const prevStateTablet = UndoRedoTabletManager.undo(
-                    layoutContext.getCurrentLayoutContent(),
-                );
+                const prevStateTablet = UndoRedoTabletManager.undo(layoutContext.getCurrentLayoutContent());
                 layoutContext.updateTabletLayout((p) => prevStateTablet || p);
                 break;
             case Layout.MOBILE:
-                const prevStateMobile = UndoRedoMobileManager.undo(
-                    layoutContext.getCurrentLayoutContent(),
-                );
+                const prevStateMobile = UndoRedoMobileManager.undo(layoutContext.getCurrentLayoutContent());
                 layoutContext.updateMobileLayout((p) => prevStateMobile || p);
                 break;
         }
-    }, [
-        layoutContext.currentLayout,
-        layoutContext.getCurrentLayoutContent,
-        layoutContext.updateDesktopLayout,
-        layoutContext.updateMobileLayout,
-        layoutContext.updateTabletLayout,
-    ]);
+    }, [UndoRedoDesktopManager, UndoRedoMobileManager, UndoRedoTabletManager, layoutContext]);
 
     const redo = useCallback(() => {
         switch (layoutContext.currentLayout) {
             case Layout.DESKTOP:
-                const nextStateDesktop = UndoRedoDesktopManager.redo(
-                    layoutContext.getCurrentLayoutContent(),
-                );
+                const nextStateDesktop = UndoRedoDesktopManager.redo(layoutContext.getCurrentLayoutContent());
                 layoutContext.updateDesktopLayout((p) => nextStateDesktop || p);
                 break;
             case Layout.TABLET:
-                const nextStateTablet = UndoRedoTabletManager.redo(
-                    layoutContext.getCurrentLayoutContent(),
-                );
+                const nextStateTablet = UndoRedoTabletManager.redo(layoutContext.getCurrentLayoutContent());
                 layoutContext.updateTabletLayout((p) => nextStateTablet || p);
                 break;
             case Layout.MOBILE:
-                const nextStateMobile = UndoRedoMobileManager.redo(
-                    layoutContext.getCurrentLayoutContent(),
-                );
+                const nextStateMobile = UndoRedoMobileManager.redo(layoutContext.getCurrentLayoutContent());
                 layoutContext.updateMobileLayout((p) => nextStateMobile || p);
                 break;
         }
-    }, [
-        layoutContext.currentLayout,
-        layoutContext.getCurrentLayoutContent,
-        layoutContext.updateDesktopLayout,
-        layoutContext.updateMobileLayout,
-        layoutContext.updateTabletLayout,
-    ]);
+    }, [UndoRedoDesktopManager, UndoRedoMobileManager, UndoRedoTabletManager, layoutContext]);
 
     const isUndoCapacityEmpty = useCallback(
         (layout: Layout) => {
@@ -141,11 +115,7 @@ export const EditHistoryContextProvider = (
                     break;
             }
         },
-        [
-            UndoRedoDesktopManager.updateBuffers,
-            UndoRedoTabletManager.updateBuffers,
-            UndoRedoMobileManager.updateBuffers,
-        ],
+        [UndoRedoDesktopManager, UndoRedoMobileManager, UndoRedoTabletManager],
     );
 
     return (

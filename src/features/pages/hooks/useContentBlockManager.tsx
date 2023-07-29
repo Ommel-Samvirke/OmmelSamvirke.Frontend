@@ -1,9 +1,9 @@
-﻿import { useCallback, useContext } from "react";
+﻿import { useCallback, useContext } from 'react';
 
-import { EditHistoryContext } from "@/features/pages/context/EditHistoryContext";
-import { LayoutContext } from "@/features/pages/context/LayoutContext";
-import { canResizeOrMove } from "@/features/pages/helpers/ContentBlockHelpers";
-import { ContentBlockType } from "@/features/pages/types/ContentBlockType";
+import { EditHistoryContext } from '@/features/pages/context/EditHistoryContext';
+import { LayoutContext } from '@/features/pages/context/LayoutContext';
+import { canResizeOrMove } from '@/features/pages/helpers/ContentBlockHelpers';
+import { ContentBlockType } from '@/features/pages/types/ContentBlockType';
 
 export const useContentBlockManager = () => {
     const editHistoryContext = useContext(EditHistoryContext);
@@ -13,21 +13,11 @@ export const useContentBlockManager = () => {
         (id: string, x: number, y: number, width?: number, height?: number) => {
             const content = layoutContext.getCurrentLayoutContent();
             const rowCount = layoutContext.getRowCount();
-            const contentBlock: ContentBlockType | undefined = content.find(
-                (block) => block.id === id,
-            );
+            const contentBlock: ContentBlockType | undefined = content.find((block) => block.id === id);
 
             if (!contentBlock) {
                 if (!width || !height) return false;
-                return canResizeOrMove(
-                    width,
-                    height,
-                    x,
-                    y,
-                    id,
-                    content,
-                    rowCount,
-                );
+                return canResizeOrMove(width, height, x, y, id, content, rowCount);
             }
 
             return canResizeOrMove(
@@ -40,7 +30,7 @@ export const useContentBlockManager = () => {
                 rowCount,
             );
         },
-        [layoutContext.getCurrentLayoutContent, layoutContext.getRowCount],
+        [layoutContext],
     );
 
     const moveContentBlock = useCallback(
@@ -48,81 +38,48 @@ export const useContentBlockManager = () => {
             if (!canMoveContentBlock(id, x, y)) return;
 
             layoutContext.updateCurrentLayoutContent((prevBlocks) => {
-                editHistoryContext.updateBuffers(
-                    prevBlocks,
-                    layoutContext.currentLayout,
-                );
-                return prevBlocks.map((block) =>
-                    block.id === id ? { ...block, x, y } : block,
-                );
+                editHistoryContext.updateBuffers(prevBlocks, layoutContext.currentLayout);
+                return prevBlocks.map((block) => (block.id === id ? { ...block, x, y } : block));
             });
         },
-        [
-            canMoveContentBlock,
-            layoutContext.updateCurrentLayoutContent,
-            editHistoryContext.updateBuffers,
-        ],
+        [canMoveContentBlock, layoutContext, editHistoryContext],
     );
 
     const resizeContentBlock = useCallback(
         (id: string, width: number, height: number) => {
             const contentBlocks = layoutContext.getCurrentLayoutContent();
-            let currentBlock: ContentBlockType | undefined = contentBlocks.find(
-                (block) => block.id === id,
-            );
+            let currentBlock: ContentBlockType | undefined = contentBlocks.find((block) => block.id === id);
             if (!currentBlock) return;
 
             const { x, y } = currentBlock;
             if (!canMoveContentBlock(id, x, y, width, height)) return;
 
             layoutContext.updateCurrentLayoutContent((prevBlocks) => {
-                editHistoryContext.updateBuffers(
-                    prevBlocks,
-                    layoutContext.currentLayout,
-                );
-                return prevBlocks.map((block) =>
-                    block.id === id ? { ...block, width, height } : block,
-                );
+                editHistoryContext.updateBuffers(prevBlocks, layoutContext.currentLayout);
+                return prevBlocks.map((block) => (block.id === id ? { ...block, width, height } : block));
             });
         },
-        [
-            canMoveContentBlock,
-            layoutContext.getCurrentLayoutContent,
-            layoutContext.updateCurrentLayoutContent,
-            editHistoryContext.updateBuffers,
-        ],
+        [layoutContext, canMoveContentBlock, editHistoryContext],
     );
 
     const addContentBlock = useCallback(
         (contentBlock: ContentBlockType) => {
             layoutContext.updateCurrentLayoutContent((prevBlocks) => {
-                editHistoryContext.updateBuffers(
-                    prevBlocks,
-                    layoutContext.currentLayout,
-                );
+                editHistoryContext.updateBuffers(prevBlocks, layoutContext.currentLayout);
                 return [...prevBlocks, contentBlock];
             });
         },
-        [
-            layoutContext.updateCurrentLayoutContent,
-            editHistoryContext.updateBuffers,
-        ],
+        [layoutContext, editHistoryContext],
     );
 
     const removeContentBlock = useCallback(
         (id: string) => {
             layoutContext.updateCurrentLayoutContent((prevBlocks) => {
-                editHistoryContext.updateBuffers(
-                    prevBlocks,
-                    layoutContext.currentLayout,
-                );
+                editHistoryContext.updateBuffers(prevBlocks, layoutContext.currentLayout);
                 return prevBlocks.filter((block) => block.id !== id);
             });
         },
-        [
-            layoutContext.updateCurrentLayoutContent,
-            editHistoryContext.updateBuffers,
-        ],
+        [layoutContext, editHistoryContext],
     );
 
     return {

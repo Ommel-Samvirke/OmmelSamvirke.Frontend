@@ -1,9 +1,9 @@
-import { ContentBlock } from "@/features/pages/enums/ContentBlock";
-import { Layout } from "@/features/pages/enums/Layouts";
-import { AbstractContentBlocks } from "@/features/pages/models/AbstractContentBlocks";
+import { ContentBlock } from '@/features/pages/enums/ContentBlock';
+import { Layout } from '@/features/pages/enums/Layouts';
+import { AbstractContentBlocks } from '@/features/pages/models/AbstractContentBlocks';
 
 export class VideoBlock extends AbstractContentBlocks {
-    public videoUrl: string = "";
+    public videoUrl: string = '';
     public width: number = VideoBlock.defaultWidth;
     public height: number = VideoBlock.defaultHeight;
     public static defaultWidth: number = 8;

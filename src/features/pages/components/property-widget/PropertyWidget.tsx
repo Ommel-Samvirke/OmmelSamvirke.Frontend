@@ -1,13 +1,14 @@
-﻿import BorderRadiusSection from '@/features/pages/components/property-widget/BorderRadiusSection';
-import { ImageBlock } from '@/features/pages/models/ImageBlock';
-import styles from './styles/PropertyWidget.module.scss';
+﻿import styles from './styles/PropertyWidget.module.scss';
 
 import { ForwardedRef, forwardRef } from 'react';
 
+import BorderRadiusSection from '@/features/pages/components/property-widget/BorderRadiusSection';
 import DeleteSection from '@/features/pages/components/property-widget/DeleteSection';
+import PaddingSection from '@/features/pages/components/property-widget/PaddingSection';
 import PositionPropertiesSection from '@/features/pages/components/property-widget/PositionPropertiesSection';
 import TextPropertiesSection from '@/features/pages/components/property-widget/TextPropertiesSection';
 import { ContentBlock } from '@/features/pages/enums/ContentBlock';
+import { ImageBlock } from '@/features/pages/models/ImageBlock';
 import { ContentBlockType } from '@/features/pages/types/ContentBlockType';
 
 interface PropertyWidgetProps {
@@ -18,6 +19,7 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
     return (
         <div ref={ref} className={styles.PropertyWidget + ' content-block-controls'}>
             <PositionPropertiesSection contentBlock={props.contentBlock} />
+            <PaddingSection contentBlock={props.contentBlock} />
             {(props.contentBlock.type === ContentBlock.HEADLINE_BLOCK ||
                 props.contentBlock.type === ContentBlock.TEXT_BLOCK) && (
                 <TextPropertiesSection contentBlock={props.contentBlock} />

@@ -24,6 +24,10 @@ const ImageBlockComponent = forwardRef((props: ImageBlockProps, ref: ForwardedRe
                 borderTopRightRadius: `${props.imageBlock.topRightBorderRadius.radius}%`,
                 borderBottomLeftRadius: `${props.imageBlock.bottomLeftBorderRadius.radius}%`,
                 borderBottomRightRadius: `${props.imageBlock.bottomRightBorderRadius.radius}%`,
+                paddingTop: `${props.imageBlock.topPadding.padding}px`,
+                paddingBottom: `${props.imageBlock.bottomPadding.padding}px`,
+                paddingLeft: `${props.imageBlock.leftPadding.padding}px`,
+                paddingRight: `${props.imageBlock.rightPadding.padding}px`,
             }}
         />
     );

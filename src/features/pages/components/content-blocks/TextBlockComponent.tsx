@@ -1,13 +1,12 @@
 import styles from './styles/TextBlockComponent.module.scss';
 
-import React, { ForwardedRef, forwardRef, useContext, useEffect, useRef, useState } from 'react';
+import React, { ForwardedRef, forwardRef, useContext, useEffect, useState } from 'react';
 
 import { LayoutContext } from '@/features/pages/context/LayoutContext';
 import { HorizontalTextAlignment } from '@/features/pages/enums/HorizontalTextAlignment';
 import { VerticalTextAlignment } from '@/features/pages/enums/VerticalTextAlignment';
 import { TextBlock } from '@/features/pages/models/TextBlock';
 import { Property } from 'csstype';
-import { loremIpsum } from 'lorem-ipsum';
 import AlignItems = Property.AlignItems;
 import TextAlign = Property.TextAlign;
 
@@ -59,6 +58,10 @@ const TextBlockComponent = forwardRef((props: TextBlockComponentProps, ref: Forw
             style={{
                 backgroundColor: layoutContext.color,
                 alignItems: verticalTextAlignment,
+                paddingTop: `${props.textBlock.topPadding.padding}px`,
+                paddingBottom: `${props.textBlock.bottomPadding.padding}px`,
+                paddingLeft: `${props.textBlock.leftPadding.padding}px`,
+                paddingRight: `${props.textBlock.rightPadding.padding}px`,
             }}
         >
             <div

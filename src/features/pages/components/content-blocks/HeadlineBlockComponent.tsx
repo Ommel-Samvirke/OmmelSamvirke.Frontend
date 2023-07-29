@@ -58,6 +58,10 @@ const HeadlineBlockComponent = forwardRef((props: HeadlineBlockComponentProps, r
             style={{
                 backgroundColor: layoutContext.color,
                 alignItems: verticalTextAlignment,
+                paddingTop: `${props.headlineBlock.topPadding.padding}px`,
+                paddingBottom: `${props.headlineBlock.bottomPadding.padding}px`,
+                paddingLeft: `${props.headlineBlock.leftPadding.padding}px`,
+                paddingRight: `${props.headlineBlock.rightPadding.padding}px`,
             }}
         >
             <h1

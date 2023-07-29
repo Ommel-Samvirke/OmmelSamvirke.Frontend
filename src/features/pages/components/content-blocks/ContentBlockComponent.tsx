@@ -22,8 +22,10 @@ import { useContentBlockManager } from '@/features/pages/hooks/useContentBlockMa
 import { IDraggableItem } from '@/features/pages/interfaces/IDraggableItem';
 import { HeadlineBlock } from '@/features/pages/models/HeadlineBlock';
 import { ImageBlock } from '@/features/pages/models/ImageBlock';
+import { PdfBlock } from '@/features/pages/models/PdfBlock';
 import { SlideshowBlock } from '@/features/pages/models/SlideshowBlock';
 import { TextBlock } from '@/features/pages/models/TextBlock';
+import { VideoBlock } from '@/features/pages/models/VideoBlock';
 import { ContentBlockType } from '@/features/pages/types/ContentBlockType';
 
 export interface ContentBlockProps {
@@ -174,11 +176,15 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
                     {props.contentBlock.type === ContentBlock.IMAGE_BLOCK && (
                         <ImageBlockComponent ref={drag} imageBlock={props.contentBlock as ImageBlock} />
                     )}
-                    {props.contentBlock.type === ContentBlock.VIDEO_BLOCK && <VideoBlockComponent ref={drag} />}
+                    {props.contentBlock.type === ContentBlock.VIDEO_BLOCK && (
+                        <VideoBlockComponent videoBlock={props.contentBlock as VideoBlock} ref={drag} />
+                    )}
                     {props.contentBlock.type === ContentBlock.TEXT_BLOCK && (
                         <TextBlockComponent textBlock={props.contentBlock as TextBlock} ref={drag} />
                     )}
-                    {props.contentBlock.type === ContentBlock.PDF_BLOCK && <PdfBlockComponent ref={drag} />}
+                    {props.contentBlock.type === ContentBlock.PDF_BLOCK && (
+                        <PdfBlockComponent pdfBlock={props.contentBlock as PdfBlock} ref={drag} />
+                    )}
                     {props.contentBlock.type === ContentBlock.SLIDESHOW_BLOCK && (
                         <SlideshowBlockComponent
                             ref={drag}

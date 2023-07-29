@@ -17,7 +17,7 @@ const PositionPropertiesSection = (props: PositionPropertiesSectionInterface) =>
     return (
         <>
             <div className={styles.Header}>
-                Egenskaber
+                Positioner
                 <div className={styles.separator}></div>
             </div>
             <div className={styles.Body}>

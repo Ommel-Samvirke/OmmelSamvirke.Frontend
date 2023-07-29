@@ -17,6 +17,7 @@ interface ToolMenuProps {
     isGridVisible: boolean;
     currentXCoordinate: number;
     currentYCoordinate: number;
+    minRows: number;
 }
 
 const ToolMenu = (props: ToolMenuProps) => {
@@ -35,12 +36,14 @@ const ToolMenu = (props: ToolMenuProps) => {
                     tooltip={'Tilføj række'}
                     onClick={props.addRow}
                     rowCount={props.rowCount}
+                    minRows={props.minRows}
                 />
                 <ManageRowCountButton
                     type={'remove-row'}
                     tooltip={'Fjern række'}
                     onClick={props.removeRow}
                     rowCount={props.rowCount}
+                    minRows={props.minRows}
                 />
                 <ToggleGridButton onClick={props.toggleGrid} isGridVisible={props.isGridVisible} />
                 <DeleteChanges />

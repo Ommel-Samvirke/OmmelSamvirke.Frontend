@@ -1,4 +1,5 @@
-﻿import styles from './styles/Grid.module.scss';
+﻿import { min } from '@popperjs/core/lib/utils/math';
+import styles from './styles/Grid.module.scss';
 
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { DndProvider } from 'react-dnd';
@@ -55,8 +56,9 @@ const Grid = () => {
         const rowsForViewportHeight = Math.ceil(window.innerHeight / actualCellWidth) - 2;
         const desiredRowCount = Math.max(minRows, rowsForViewportHeight);
 
+        console.log(minRows);
         setRows(desiredRowCount);
-    }, [minRows, setRows]);
+    }, [minRows]);
 
     useEffect(() => {
         const debouncedAdjustGridSize = debounce(adjustGridSize, 150);
@@ -217,6 +219,7 @@ const Grid = () => {
                     isGridVisible={displayGrid}
                     currentXCoordinate={currentCoordinate[0]}
                     currentYCoordinate={currentCoordinate[1]}
+                    minRows={minRows}
                 />
             </DndProvider>
         </div>

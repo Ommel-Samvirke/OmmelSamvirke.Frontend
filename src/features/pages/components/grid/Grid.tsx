@@ -56,7 +56,6 @@ const Grid = () => {
         const rowsForViewportHeight = Math.ceil(window.innerHeight / actualCellWidth) - 2;
         const desiredRowCount = Math.max(minRows, rowsForViewportHeight);
 
-        console.log(minRows);
         setRows(desiredRowCount);
     }, [minRows]);
 

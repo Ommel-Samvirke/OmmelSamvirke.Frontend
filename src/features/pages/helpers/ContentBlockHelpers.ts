@@ -1,5 +1,5 @@
-﻿import { GridConstants } from "@/features/pages/constants/GridConstants";
-import { ContentBlockType } from "@/features/pages/types/ContentBlockType";
+﻿import { GridConstants } from '@/features/pages/constants/GridConstants';
+import { ContentBlockType } from '@/features/pages/types/ContentBlockType';
 
 const isOverlapping = (
     x1: number,
@@ -23,26 +23,15 @@ export const canResizeOrMove = (
     contentBlocks: ContentBlockType[],
     rowCount: number,
 ) => {
+    if (x + width > GridConstants.COLUMNS) return false;
+    if (x + width < 0) return false;
+    if (y + height < 0) return false;
+    if (y + height > rowCount) return false;
+
     for (let block of contentBlocks) {
         if (block.id === id) continue;
 
-        if (x + width > GridConstants.COLUMNS) return false;
-        if (x + width < 0) return false;
-        if (y + height < 0) return false;
-        if (y + height > rowCount) return false;
-
-        if (
-            isOverlapping(
-                x,
-                y,
-                width,
-                height,
-                block.x,
-                block.y,
-                block.width,
-                block.height,
-            )
-        ) {
+        if (isOverlapping(x, y, width, height, block.x, block.y, block.width, block.height)) {
             return false;
         }
     }

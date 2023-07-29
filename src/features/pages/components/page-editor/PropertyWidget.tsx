@@ -1,6 +1,6 @@
 ﻿import styles from './styles/PropertyWidget.module.scss';
 
-import { ChangeEvent, ForwardedRef, forwardRef, useEffect } from 'react';
+import { ChangeEvent, ForwardedRef, forwardRef } from 'react';
 
 import ColorPicker from '@/features/pages/components/color-picker/ColorPicker';
 import { GridConstants } from '@/features/pages/constants/GridConstants';

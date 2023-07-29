@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import { ButtonPropsColorOverrides, ColorPaletteProp, ModalDialog, Typography } from '@mui/joy';
 import Button from '@mui/joy/Button';
 import Modal from '@mui/joy/Modal';

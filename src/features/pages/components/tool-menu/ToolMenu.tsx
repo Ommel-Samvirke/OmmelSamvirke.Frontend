@@ -1,6 +1,6 @@
 ﻿import styles from './styles/ToolMenu.module.scss';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import CoordinateWidget from '@/features/pages/components/tool-menu/CoordinateWidget';
 import DeleteChanges from '@/features/pages/components/tool-menu/DeleteChanges';

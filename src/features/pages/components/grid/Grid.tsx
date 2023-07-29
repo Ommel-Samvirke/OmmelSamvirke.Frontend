@@ -1,5 +1,4 @@
-﻿import { min } from '@popperjs/core/lib/utils/math';
-import styles from './styles/Grid.module.scss';
+﻿import styles from './styles/Grid.module.scss';
 
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { DndProvider } from 'react-dnd';
@@ -80,7 +79,11 @@ const Grid = () => {
         };
 
         const handleKeyPress = (event: KeyboardEvent) => {
-            if (event.key === 'Escape' || event.key === 'Delete') {
+            if (event.key === 'Escape') {
+                setSelectedContentBlockId(null);
+            }
+
+            if (event.key === 'Delete') {
                 if (!selectedContentBlockId) return;
                 contentBlockManager.removeContentBlock(selectedContentBlockId);
             }

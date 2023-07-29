@@ -18,7 +18,7 @@ interface PropertyInputInterface {
 
 const PropertyInput = (props: PropertyInputInterface) => {
     return (
-        <FormControl className={styles.propertyInput} style={{ width: `calc(${props.widthPercentage}% - 1rem);` }}>
+        <FormControl className={styles.propertyInput} style={{ width: `calc(${props.widthPercentage}% - 1rem)` }}>
             <FormLabel>{props.label}</FormLabel>
             <Input
                 placeholder={props.placeholder}

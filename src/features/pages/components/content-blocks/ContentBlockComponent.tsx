@@ -11,7 +11,7 @@ import PdfBlockComponent from '@/features/pages/components/content-blocks/PdfBlo
 import SlideshowBlockComponent from '@/features/pages/components/content-blocks/SlideshowBlockComponent';
 import TextBlockComponent from '@/features/pages/components/content-blocks/TextBlockComponent';
 import VideoBlockComponent from '@/features/pages/components/content-blocks/VideoBlockComponent';
-import PropertyWidget from '@/features/pages/components/page-editor/PropertyWidget';
+import PropertyWidget from '@/features/pages/components/property-widget/PropertyWidget';
 import { GridConstants } from '@/features/pages/constants/GridConstants';
 import { LayoutContext } from '@/features/pages/context/LayoutContext';
 import { ContentBlock } from '@/features/pages/enums/ContentBlock';

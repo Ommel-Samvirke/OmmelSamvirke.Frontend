@@ -41,6 +41,7 @@ export interface ContentBlockProps {
 const ContentBlockComponent = (props: ContentBlockProps) => {
     const layoutContext = useContext(LayoutContext);
     const [isSelectionBlocked, setIsSelectionBlocked] = useState<boolean>(false);
+    const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
     const propertyWidget = useRef(null);
     const resizableRef = useRef(null);
     const contentBlockManager = useContentBlockManager();
@@ -79,8 +80,13 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
     useEffect(() => {
         // Prevent resizing when mouseup is triggered while the mouse is over an iframe or an embed element.
         const handleMouseMove = (event: MouseEvent) => {
-            if (event.buttons === 0 && resizableRef.current) {
+            if (event.buttons === 1) {
+                setIsMouseDown(true);
+            }
+
+            if (resizableRef.current && event.buttons === 0 && isMouseDown) {
                 document.dispatchEvent(new Event('mouseup'));
+                setIsMouseDown(false);
             }
         };
 
@@ -91,7 +97,7 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
         return () => {
             document.removeEventListener('mousemove', handleMouseMove);
         };
-    }, [resizableRef]);
+    }, [isMouseDown, resizableRef]);
 
     return (
         <>

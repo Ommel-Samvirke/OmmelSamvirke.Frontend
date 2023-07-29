@@ -61,7 +61,10 @@ const TextBlockComponent = forwardRef((props: TextBlockComponentProps, ref: Forw
                 alignItems: verticalTextAlignment,
             }}
         >
-            <div className={styles.textContent} style={{ textAlign: horizontalTextAlignment }}>
+            <div
+                className={styles.textContent}
+                style={{ textAlign: horizontalTextAlignment, color: props.textBlock.color }}
+            >
                 {text}
             </div>
         </div>

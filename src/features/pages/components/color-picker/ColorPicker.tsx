@@ -1,35 +1,49 @@
-﻿import styles from "./styles/ColorPicker.module.scss";
+﻿import styles from './styles/ColorPicker.module.scss';
 
-import { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 
-import { LayoutContext } from "@/features/pages/context/LayoutContext";
-import Tooltip from "@mui/joy/Tooltip";
+import Tooltip from '@mui/joy/Tooltip';
 
-const ColorPicker = () => {
-    const [color, setColor] = useState("#ffffff");
+interface ColorPickerProps {
+    toolTip: string;
+    onChange: (color: string) => void;
+    initialColor?: string;
+}
+
+const ColorPicker = (props: ColorPickerProps) => {
+    const [color, setColor] = useState(props.initialColor || '#ffffff');
     const colorDisplayRef = useRef<HTMLDivElement>(null);
-    const layoutContext = useContext(LayoutContext);
+    const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
-        layoutContext.updateColor(color);
+        props.onChange(color);
 
         if (!colorDisplayRef.current) return;
         colorDisplayRef.current.style.backgroundColor = color;
-    }, [color, layoutContext]);
+    }, [color, props]);
+
+    const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedColor = e.target.value;
+
+        if (debounceTimeout.current) {
+            clearTimeout(debounceTimeout.current);
+        }
+
+        debounceTimeout.current = setTimeout(() => {
+            setColor(selectedColor);
+        }, 50);
+    };
 
     return (
         <label htmlFor="colorPicker" className={styles.colorPickerWrapper}>
-            <Tooltip title={"Baggrundsfarve"}>
+            <Tooltip title={props.toolTip}>
                 <span>
-                    <div
-                        ref={colorDisplayRef}
-                        className={styles.colorDisplay}
-                    ></div>
+                    <div ref={colorDisplayRef} className={styles.colorDisplay}></div>
                     <input
                         className={styles.colorPickerInput}
                         type="color"
                         value={color}
-                        onChange={(e) => setColor(e.target.value)}
+                        onChange={handleColorChange}
                     />
                 </span>
             </Tooltip>

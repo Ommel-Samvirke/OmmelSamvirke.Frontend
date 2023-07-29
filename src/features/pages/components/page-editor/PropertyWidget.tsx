@@ -1,13 +1,15 @@
-﻿import { VerticalTextAlignment } from '@/features/pages/enums/VerticalTextAlignment';
-import styles from './styles/PropertyWidget.module.scss';
+﻿import styles from './styles/PropertyWidget.module.scss';
 
-import { ChangeEvent, ForwardedRef, forwardRef } from 'react';
+import { ChangeEvent, ForwardedRef, forwardRef, useEffect } from 'react';
 
+import ColorPicker from '@/features/pages/components/color-picker/ColorPicker';
 import { GridConstants } from '@/features/pages/constants/GridConstants';
 import { ContentBlock } from '@/features/pages/enums/ContentBlock';
 import { HorizontalTextAlignment } from '@/features/pages/enums/HorizontalTextAlignment';
+import { VerticalTextAlignment } from '@/features/pages/enums/VerticalTextAlignment';
 import { useContentBlockManager } from '@/features/pages/hooks/useContentBlockManager';
 import UseTextAlign from '@/features/pages/hooks/useTextAlign';
+import useTextColor from '@/features/pages/hooks/useTextColor';
 import { TextBlock } from '@/features/pages/models/TextBlock';
 import { ContentBlockType } from '@/features/pages/types/ContentBlockType';
 import {
@@ -30,6 +32,7 @@ interface PropertyWidgetProps {
 
 const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef<HTMLDivElement>) => {
     const textAlignment = UseTextAlign();
+    const textColor = useTextColor();
     const contentBlockManager = useContentBlockManager();
 
     return (
@@ -131,7 +134,7 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
                 props.contentBlock.type === ContentBlock.TEXT_BLOCK) && (
                 <>
                     <div className={styles.Header}>
-                        Tekstplacering
+                        Tekst
                         <div className={styles.separator}></div>
                     </div>
                     <div className={styles.Body}>
@@ -267,7 +270,15 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
                                         <VerticalAlignBottom />
                                     </IconButton>
                                 </Tooltip>
-                                <button style={{ visibility: 'hidden' }}></button> {/* For layout purposes*/}
+                                <ColorPicker
+                                    toolTip={'Vælg Tekstfarve'}
+                                    onChange={(color: string) => {
+                                        if ((props.contentBlock as TextBlock).color !== color) {
+                                            textColor.updateTextColor(props.contentBlock as TextBlock, color);
+                                        }
+                                    }}
+                                    initialColor={(props.contentBlock as TextBlock).color}
+                                />
                             </div>
                         </div>
                     </div>

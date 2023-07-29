@@ -62,7 +62,7 @@ const HeadlineBlockComponent = forwardRef((props: HeadlineBlockComponentProps, r
         >
             <h1
                 className={styles.headline + ' ' + roboto.className + ' '}
-                style={{ textAlign: horizontalTextAlignment }}
+                style={{ textAlign: horizontalTextAlignment, color: props.headlineBlock.color }}
             >
                 {props.headlineBlock.headline}
             </h1>

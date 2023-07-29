@@ -1,7 +1,8 @@
 import styles from './styles/PdfBlockComponent.module.scss';
 
-import { ForwardedRef, forwardRef } from 'react';
+import { ForwardedRef, forwardRef, useContext } from 'react';
 
+import { LayoutContext } from '@/features/pages/context/LayoutContext';
 import { PdfBlock } from '@/features/pages/models/PdfBlock';
 
 interface PdfBlockComponentProps {
@@ -9,6 +10,8 @@ interface PdfBlockComponentProps {
 }
 
 const PdfBlockComponent = forwardRef((props: PdfBlockComponentProps, ref: ForwardedRef<HTMLDivElement>) => {
+    const layoutContext = useContext(LayoutContext);
+
     return (
         <div
             ref={ref}
@@ -18,6 +21,7 @@ const PdfBlockComponent = forwardRef((props: PdfBlockComponentProps, ref: Forwar
                 paddingBottom: `${props.pdfBlock.bottomPadding.padding}px`,
                 paddingLeft: `${props.pdfBlock.leftPadding.padding}px`,
                 paddingRight: `${props.pdfBlock.rightPadding.padding}px`,
+                backgroundColor: layoutContext.color,
             }}
         >
             <embed src="/files/test-pdf.pdf" type="application/pdf" width="100%" height="100%" />

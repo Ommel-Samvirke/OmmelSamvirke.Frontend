@@ -1,8 +1,9 @@
 import styles from './styles/SlideshowBlockComponent.module.scss';
 
-import React, { ForwardedRef, forwardRef, useState } from 'react';
+import React, { ForwardedRef, forwardRef, useContext, useState } from 'react';
 
 import 'swiper/css';
+import { LayoutContext } from '@/features/pages/context/LayoutContext';
 import { SlideshowBlock } from '@/features/pages/models/SlideshowBlock';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import { Box } from '@mui/joy';
@@ -19,6 +20,7 @@ interface SlideshowBlockComponentProps {
 const SlideshowBlockComponent = forwardRef((props: SlideshowBlockComponentProps, ref: ForwardedRef<HTMLDivElement>) => {
     const [activeStep, setActiveStep] = useState<number>(0);
     const [swiper, setSwiper] = useState<SwiperClass | null>(null);
+    const layoutContext = useContext(LayoutContext);
 
     const handleButtonClick = () => {
         if (swiper) {
@@ -35,6 +37,7 @@ const SlideshowBlockComponent = forwardRef((props: SlideshowBlockComponentProps,
                 paddingBottom: `${props.slideshowBlock.bottomPadding.padding}px`,
                 paddingLeft: `${props.slideshowBlock.leftPadding.padding}px`,
                 paddingRight: `${props.slideshowBlock.rightPadding.padding}px`,
+                backgroundColor: layoutContext.color,
             }}
         >
             <Box className={styles.slideshowContent}>

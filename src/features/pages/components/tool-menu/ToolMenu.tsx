@@ -1,13 +1,13 @@
-﻿import styles from "./styles/ToolMenu.module.scss";
+﻿import styles from './styles/ToolMenu.module.scss';
 
-import React from "react";
+import React from 'react';
 
-import CoordinateWidget from "./CoordinateWidget";
-import DraggableToolMenuIcon from "./DraggableToolMenuIcon";
-import ManageRowCountButton from "./ManageRowCountButton";
-import ToggleGridButton from "./ToggleGridButton";
-
-import { ContentBlock } from "@/features/pages/enums/ContentBlock";
+import CoordinateWidget from '@/features/pages/components/tool-menu/CoordinateWidget';
+import DeleteChanges from '@/features/pages/components/tool-menu/DeleteChanges';
+import DraggableToolMenuIcon from '@/features/pages/components/tool-menu/DraggableToolMenuIcon';
+import ManageRowCountButton from '@/features/pages/components/tool-menu/ManageRowCountButton';
+import ToggleGridButton from '@/features/pages/components/tool-menu/ToggleGridButton';
+import { ContentBlock } from '@/features/pages/enums/ContentBlock';
 
 interface ToolMenuProps {
     addRow: () => void;
@@ -31,18 +31,19 @@ const ToolMenu = (props: ToolMenuProps) => {
                 <DraggableToolMenuIcon type={ContentBlock.SLIDESHOW_BLOCK} tooltip="Galleri" />
                 <div className={styles.separator}></div>
                 <ManageRowCountButton
-                    type={"add-row"}
-                    tooltip={"Tilføj række"}
+                    type={'add-row'}
+                    tooltip={'Tilføj række'}
                     onClick={props.addRow}
                     rowCount={props.rowCount}
                 />
                 <ManageRowCountButton
-                    type={"remove-row"}
-                    tooltip={"Fjern række"}
+                    type={'remove-row'}
+                    tooltip={'Fjern række'}
                     onClick={props.removeRow}
                     rowCount={props.rowCount}
                 />
                 <ToggleGridButton onClick={props.toggleGrid} isGridVisible={props.isGridVisible} />
+                <DeleteChanges />
             </div>
             <CoordinateWidget x={props.currentXCoordinate} y={props.currentYCoordinate} />
         </>

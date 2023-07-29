@@ -1,10 +1,10 @@
-﻿import React, { createContext, useCallback } from "react";
+﻿import React, { createContext, useCallback } from 'react';
 
-import { GridConstants } from "@/features/pages/constants/GridConstants";
-import { Layout } from "@/features/pages/enums/Layouts";
-import { useLayout } from "@/features/pages/hooks/useLayout";
-import { useLayoutState } from "@/features/pages/hooks/UseLayoutState";
-import { ContentBlockType } from "@/features/pages/types/ContentBlockType";
+import { GridConstants } from '@/features/pages/constants/GridConstants';
+import { Layout } from '@/features/pages/enums/Layouts';
+import { useLayout } from '@/features/pages/hooks/useLayout';
+import { useLayoutState } from '@/features/pages/hooks/useLayoutState';
+import { ContentBlockType } from '@/features/pages/types/ContentBlockType';
 
 export interface LayoutContextState {
     desktopLayout: ContentBlockType[];
@@ -40,7 +40,7 @@ export const LayoutContext = createContext<LayoutContextState>({
     getRowCount: () => GridConstants.COLUMNS,
     updateMinRows: () => {},
     updateRowCount: () => {},
-    color: "#ffffff",
+    color: '#ffffff',
     updateColor: () => {},
 });
 

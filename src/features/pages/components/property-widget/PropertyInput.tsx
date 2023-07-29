@@ -8,10 +8,11 @@ import { FormControl, FormLabel, Input } from '@mui/joy';
 interface PropertyInputInterface {
     widthPercentage: number;
     contentBlock: ContentBlockType;
-    value: string | number | readonly string[] | undefined;
+    value: number;
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
     minvalue?: number;
     maxvalue?: number;
+    stepSize?: number;
     placeholder: string;
     label: string;
 }
@@ -28,6 +29,7 @@ const PropertyInput = (props: PropertyInputInterface) => {
                     input: {
                         min: props.minvalue,
                         max: props.maxvalue,
+                        step: props.stepSize,
                     },
                 }}
                 onChange={props.onChange}

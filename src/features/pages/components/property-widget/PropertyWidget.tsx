@@ -1,4 +1,6 @@
-﻿import styles from './styles/PropertyWidget.module.scss';
+﻿import BorderRadiusSection from '@/features/pages/components/property-widget/BorderRadiusSection';
+import { ImageBlock } from '@/features/pages/models/ImageBlock';
+import styles from './styles/PropertyWidget.module.scss';
 
 import { ForwardedRef, forwardRef } from 'react';
 
@@ -19,6 +21,9 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
             {(props.contentBlock.type === ContentBlock.HEADLINE_BLOCK ||
                 props.contentBlock.type === ContentBlock.TEXT_BLOCK) && (
                 <TextPropertiesSection contentBlock={props.contentBlock} />
+            )}
+            {props.contentBlock.type === ContentBlock.IMAGE_BLOCK && (
+                <BorderRadiusSection contentBlock={props.contentBlock as ImageBlock} />
             )}
             <DeleteSection contentBlock={props.contentBlock} />
         </div>

@@ -24,25 +24,18 @@ const Grid = () => {
     const [selectedContentBlockId, setSelectedContentBlockId] = useState<string | null>(null);
     const [displayGrid, setDisplayGrid] = useState<boolean>(true);
     const [minRows, setMinRows] = useState<number>(GridConstants.COLUMNS);
+    const [didLayoutChange, setDidLayoutChange] = useState<boolean>(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const setRows = useCallback(
-        (rowCount: number) => {
-            const newGridCells: GridCellProps[] = [];
+    const addRow = useCallback(() => {
+        layoutContext.updateRowCount(layoutContext.getRowCount() + 1);
+    }, [layoutContext]);
 
-            for (let y = 0; y < rowCount; y++) {
-                for (let x = 0; x < cols; x++) {
-                    newGridCells.push({ x, y });
-                }
-            }
+    const removeRow = useCallback(() => {
+        layoutContext.updateRowCount(layoutContext.getRowCount() - 1);
+    }, [layoutContext]);
 
-            setGridCells(newGridCells);
-            layoutContext.updateRowCount(rowCount);
-        },
-        [cols, layoutContext],
-    );
-
-    const adjustGridSize = useCallback(() => {
+    const calculateGridCellWidth = useCallback(() => {
         if (!containerRef.current) return;
 
         const tempCell = document.createElement('div');
@@ -51,15 +44,50 @@ const Grid = () => {
         const actualCellWidth = tempCell.getBoundingClientRect().width;
         setGridCellWidth(actualCellWidth);
         containerRef.current.removeChild(tempCell);
-
-        const rowsForViewportHeight = Math.ceil(window.innerHeight / actualCellWidth) - 2;
-        const desiredRowCount = Math.max(minRows, rowsForViewportHeight);
-
-        setRows(desiredRowCount);
-    }, [minRows]);
+    }, []);
 
     useEffect(() => {
-        const debouncedAdjustGridSize = debounce(adjustGridSize, 150);
+        const newGridCells: GridCellProps[] = [];
+
+        for (let y = 0; y < layoutContext.getRowCount(); y++) {
+            for (let x = 0; x < cols; x++) {
+                newGridCells.push({ x, y });
+            }
+        }
+
+        setGridCells(() => newGridCells);
+    }, [cols, layoutContext]);
+
+    useEffect(() => {
+        let lowestRowWithContent = 0;
+
+        layoutContext.getCurrentLayoutContent().forEach((contentBlock) => {
+            if (contentBlock.y + contentBlock.height > lowestRowWithContent) {
+                lowestRowWithContent = contentBlock.y + contentBlock.height;
+            }
+        });
+
+        if (didLayoutChange && lowestRowWithContent < minRows) {
+            layoutContext.updateRowCount(minRows);
+        }
+
+        if (didLayoutChange && lowestRowWithContent >= minRows) {
+            layoutContext.updateRowCount(lowestRowWithContent);
+        }
+
+        setDidLayoutChange(false);
+    }, [gridCells, layoutContext, minRows, layoutContext.currentLayout, didLayoutChange]);
+
+    useEffect(() => {
+        calculateGridCellWidth();
+        setDidLayoutChange(true);
+    }, [layoutContext.currentLayout, calculateGridCellWidth]);
+
+    useEffect(() => {
+        calculateGridCellWidth();
+    }, [calculateGridCellWidth]);
+
+    useEffect(() => {
         const handleDocumentClick = (event: MouseEvent) => {
             const target = event.target as Element;
 
@@ -91,14 +119,31 @@ const Grid = () => {
 
         document.addEventListener('mousedown', handleDocumentClick);
         document.addEventListener('keydown', handleKeyPress);
-        window.addEventListener('resize', debouncedAdjustGridSize);
 
         return () => {
             document.removeEventListener('mousedown', handleDocumentClick);
             document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [cols, layoutContext, contentBlockManager, selectedContentBlockId]);
+
+    useEffect(() => {
+        const debouncedAdjustGridSize = debounce(() => {
+            if (layoutContext.getRowCount() < layoutContext.currentMinRows) {
+                layoutContext.updateRowCount(layoutContext.currentMinRows);
+            }
+        }, 150);
+        window.addEventListener('resize', debouncedAdjustGridSize);
+
+        return () => {
             window.removeEventListener('resize', debouncedAdjustGridSize);
         };
-    }, [cols, layoutContext, adjustGridSize, contentBlockManager, selectedContentBlockId]);
+    }, [layoutContext]);
+
+    useEffect(() => {
+        if (layoutContext.getRowCount() < layoutContext.currentMinRows) {
+            layoutContext.updateRowCount(layoutContext.currentMinRows);
+        }
+    }, [layoutContext]);
 
     useEffect(() => {
         let columnMultiplier: number = 1;
@@ -115,13 +160,9 @@ const Grid = () => {
                 break;
         }
 
-        setMinRows(Math.floor(GridConstants.COLUMNS * columnMultiplier));
+        setMinRows(() => Math.floor(GridConstants.COLUMNS * columnMultiplier));
         layoutContext.updateMinRows(Math.floor(GridConstants.COLUMNS * columnMultiplier));
     }, [layoutContext]);
-
-    useEffect(() => {
-        adjustGridSize();
-    }, [minRows, adjustGridSize]);
 
     useEffect(() => {
         if (!layoutContext.color) return;
@@ -129,16 +170,6 @@ const Grid = () => {
 
         containerRef.current.style.backgroundColor = layoutContext.color;
     }, [layoutContext.color]);
-
-    const addRow = () => {
-        const currentRows = gridCells.length / GridConstants.COLUMNS;
-        setRows(currentRows + 1);
-    };
-
-    const removeRow = () => {
-        const currentRows = gridCells.length / GridConstants.COLUMNS;
-        setRows(currentRows - 1);
-    };
 
     const calculateCurrentGridCell = (event: React.MouseEvent<HTMLDivElement>) => {
         if (!containerRef.current) return;

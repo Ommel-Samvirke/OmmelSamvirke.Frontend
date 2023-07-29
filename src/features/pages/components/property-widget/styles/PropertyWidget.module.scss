@@ -33,11 +33,16 @@
     .Body {
         display: flex;
         flex-direction: column;
+        align-items: center;
+        width: 100%;
+        padding: 1rem;
+        margin: 0 auto;
 
         .propertyInputRow {
             display: flex;
             flex-direction: row;
             margin: 0.3rem 0;
+            width: 90%;
             
             .buttonGroup {
                 width: 200px;

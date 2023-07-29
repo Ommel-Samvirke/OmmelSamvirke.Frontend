@@ -1,18 +1,18 @@
-﻿import styles from "./styles/Grid.module.scss";
+﻿import styles from './styles/Grid.module.scss';
 
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
-import ContentBlockComponent from "@/features/pages/components/content-blocks/ContentBlockComponent";
-import GridCell, { GridCellProps } from "@/features/pages/components/grid/GridCell";
-import ToolMenu from "@/features/pages/components/tool-menu/ToolMenu";
-import { GridConstants } from "@/features/pages/constants/GridConstants";
-import { LayoutContext } from "@/features/pages/context/LayoutContext";
-import { Layout } from "@/features/pages/enums/Layouts";
-import { useContentBlockManager } from "@/features/pages/hooks/useContentBlockManager";
-import { debounce } from "@/util/debounce";
-import classNames from "classnames";
+import ContentBlockComponent from '@/features/pages/components/content-blocks/ContentBlockComponent';
+import GridCell, { GridCellProps } from '@/features/pages/components/grid/GridCell';
+import ToolMenu from '@/features/pages/components/tool-menu/ToolMenu';
+import { GridConstants } from '@/features/pages/constants/GridConstants';
+import { LayoutContext } from '@/features/pages/context/LayoutContext';
+import { Layout } from '@/features/pages/enums/Layouts';
+import { useContentBlockManager } from '@/features/pages/hooks/useContentBlockManager';
+import { debounce } from '@/util/debounce';
+import classNames from 'classnames';
 
 const Grid = () => {
     const layoutContext = useContext(LayoutContext);
@@ -45,7 +45,7 @@ const Grid = () => {
     const adjustGridSize = useCallback(() => {
         if (!containerRef.current) return;
 
-        const tempCell = document.createElement("div");
+        const tempCell = document.createElement('div');
         tempCell.className = styles.gridCell;
         containerRef.current.appendChild(tempCell);
         const actualCellWidth = tempCell.getBoundingClientRect().width;
@@ -63,11 +63,15 @@ const Grid = () => {
         const handleDocumentClick = (event: MouseEvent) => {
             const target = event.target as Element;
 
-            if (target.closest(".content-block-controls")) {
+            if (target.closest('.content-block-controls')) {
                 return;
             }
 
-            if (target.closest(".content-block")) {
+            if (target.closest('.content-block')) {
+                return;
+            }
+
+            if (target.closest('.MuiTooltip-root')) {
                 return;
             }
 
@@ -75,20 +79,20 @@ const Grid = () => {
         };
 
         const handleKeyPress = (event: KeyboardEvent) => {
-            if (event.key === "Escape" || event.key === "Delete") {
+            if (event.key === 'Escape' || event.key === 'Delete') {
                 if (!selectedContentBlockId) return;
                 contentBlockManager.removeContentBlock(selectedContentBlockId);
             }
         };
 
-        document.addEventListener("mousedown", handleDocumentClick);
-        document.addEventListener("keydown", handleKeyPress);
-        window.addEventListener("resize", debouncedAdjustGridSize);
+        document.addEventListener('mousedown', handleDocumentClick);
+        document.addEventListener('keydown', handleKeyPress);
+        window.addEventListener('resize', debouncedAdjustGridSize);
 
         return () => {
-            document.removeEventListener("mousedown", handleDocumentClick);
-            document.removeEventListener("keydown", handleKeyPress);
-            window.removeEventListener("resize", debouncedAdjustGridSize);
+            document.removeEventListener('mousedown', handleDocumentClick);
+            document.removeEventListener('keydown', handleKeyPress);
+            window.removeEventListener('resize', debouncedAdjustGridSize);
         };
     }, [cols, layoutContext, adjustGridSize, contentBlockManager, selectedContentBlockId]);
 

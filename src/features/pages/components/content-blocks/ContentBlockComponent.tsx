@@ -60,14 +60,7 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
     // Allow dropping content block on a position occupied by itself
     const [_, drop] = useDrop<IDraggableItem>(
         () => ({
-            accept: [
-                ContentBlock.HEADLINE_BLOCK,
-                ContentBlock.TEXT_BLOCK,
-                ContentBlock.IMAGE_BLOCK,
-                ContentBlock.PDF_BLOCK,
-                ContentBlock.VIDEO_BLOCK,
-                ContentBlock.SLIDESHOW_BLOCK,
-            ],
+            accept: [props.contentBlock.type],
             drop: (item: IDraggableItem, monitor: DropTargetMonitor<IDraggableItem, void>) => {
                 const clientOffset = monitor.getClientOffset();
 

@@ -5,9 +5,12 @@
     .headline {
         width: 100%;
         font-size: 34px;
-        letter-spacing: 0.25px;
         font-weight: 300;
         align-items: flex-end;
         overflow: hidden;
+    }
+    .headlineEditable {
+        padding: 0;
+        border: none;
     }
 }

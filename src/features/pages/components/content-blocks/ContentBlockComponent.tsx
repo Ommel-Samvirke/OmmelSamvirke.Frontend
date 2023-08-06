@@ -160,7 +160,7 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
                     }}
                     onClick={() => {
                         if (props.isSelected) {
-                            props.onDeselect();
+                            //props.onDeselect();
                         } else {
                             if (!isSelectionBlocked) {
                                 props.onSelect(props.contentBlock.id);
@@ -171,7 +171,11 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
                     }}
                 >
                     {props.contentBlock.type === ContentBlock.HEADLINE_BLOCK && (
-                        <HeadlineBlockComponent ref={drag} headlineBlock={props.contentBlock as HeadlineBlock} />
+                        <HeadlineBlockComponent
+                            ref={drag}
+                            headlineBlock={props.contentBlock as HeadlineBlock}
+                            isSelected={props.isSelected}
+                        />
                     )}
                     {props.contentBlock.type === ContentBlock.IMAGE_BLOCK && (
                         <ImageBlockComponent ref={drag} imageBlock={props.contentBlock as ImageBlock} />

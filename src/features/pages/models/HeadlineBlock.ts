@@ -5,7 +5,8 @@ import { VerticalTextAlignment } from '@/features/pages/enums/VerticalTextAlignm
 import { AbstractContentBlocks } from '@/features/pages/models/AbstractContentBlocks';
 
 export class HeadlineBlock extends AbstractContentBlocks {
-    public headline: string = 'Lorem ipsum dolor sit amet';
+    public headline: string = '';
+    public placeholderText: string = 'Lorem ipsum dolor sit amet';
     public width: number = HeadlineBlock.defaultWidth;
     public height: number = HeadlineBlock.defaultHeight;
     public verticalTextAlignment: VerticalTextAlignment = VerticalTextAlignment.TOP;

@@ -2,8 +2,8 @@
 
 import { ForwardedRef, forwardRef } from 'react';
 
+import ActionsSection from '@/features/pages/components/property-widget/ActionsSection';
 import BorderRadiusSection from '@/features/pages/components/property-widget/BorderRadiusSection';
-import DeleteSection from '@/features/pages/components/property-widget/DeleteSection';
 import PaddingSection from '@/features/pages/components/property-widget/PaddingSection';
 import PositionPropertiesSection from '@/features/pages/components/property-widget/PositionPropertiesSection';
 import TextPropertiesSection from '@/features/pages/components/property-widget/TextPropertiesSection';
@@ -13,6 +13,7 @@ import { ContentBlockType } from '@/features/pages/types/ContentBlockType';
 
 interface PropertyWidgetProps {
     contentBlock: ContentBlockType;
+    onEdit: () => void;
 }
 
 const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef<HTMLDivElement>) => {
@@ -27,7 +28,7 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
             {props.contentBlock.type === ContentBlock.IMAGE_BLOCK && (
                 <BorderRadiusSection contentBlock={props.contentBlock as ImageBlock} />
             )}
-            <DeleteSection contentBlock={props.contentBlock} />
+            <ActionsSection contentBlock={props.contentBlock} onEdit={props.onEdit} />
         </div>
     );
 });

@@ -8,6 +8,12 @@
     font-size: 1rem;
     line-height: 1.5rem;
     padding: 0 0 0.5rem 0;
+    .editor, .wrapper, .toolbar {
+        width: 100%;
+    }
+    .wrapper {
+        height: 100%;
+    }
     .textContent {
         width: 100%;
         text-align: justify;

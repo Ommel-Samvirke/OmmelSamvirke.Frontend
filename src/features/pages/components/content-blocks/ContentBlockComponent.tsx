@@ -44,6 +44,7 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
     const layoutContext = useContext(LayoutContext);
     const [isSelectionBlocked, setIsSelectionBlocked] = useState<boolean>(false);
     const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
     const propertyWidget = useRef(null);
     const resizableRef = useRef(null);
     const contentBlockManager = useContentBlockManager();
@@ -103,7 +104,13 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
 
     return (
         <>
-            {props.isSelected && <PropertyWidget contentBlock={props.contentBlock} ref={propertyWidget} />}
+            {props.isSelected && (
+                <PropertyWidget
+                    contentBlock={props.contentBlock}
+                    ref={propertyWidget}
+                    onEdit={() => setIsEditing(!isEditing)}
+                />
+            )}
             <Resizable
                 width={props.contentBlock.width * props.gridCellWidth}
                 height={props.contentBlock.height * props.gridCellWidth}
@@ -184,7 +191,13 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
                         <VideoBlockComponent videoBlock={props.contentBlock as VideoBlock} ref={drag} />
                     )}
                     {props.contentBlock.type === ContentBlock.TEXT_BLOCK && (
-                        <TextBlockComponent textBlock={props.contentBlock as TextBlock} ref={drag} />
+                        <TextBlockComponent
+                            ref={drag}
+                            textBlock={props.contentBlock as TextBlock}
+                            isSelected={props.isSelected}
+                            isEditing={isEditing}
+                            disableEditing={() => setIsEditing(false)}
+                        />
                     )}
                     {props.contentBlock.type === ContentBlock.PDF_BLOCK && (
                         <PdfBlockComponent pdfBlock={props.contentBlock as PdfBlock} ref={drag} />

@@ -5,7 +5,7 @@ import { VerticalTextAlignment } from '@/features/pages/enums/VerticalTextAlignm
 import { AbstractContentBlocks } from '@/features/pages/models/AbstractContentBlocks';
 
 export class TextBlock extends AbstractContentBlocks {
-    public text: string = 'Tekstindhold';
+    public text: string = '<p>Tekstindhold, lorem ipsum dolor sit...</p>';
     public width: number = TextBlock.defaultWidth;
     public height: number = TextBlock.defaultHeight;
     public verticalTextAlignment: VerticalTextAlignment = VerticalTextAlignment.TOP;

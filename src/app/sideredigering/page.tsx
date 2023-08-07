@@ -1,15 +1,17 @@
-"use client";
+'use client';
 
-import PageEditor from "@/features/pages/components/page-editor/PageEditor";
-import { EditHistoryContextProvider } from "@/features/pages/context/EditHistoryContext";
-import { LayoutContextProvider } from "@/features/pages/context/LayoutContext";
+import { EditHistoryContextProvider } from '@/features/pages/context/EditHistoryContext';
+import { LayoutContextProvider } from '@/features/pages/context/LayoutContext';
+import dynamic from 'next/dynamic';
+
+const DynamicPageEditor = dynamic(() => import('@/features/pages/components/page-editor/PageEditor'), { ssr: false });
 
 const PageEditorPage = () => {
     return (
         <>
             <LayoutContextProvider>
                 <EditHistoryContextProvider>
-                    <PageEditor />
+                    <DynamicPageEditor />
                 </EditHistoryContextProvider>
             </LayoutContextProvider>
         </>

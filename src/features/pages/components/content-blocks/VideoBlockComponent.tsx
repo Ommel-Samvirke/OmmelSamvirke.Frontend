@@ -16,7 +16,7 @@ const VideoBlockComponent = forwardRef((props: VideoBlockComponentProps, ref: Fo
         <iframe
             ref={ref}
             className={styles.video}
-            src="https://www.youtube.com/embed/C0DPdy98e4c"
+            src="https://www.youtube.com/embed/mQMLMSi2pB0"
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             style={{

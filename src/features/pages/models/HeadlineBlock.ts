@@ -6,7 +6,7 @@ import { AbstractContentBlocks } from '@/features/pages/models/AbstractContentBl
 
 export class HeadlineBlock extends AbstractContentBlocks {
     public headline: string = '';
-    public placeholderText: string = 'Lorem ipsum dolor sit amet';
+    public placeholderText: string = 'Overskrift';
     public width: number = HeadlineBlock.defaultWidth;
     public height: number = HeadlineBlock.defaultHeight;
     public verticalTextAlignment: VerticalTextAlignment = VerticalTextAlignment.TOP;

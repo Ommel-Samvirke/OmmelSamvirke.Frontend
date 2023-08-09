@@ -1,12 +1,12 @@
-import { ContentBlock } from "@/features/pages/enums/ContentBlock";
-import { Layout } from "@/features/pages/enums/Layouts";
-import { AbstractContentBlocks } from "@/features/pages/models/AbstractContentBlocks";
+import { ContentBlock } from '@/features/pages/enums/ContentBlock';
+import { Layout } from '@/features/pages/enums/Layouts';
+import { AbstractContentBlocks } from '@/features/pages/models/AbstractContentBlocks';
 
 export class SlideshowBlock extends AbstractContentBlocks {
     public imageUrls: string[] = [
-        "https://via.placeholder.com/600",
-        "https://via.placeholder.com/601",
-        "https://via.placeholder.com/602",
+        'https://fakeimg.pl/1600x1200?text=Billede1',
+        'https://fakeimg.pl/1600x1200?text=Billede2',
+        'https://fakeimg.pl/1600x1200?text=Billede3',
     ];
     public width: number = SlideshowBlock.defaultWidth;
     public height: number = SlideshowBlock.defaultHeight;

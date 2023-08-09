@@ -3,7 +3,7 @@ import { Layout } from '@/features/pages/enums/Layouts';
 import { AbstractContentBlocks } from '@/features/pages/models/AbstractContentBlocks';
 
 export class VideoBlock extends AbstractContentBlocks {
-    public videoUrl: string = '';
+    public videoUrl: string = 'https://www.youtube.com/watch?v=mQMLMSi2pB0';
     public width: number = VideoBlock.defaultWidth;
     public height: number = VideoBlock.defaultHeight;
     public static defaultWidth: number = 8;

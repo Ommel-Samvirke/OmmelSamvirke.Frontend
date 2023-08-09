@@ -13,7 +13,7 @@ export class ImageBlock extends AbstractContentBlocks {
     public topRightBorderRadius: BorderRadius;
     public bottomLeftBorderRadius: BorderRadius;
     public bottomRightBorderRadius: BorderRadius;
-    public static defaultWidth: number = 8;
+    public static defaultWidth: number = 14;
     public static defaultHeight: number = 6;
 
     constructor(layout: Layout, x: number, y: number, width?: number, height?: number) {

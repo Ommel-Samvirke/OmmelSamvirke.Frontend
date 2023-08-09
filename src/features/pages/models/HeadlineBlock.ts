@@ -12,7 +12,7 @@ export class HeadlineBlock extends AbstractContentBlocks {
     public verticalTextAlignment: VerticalTextAlignment = VerticalTextAlignment.TOP;
     public horizontalTextAlignment: HorizontalTextAlignment = HorizontalTextAlignment.LEFT;
     public color: string = '#000000';
-    public static defaultWidth: number = 8;
+    public static defaultWidth: number = 14;
     public static defaultHeight: number = 1;
 
     constructor(layout: Layout, x: number, y: number, width?: number, height?: number) {

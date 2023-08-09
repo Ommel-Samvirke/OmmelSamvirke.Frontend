@@ -7,8 +7,8 @@ export class PdfBlock extends AbstractContentBlocks {
     public width: number = PdfBlock.defaultWidth;
     public height: number = PdfBlock.defaultHeight;
 
-    public static defaultWidth: number = 12;
-    public static defaultHeight: number = 14;
+    public static defaultWidth: number = 10;
+    public static defaultHeight: number = 10;
 
     constructor(layout: Layout, x: number, y: number, width?: number, height?: number) {
         super(

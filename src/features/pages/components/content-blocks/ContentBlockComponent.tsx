@@ -109,6 +109,7 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
                     contentBlock={props.contentBlock}
                     ref={propertyWidget}
                     onEdit={() => setIsEditing(!isEditing)}
+                    isEditing={isEditing}
                 />
             )}
             <Resizable
@@ -197,6 +198,7 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
                             isSelected={props.isSelected}
                             isEditing={isEditing}
                             disableEditing={() => setIsEditing(false)}
+                            enableEditing={() => setIsEditing(true)}
                         />
                     )}
                     {props.contentBlock.type === ContentBlock.PDF_BLOCK && (

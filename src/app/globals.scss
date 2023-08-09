@@ -1,5 +1,5 @@
 :root {
-
+    
 }
 
 * {
@@ -13,9 +13,37 @@ body {
     width: 100vw;
     height: 100%;
     overflow-x: hidden;
+    font-size: 16px;
 }
 
 a {
     color: blue;
     text-decoration: none;
+}
+
+ol li {
+    list-style-type: decimal;
+}
+
+
+ul li {
+    list-style-type: disc;
+}
+
+li {
+    display: list-item;
+    margin-left: 2.5rem;
+}
+
+.rdw-link-decorator-icon {
+    display: none;
+}
+
+div.rdw-link-wrapper > div.rdw-link-modal {
+    height: 240px;
+}
+
+p, a, li {
+    line-height: 1.5rem;
+    min-height: 1.5rem;
 }

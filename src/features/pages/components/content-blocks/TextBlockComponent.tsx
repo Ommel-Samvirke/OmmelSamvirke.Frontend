@@ -23,6 +23,7 @@ interface TextBlockComponentProps {
     isSelected: boolean;
     isEditing: boolean;
     disableEditing: () => void;
+    enableEditing: () => void;
 }
 
 const TextBlockComponent = forwardRef((props: TextBlockComponentProps, ref: ForwardedRef<HTMLDivElement>) => {
@@ -103,6 +104,7 @@ const TextBlockComponent = forwardRef((props: TextBlockComponentProps, ref: Forw
         <div
             ref={props.isEditing ? null : ref}
             className={styles.textContainer}
+            onDoubleClick={props.enableEditing}
             style={{
                 backgroundColor: layoutContext.color,
                 alignItems: verticalTextAlignment,
@@ -132,6 +134,9 @@ const TextBlockComponent = forwardRef((props: TextBlockComponentProps, ref: Forw
                         }}
                         localization={{
                             locale: 'da',
+                        }}
+                        editorStyle={{
+                            color: props.textBlock.color,
                         }}
                     />
                 )}

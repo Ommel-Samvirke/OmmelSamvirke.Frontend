@@ -6,19 +6,31 @@
     height: 100%;
     width: 100%;
     font-size: 1rem;
-    line-height: 1.5rem;
     padding: 0 0 0.5rem 0;
     .editor, .wrapper, .toolbar {
         width: 100%;
     }
+    .editor div {
+        margin: 0;
+    }
     .wrapper {
         height: 100%;
+        cursor: text;
+        br {
+            height: 0;
+            line-height: 0;
+        }
+        ol, ul {
+            line-height: 0.35rem;
+            margin: 0;
+            li {
+                display: list-item;
+                margin-left: 2.5rem;
+            }
+        }
     }
     .textContent {
         width: 100%;
         text-align: justify;
-    }
-    p {
-        padding: 0.5rem;
     }
 }

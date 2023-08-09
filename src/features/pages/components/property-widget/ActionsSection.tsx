@@ -5,11 +5,13 @@ import { useContentBlockManager } from '@/features/pages/hooks/useContentBlockMa
 import { ContentBlockType } from '@/features/pages/types/ContentBlockType';
 import { Delete } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 import Button from '@mui/joy/Button';
 
 interface DeleteSectionInterface {
     contentBlock: ContentBlockType;
     onEdit: () => void;
+    isEditing: boolean;
 }
 
 const ActionsSection = (props: DeleteSectionInterface) => {
@@ -20,8 +22,12 @@ const ActionsSection = (props: DeleteSectionInterface) => {
             <div className={styles.separator}></div>
             <div className={styles.actionButtons}>
                 {props.contentBlock.type === ContentBlock.TEXT_BLOCK && (
-                    <Button startDecorator={<EditIcon />} color={'primary'} onClick={props.onEdit}>
-                        Rediger
+                    <Button
+                        startDecorator={props.isEditing ? <SaveIcon /> : <EditIcon />}
+                        color={props.isEditing ? 'neutral' : 'primary'}
+                        onClick={props.onEdit}
+                    >
+                        {props.isEditing ? 'Gem' : 'Rediger'}
                     </Button>
                 )}
                 <Button

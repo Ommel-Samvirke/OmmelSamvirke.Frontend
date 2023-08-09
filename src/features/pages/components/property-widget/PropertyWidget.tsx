@@ -14,6 +14,7 @@ import { ContentBlockType } from '@/features/pages/types/ContentBlockType';
 interface PropertyWidgetProps {
     contentBlock: ContentBlockType;
     onEdit: () => void;
+    isEditing: boolean;
 }
 
 const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef<HTMLDivElement>) => {
@@ -28,7 +29,7 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
             {props.contentBlock.type === ContentBlock.IMAGE_BLOCK && (
                 <BorderRadiusSection contentBlock={props.contentBlock as ImageBlock} />
             )}
-            <ActionsSection contentBlock={props.contentBlock} onEdit={props.onEdit} />
+            <ActionsSection contentBlock={props.contentBlock} onEdit={props.onEdit} isEditing={props.isEditing} />
         </div>
     );
 });

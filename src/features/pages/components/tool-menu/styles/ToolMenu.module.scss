@@ -58,7 +58,7 @@
     }
 
     &.open.animate {
-        animation: hideTooMenu 0.4s forwards;
+        animation: hideToolMenu 0.4s forwards;
     }
     
     svg {
@@ -67,7 +67,7 @@
     }
 }
 
-@keyframes hideTooMenu {
+@keyframes hideToolMenu {
     0% {
         bottom: calc(3rem - 29px);
     }

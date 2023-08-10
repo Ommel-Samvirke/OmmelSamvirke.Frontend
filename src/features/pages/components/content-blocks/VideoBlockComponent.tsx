@@ -1,6 +1,6 @@
 import styles from './styles/VideoBlockComponent.module.scss';
 
-import { ForwardedRef, forwardRef, useContext } from 'react';
+import { ForwardedRef, forwardRef, useContext, useEffect, useState } from 'react';
 
 import { LayoutContext } from '@/features/pages/context/LayoutContext';
 import { VideoBlock } from '@/features/pages/models/VideoBlock';
@@ -10,13 +10,18 @@ interface VideoBlockComponentProps {
 }
 
 const VideoBlockComponent = forwardRef((props: VideoBlockComponentProps, ref: ForwardedRef<HTMLIFrameElement>) => {
+    const [src, setSrc] = useState(props.videoBlock.videoUrl);
     const layoutContext = useContext(LayoutContext);
+
+    useEffect(() => {
+        setSrc(props.videoBlock.videoUrl);
+    }, [props]);
 
     return (
         <iframe
             ref={ref}
             className={styles.video}
-            src="https://www.youtube.com/embed/mQMLMSi2pB0"
+            src={src}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             style={{

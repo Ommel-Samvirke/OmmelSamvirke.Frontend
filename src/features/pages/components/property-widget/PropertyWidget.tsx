@@ -29,6 +29,9 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
             {props.contentBlock.type === ContentBlock.IMAGE_BLOCK && (
                 <BorderRadiusSection contentBlock={props.contentBlock as ImageBlock} />
             )}
+            {props.contentBlock.type === ContentBlock.SLIDESHOW_BLOCK && <></>}
+            {props.contentBlock.type === ContentBlock.VIDEO_BLOCK && <></>}
+            {props.contentBlock.type === ContentBlock.PDF_BLOCK && <></>}
             <ActionsSection contentBlock={props.contentBlock} onEdit={props.onEdit} isEditing={props.isEditing} />
         </div>
     );

@@ -11,6 +11,7 @@
     flex-direction: column;
     background: white;
     border-left: 1px solid #c7c7c7;
+    overflow-y: auto;
 
     .Header {
         display: flex;

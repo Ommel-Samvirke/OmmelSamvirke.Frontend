@@ -1,4 +1,6 @@
-﻿import styles from './styles/PropertyWidget.module.scss';
+﻿import SlideShowImagesSection from '@/features/pages/components/property-widget/SlideShowImagesSection';
+import { SlideshowBlock } from '@/features/pages/models/SlideshowBlock';
+import styles from './styles/PropertyWidget.module.scss';
 
 import { ForwardedRef, forwardRef } from 'react';
 
@@ -31,7 +33,9 @@ const PropertyWidget = forwardRef((props: PropertyWidgetProps, ref: ForwardedRef
             {props.contentBlock.type === ContentBlock.IMAGE_BLOCK && (
                 <BorderRadiusSection contentBlock={props.contentBlock as ImageBlock} />
             )}
-            {props.contentBlock.type === ContentBlock.SLIDESHOW_BLOCK && <></>}
+            {props.contentBlock.type === ContentBlock.SLIDESHOW_BLOCK && (
+                <SlideShowImagesSection slideshowBlock={props.contentBlock as SlideshowBlock} />
+            )}
             {props.contentBlock.type === ContentBlock.VIDEO_BLOCK && (
                 <VideoLinkSection contentBlock={props.contentBlock as VideoBlock} />
             )}

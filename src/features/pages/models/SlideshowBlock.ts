@@ -11,7 +11,7 @@ export class SlideshowBlock extends AbstractContentBlocks {
     public width: number = SlideshowBlock.defaultWidth;
     public height: number = SlideshowBlock.defaultHeight;
 
-    public static defaultWidth: number = 14;
+    public static defaultWidth: number = 8;
     public static defaultHeight: number = 6;
 
     constructor(layout: Layout, x: number, y: number, width?: number, height?: number) {

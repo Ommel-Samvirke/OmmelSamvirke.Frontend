@@ -3,7 +3,7 @@ import { Layout } from '@/features/pages/enums/Layouts';
 import { AbstractContentBlocks } from '@/features/pages/models/AbstractContentBlocks';
 
 export class PdfBlock extends AbstractContentBlocks {
-    public pdfUrl: string = '';
+    public pdfUrl: string = '/files/test-pdf.pdf';
     public width: number = PdfBlock.defaultWidth;
     public height: number = PdfBlock.defaultHeight;
 

@@ -24,13 +24,13 @@ const UploadImageSection = (props: UploadImageSectionProps) => {
         <>
             <input
                 type="file"
-                accept={'image/*'}
+                accept={'application/pdf'}
                 ref={fileInput}
                 style={{ display: 'none' }}
                 onChange={handleFileChange}
             />
             <Button color="primary" onClick={handleButtonClick}>
-                Skift Billede
+                Upload Fil
             </Button>
         </>
     );

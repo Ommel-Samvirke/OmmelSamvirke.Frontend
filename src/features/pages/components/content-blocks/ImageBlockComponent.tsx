@@ -31,7 +31,13 @@ const ImageBlockComponent = forwardRef((props: ImageBlockProps, ref: ForwardedRe
 
     return (
         <div style={{ backgroundColor: layoutContext.color, width: '100%', height: '100%' }}>
-            <input type="file" ref={fileInput} style={{ display: 'none' }} onChange={handleFileChange} />
+            <input
+                type="file"
+                accept={'image/*'}
+                ref={fileInput}
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+            />
             <Image
                 ref={ref}
                 src={props.imageBlock.imageUrl}

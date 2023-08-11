@@ -71,13 +71,13 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
                 if (item.source === DragSource.CONTENT_BLOCK && clientOffset) {
                     const gridX = Math.floor((clientOffset.x - props.gridContainerLeft) / props.gridCellWidth);
                     const gridY = Math.floor((clientOffset.y - props.gridContainerTop) / props.gridCellWidth);
-                    if (contentBlockManager.canMoveContentBlock(item.id, gridX, gridY)) {
-                        contentBlockManager.moveContentBlock(item.id, gridX, gridY);
+                    if (contentBlockManager.canMoveContentBlock(item.id, gridX, gridY, layoutContext.getRowCount())) {
+                        contentBlockManager.moveContentBlock(item.id, gridX, gridY, layoutContext.getRowCount());
                     }
                 }
             },
         }),
-        [props.mouseGridX, props.mouseGridY, layoutContext.currentLayout],
+        [props.mouseGridX, props.mouseGridY, layoutContext.currentLayout, layoutContext.getRowCount],
     );
 
     useEffect(() => {

@@ -8,7 +8,6 @@ interface ManageRowCountButtonProps {
     tooltip: string;
     onClick: () => void;
     rowCount: number;
-    minRows: number;
 }
 
 const ManageRowCountButton = (props: ManageRowCountButtonProps) => {
@@ -21,22 +20,22 @@ const ManageRowCountButton = (props: ManageRowCountButtonProps) => {
                     </IconButton>
                 </Tooltip>
             )}
-            {props.type === 'remove-row' && props.rowCount > props.minRows && (
+            {props.type === 'remove-row' && props.rowCount && (
                 <Tooltip title={props.tooltip}>
                     <IconButton onClick={props.onClick}>
                         <RemoveIcon />
                     </IconButton>
                 </Tooltip>
             )}
-            {props.type === 'remove-row' && props.rowCount <= props.minRows && (
-                <Tooltip title={'Kan ikke fjerne flere rækker'}>
-                    <span style={{ cursor: 'not-allowed' }}>
-                        <IconButton disabled={true}>
-                            <RemoveIcon />
-                        </IconButton>
-                    </span>
-                </Tooltip>
-            )}
+            {/*{props.type === 'remove-row' && props.rowCount && (*/}
+            {/*    <Tooltip title={'Kan ikke fjerne flere rækker'}>*/}
+            {/*        <span style={{ cursor: 'not-allowed' }}>*/}
+            {/*            <IconButton disabled={true}>*/}
+            {/*                <RemoveIcon />*/}
+            {/*            </IconButton>*/}
+            {/*        </span>*/}
+            {/*    </Tooltip>*/}
+            {/*)}*/}
         </>
     );
 };

@@ -11,7 +11,6 @@ import { GridConstants } from '@/features/pages/constants/GridConstants';
 import { LayoutContext } from '@/features/pages/context/LayoutContext';
 import { Layout } from '@/features/pages/enums/Layouts';
 import { useContentBlockManager } from '@/features/pages/hooks/useContentBlockManager';
-import { debounce } from '@/util/debounce';
 import classNames from 'classnames';
 
 const Grid = () => {
@@ -23,16 +22,15 @@ const Grid = () => {
     const [currentCoordinate, setCurrentCoordinate] = useState<[number, number]>([0, 0]);
     const [selectedContentBlockId, setSelectedContentBlockId] = useState<string | null>(null);
     const [displayGrid, setDisplayGrid] = useState<boolean>(true);
-    const [minRows, setMinRows] = useState<number>(GridConstants.COLUMNS);
     const [didLayoutChange, setDidLayoutChange] = useState<boolean>(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const addRow = useCallback(() => {
-        layoutContext.updateRowCount(layoutContext.getRowCount() + 1);
+        layoutContext.incrementRowCount();
     }, [layoutContext]);
 
     const removeRow = useCallback(() => {
-        layoutContext.updateRowCount(layoutContext.getRowCount() - 1);
+        layoutContext.decrementRowCount();
     }, [layoutContext]);
 
     const calculateGridCellWidth = useCallback(() => {
@@ -67,16 +65,8 @@ const Grid = () => {
             }
         });
 
-        if (didLayoutChange && lowestRowWithContent < minRows) {
-            layoutContext.updateRowCount(minRows);
-        }
-
-        if (didLayoutChange && lowestRowWithContent >= minRows) {
-            layoutContext.updateRowCount(lowestRowWithContent);
-        }
-
         setDidLayoutChange(false);
-    }, [gridCells, layoutContext, minRows, layoutContext.currentLayout, didLayoutChange]);
+    }, [gridCells, layoutContext, layoutContext.currentLayout, didLayoutChange]);
 
     useEffect(() => {
         calculateGridCellWidth();
@@ -125,44 +115,6 @@ const Grid = () => {
             document.removeEventListener('keydown', handleKeyPress);
         };
     }, [cols, layoutContext, contentBlockManager, selectedContentBlockId]);
-
-    useEffect(() => {
-        const debouncedAdjustGridSize = debounce(() => {
-            if (layoutContext.getRowCount() < layoutContext.currentMinRows) {
-                layoutContext.updateRowCount(layoutContext.currentMinRows);
-            }
-        }, 150);
-        window.addEventListener('resize', debouncedAdjustGridSize);
-
-        return () => {
-            window.removeEventListener('resize', debouncedAdjustGridSize);
-        };
-    }, [layoutContext]);
-
-    useEffect(() => {
-        if (layoutContext.getRowCount() < layoutContext.currentMinRows) {
-            layoutContext.updateRowCount(layoutContext.currentMinRows);
-        }
-    }, [layoutContext]);
-
-    useEffect(() => {
-        let columnMultiplier: number = 1;
-
-        switch (layoutContext.currentLayout) {
-            case Layout.DESKTOP:
-                columnMultiplier = 0.85;
-                break;
-            case Layout.TABLET:
-                columnMultiplier = 1.5;
-                break;
-            case Layout.MOBILE:
-                columnMultiplier = 3;
-                break;
-        }
-
-        setMinRows(() => Math.floor(GridConstants.COLUMNS * columnMultiplier));
-        layoutContext.updateMinRows(Math.floor(GridConstants.COLUMNS * columnMultiplier));
-    }, [layoutContext]);
 
     useEffect(() => {
         if (!layoutContext.color) return;
@@ -252,7 +204,6 @@ const Grid = () => {
                     isGridVisible={displayGrid}
                     currentXCoordinate={currentCoordinate[0]}
                     currentYCoordinate={currentCoordinate[1]}
-                    minRows={minRows}
                 />
             </DndProvider>
         </div>

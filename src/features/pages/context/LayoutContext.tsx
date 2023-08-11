@@ -17,10 +17,9 @@ export interface LayoutContextState {
     getCurrentLayoutContent: () => ContentBlockType[];
     updateCurrentLayoutContent: (updateFn: (prevContent: ContentBlockType[]) => ContentBlockType[]) => void;
     selectLayout: (layout: Layout) => void;
-    currentMinRows: number;
     getRowCount: () => number;
-    updateMinRows: (minRows: number) => void;
-    updateRowCount: (rowCount: number) => void;
+    incrementRowCount: () => void;
+    decrementRowCount: () => void;
     color: string;
     updateColor: (color: string) => void;
 }
@@ -36,10 +35,9 @@ export const LayoutContext = createContext<LayoutContextState>({
     getCurrentLayoutContent: () => [],
     updateCurrentLayoutContent: () => [],
     selectLayout: () => {},
-    currentMinRows: GridConstants.COLUMNS,
     getRowCount: () => GridConstants.COLUMNS,
-    updateMinRows: () => {},
-    updateRowCount: () => {},
+    incrementRowCount: () => {},
+    decrementRowCount: () => {},
     color: '#ffffff',
     updateColor: () => {},
 });
@@ -65,24 +63,12 @@ export const LayoutContextProvider = (props: LayoutContextProviderProps) => {
         }
 
         return 0;
-    }, [LayoutManager.layout, DesktopLayoutManager, TabletLayoutManager, MobileLayoutManager]);
-
-    const updateRowCount = useCallback(
-        (rowCount: number) => {
-            switch (LayoutManager.layout) {
-                case Layout.DESKTOP:
-                    DesktopLayoutManager.updateRowCount(rowCount);
-                    break;
-                case Layout.TABLET:
-                    TabletLayoutManager.updateRowCount(rowCount);
-                    break;
-                case Layout.MOBILE:
-                    MobileLayoutManager.updateRowCount(rowCount);
-                    break;
-            }
-        },
-        [LayoutManager.layout, DesktopLayoutManager, TabletLayoutManager, MobileLayoutManager],
-    );
+    }, [
+        DesktopLayoutManager.rowCount,
+        LayoutManager.layout,
+        MobileLayoutManager.rowCount,
+        TabletLayoutManager.rowCount,
+    ]);
 
     const getCurrentLayoutContent = useCallback(() => {
         switch (LayoutManager.layout) {
@@ -111,6 +97,34 @@ export const LayoutContextProvider = (props: LayoutContextProviderProps) => {
         [LayoutManager.layout, DesktopLayoutManager, TabletLayoutManager, MobileLayoutManager],
     );
 
+    const incrementRowCount = useCallback(() => {
+        switch (LayoutManager.layout) {
+            case Layout.DESKTOP:
+                DesktopLayoutManager.incrementRowCount();
+                break;
+            case Layout.TABLET:
+                TabletLayoutManager.incrementRowCount();
+                break;
+            case Layout.MOBILE:
+                MobileLayoutManager.incrementRowCount();
+                break;
+        }
+    }, [LayoutManager.layout, DesktopLayoutManager, TabletLayoutManager, MobileLayoutManager]);
+
+    const decrementRowCount = useCallback(() => {
+        switch (LayoutManager.layout) {
+            case Layout.DESKTOP:
+                DesktopLayoutManager.decrementRowCount();
+                break;
+            case Layout.TABLET:
+                TabletLayoutManager.decrementRowCount();
+                break;
+            case Layout.MOBILE:
+                MobileLayoutManager.decrementRowCount();
+                break;
+        }
+    }, [LayoutManager.layout, DesktopLayoutManager, TabletLayoutManager, MobileLayoutManager]);
+
     return (
         <LayoutContext.Provider
             value={{
@@ -124,10 +138,9 @@ export const LayoutContextProvider = (props: LayoutContextProviderProps) => {
                 getCurrentLayoutContent: getCurrentLayoutContent,
                 updateCurrentLayoutContent: updateCurrentLayoutContent,
                 selectLayout: LayoutManager.updateLayout,
-                currentMinRows: LayoutManager.minRows,
                 getRowCount: getRowCount,
-                updateMinRows: LayoutManager.updateMinRows,
-                updateRowCount: updateRowCount,
+                incrementRowCount,
+                decrementRowCount,
                 color: LayoutManager.color,
                 updateColor: LayoutManager.updateColor,
             }}

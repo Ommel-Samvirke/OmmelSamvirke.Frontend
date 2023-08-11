@@ -1,12 +1,10 @@
-﻿import { useCallback, useState } from "react";
+﻿import { useCallback, useState } from 'react';
 
-import { GridConstants } from "@/features/pages/constants/GridConstants";
-import { Layout } from "@/features/pages/enums/Layouts";
+import { Layout } from '@/features/pages/enums/Layouts';
 
 export const useLayout = (initialLayout: Layout) => {
     const [layout, setLayout] = useState<Layout>(initialLayout);
-    const [color, setColor] = useState<string>("#ffffff");
-    const [minRows, setMinRows] = useState<number>(GridConstants.COLUMNS);
+    const [color, setColor] = useState<string>('#ffffff');
 
     const updateLayout = useCallback((newLayout: Layout) => {
         setLayout(newLayout);
@@ -16,16 +14,10 @@ export const useLayout = (initialLayout: Layout) => {
         setColor(newColor);
     }, []);
 
-    const updateMinRows = useCallback((newMinRows: number) => {
-        setMinRows(newMinRows);
-    }, []);
-
     return {
         layout,
         updateLayout,
-        minRows,
         color,
         updateColor,
-        updateMinRows,
     };
 };

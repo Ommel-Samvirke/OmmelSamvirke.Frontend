@@ -57,7 +57,6 @@ const VideoLinkSection = (props: VideoLinkSectionInterface) => {
                             onBlur={updateVideoLink}
                             onKeyUp={(event) => {
                                 if (event.key === 'Enter') {
-                                    console.log('Enter');
                                     inputRef.current?.blur();
                                 }
                             }}

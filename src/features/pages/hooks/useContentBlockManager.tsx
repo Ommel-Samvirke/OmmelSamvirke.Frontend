@@ -10,9 +10,8 @@ export const useContentBlockManager = () => {
     const layoutContext = useContext(LayoutContext);
 
     const canMoveContentBlock = useCallback(
-        (id: string, x: number, y: number, width?: number, height?: number) => {
+        (id: string, x: number, y: number, rowCount: number, width?: number, height?: number) => {
             const content = layoutContext.getCurrentLayoutContent();
-            const rowCount = layoutContext.getRowCount();
             const contentBlock: ContentBlockType | undefined = content.find((block) => block.id === id);
 
             if (!contentBlock) {
@@ -34,8 +33,8 @@ export const useContentBlockManager = () => {
     );
 
     const moveContentBlock = useCallback(
-        (id: string, x: number, y: number) => {
-            if (!canMoveContentBlock(id, x, y)) return;
+        (id: string, x: number, y: number, rowCount: number) => {
+            if (!canMoveContentBlock(id, x, y, rowCount)) return;
 
             layoutContext.updateCurrentLayoutContent((prevBlocks) => {
                 editHistoryContext.updateBuffers(prevBlocks, layoutContext.currentLayout);

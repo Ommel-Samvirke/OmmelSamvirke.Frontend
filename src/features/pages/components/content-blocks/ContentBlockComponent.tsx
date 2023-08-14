@@ -110,6 +110,7 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
                     ref={propertyWidget}
                     onEdit={() => setIsEditing(!isEditing)}
                     isEditing={isEditing}
+                    rowCount={layoutContext.getRowCount()}
                 />
             )}
             <Resizable
@@ -144,7 +145,12 @@ const ContentBlockComponent = (props: ContentBlockProps) => {
                         return;
                     }
 
-                    contentBlockManager.resizeContentBlock(props.contentBlock.id, newWidth, newHeight);
+                    contentBlockManager.resizeContentBlock(
+                        props.contentBlock.id,
+                        newWidth,
+                        newHeight,
+                        layoutContext.getRowCount(),
+                    );
                 }}
                 onResizeStart={props.onDeselect}
                 onResizeStop={() => setIsSelectionBlocked(true)}

@@ -45,13 +45,13 @@ export const useContentBlockManager = () => {
     );
 
     const resizeContentBlock = useCallback(
-        (id: string, width: number, height: number) => {
+        (id: string, width: number, height: number, rowCount: number) => {
             const contentBlocks = layoutContext.getCurrentLayoutContent();
             let currentBlock: ContentBlockType | undefined = contentBlocks.find((block) => block.id === id);
             if (!currentBlock) return;
 
             const { x, y } = currentBlock;
-            if (!canMoveContentBlock(id, x, y, width, height)) return;
+            if (!canMoveContentBlock(id, x, y, rowCount, width, height)) return;
 
             layoutContext.updateCurrentLayoutContent((prevBlocks) => {
                 editHistoryContext.updateBuffers(prevBlocks, layoutContext.currentLayout);

@@ -9,6 +9,7 @@ import { ContentBlockType } from '@/features/pages/types/ContentBlockType';
 
 interface PositionPropertiesSectionInterface {
     contentBlock: ContentBlockType;
+    rowCount: number;
 }
 
 const PositionPropertiesSection = (props: PositionPropertiesSectionInterface) => {
@@ -32,6 +33,7 @@ const PositionPropertiesSection = (props: PositionPropertiesSectionInterface) =>
                                 props.contentBlock.id,
                                 +event.target.value,
                                 props.contentBlock.y,
+                                props.rowCount,
                             )
                         }
                         minvalue={0}
@@ -48,6 +50,7 @@ const PositionPropertiesSection = (props: PositionPropertiesSectionInterface) =>
                                 props.contentBlock.id,
                                 props.contentBlock.x,
                                 +event.target.value,
+                                props.rowCount,
                             )
                         }
                         minvalue={0}
@@ -65,6 +68,7 @@ const PositionPropertiesSection = (props: PositionPropertiesSectionInterface) =>
                                 props.contentBlock.id,
                                 +event.target.value,
                                 props.contentBlock.height,
+                                props.rowCount
                             )
                         }
                         minvalue={1}
@@ -81,6 +85,7 @@ const PositionPropertiesSection = (props: PositionPropertiesSectionInterface) =>
                                 props.contentBlock.id,
                                 props.contentBlock.width,
                                 +event.target.value,
+                                props.rowCount
                             )
                         }
                         minvalue={1}

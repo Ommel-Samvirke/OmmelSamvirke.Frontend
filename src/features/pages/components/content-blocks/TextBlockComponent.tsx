@@ -95,10 +95,10 @@ const TextBlockComponent = forwardRef((props: TextBlockComponentProps, ref: Forw
     }, [props, props.isSelected]);
 
     useEffect(() => {
-        if (!props.isEditing) {
+        if (!props.isEditing && !props.isSelected) {
             updateText();
         }
-    }, [props.isEditing, updateText]);
+    }, [props.isEditing, props.isSelected, updateText]);
 
     return (
         <div

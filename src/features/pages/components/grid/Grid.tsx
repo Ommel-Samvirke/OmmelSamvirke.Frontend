@@ -1,6 +1,6 @@
 ﻿import styles from './styles/Grid.module.scss';
 
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -72,6 +72,14 @@ const Grid = () => {
         calculateGridCellWidth();
         setDidLayoutChange(true);
     }, [layoutContext.currentLayout, calculateGridCellWidth]);
+
+    useLayoutEffect(() => {
+        window.addEventListener('resize', calculateGridCellWidth);
+
+        return () => {
+            window.removeEventListener('resize', calculateGridCellWidth);
+        };
+    }, [calculateGridCellWidth]);
 
     useEffect(() => {
         calculateGridCellWidth();
